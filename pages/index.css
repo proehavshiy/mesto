@@ -1,0 +1,6 @@
+/*normalize*/
+@import url(../vendor/normalize.css);
+/*техсетка*/
+@import url(../vendor/greed.css);
+/*подключение шрифта Inter*/
+@import url(../vendor/fonts/Font_Inter/);

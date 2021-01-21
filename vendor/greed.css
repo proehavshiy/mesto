@@ -1,0 +1,5 @@
+/*@import url(../root/greed.css);
+ТЕХНИЧЕСКАЯ СЕТКА. подключается при работе в файл index.css*/
+body, div, header, main, section, h1, h2, h3, h4, p, ul, li, img, footer, nav, blockquote, figcaption, figure, a {
+  border: 1px solid red;
+}
