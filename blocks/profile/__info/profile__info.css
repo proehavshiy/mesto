@@ -1,6 +1,7 @@
 .profile__info {
   margin-left: 30px;
   margin-right: auto;
+  max-width: 880px;
   display: grid;
   grid-template-columns: repeat(2, auto);
   grid-template-rows: repeat(1, auto);
@@ -9,3 +10,11 @@
   align-items: center;
 }
 
+@media screen and (max-width: 942px) {
+  .profile__info {
+    margin: 0;
+    margin-bottom: 36px;
+    row-gap: 14px;
+    column-gap: 10px;
+  }
+}

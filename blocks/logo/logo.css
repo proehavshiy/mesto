@@ -3,14 +3,12 @@
   max-width: 142px;
 }
 
-/*3*/
 @media screen and (max-width: 888px) {
   .logo {
     padding-bottom: 31.6px;
   }
 }
 
-/*4-5*/
 @media screen and (max-width: 425px) {
   .logo {
     max-width: 32.41875vw;

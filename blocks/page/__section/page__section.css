@@ -1,4 +1,18 @@
 .page__section {
   margin: 0 auto;
-  max-width: 880px;
+  max-width: 68.75vw;
 }
+
+
+@media screen and (max-width: 867px) {
+  .page__section {
+    max-width: 88.125vw;
+  }
+}
+/*
+@media screen and (max-width: 424px) {
+  .page__section {
+    max-width: 282px;
+  }
+}
+*/

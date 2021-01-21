@@ -5,8 +5,20 @@
   border: 2px solid #FFFFFF;
   box-sizing: border-box;
   border-radius: 2px;
-  background-image: url(../../../images/big-button-plus-Vector.svg), url(../../../images/big-button-plus.svg);
+  background-image: url(../../../images/big-button-plus-Vector.svg);
   background-color: #000000;
   background-position: center;
   background-repeat: no-repeat;
+}
+
+@media screen and (max-width: 942px) {
+  .profile__add-button {
+    width: 60vw;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .profile__add-button {
+    width: 100%
+  }
 }

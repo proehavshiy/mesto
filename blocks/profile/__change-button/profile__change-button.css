@@ -10,3 +10,10 @@
   background-position: center;
   background-repeat: no-repeat;
 }
+
+@media screen and (max-width: 424px) {
+  .profile__change-button {
+    width: 18px;
+    height: 18px;
+  }
+}
