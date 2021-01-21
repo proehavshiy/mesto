@@ -1,0 +1,13 @@
+.element__button-like {
+  margin: 0;
+  padding: 0;
+  margin-right: 30px;
+  width: 22px;
+  height: 19px;
+  box-sizing: border-box;
+  background-image: url(../../../images/vector-like-button.svg);
+  background-color: inherit;
+  border: none;
+  background-position: center;
+  background-repeat: no-repeat;
+}

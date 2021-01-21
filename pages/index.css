@@ -4,14 +4,12 @@
 @import url(../vendor/greed.css);
 
 /*подключение шрифта Inter*/
-@import url(../vendor/fonts/Font_Inter/);
+@import url(../vendor/fonts/Font_Inter/inter.css);
 
 /*блок page*/
 @import url(../blocks/page/page.css);
 @import url(../blocks/page/__section/page__section.css);
-
 @import url(../blocks/page/__section/_margin/page__section_margin_profile.css);
-@import url(../blocks/page/__section/_margin/page__section_margin_elements.css);
   /*блок header*/
   @import url(../blocks/header/header.css);
   @import url(../blocks/page/__section/_margin/page__section_margin_header.css);
@@ -25,4 +23,14 @@
   @import url(../blocks/profile/__add-button/profile__add-button.css);
   @import url(../blocks/profile/__subtitle/profile__subtitle.css);
   @import url(../blocks/profile/__change-button/profile__change-button.css);
+   /*блок elements*/
+   @import url(../blocks/elements/elements.css);
+   @import url(../blocks/page/__section/_margin/page__section_margin_elements.css);
+   /*блок element*/
+   @import url(../blocks/element/element.css);
+   @import url(../blocks/element/__image/element__image.css);
+   @import url(../blocks/element/__figcaption/element__figcaption.css);
+   @import url(../blocks/element/__card-title/element__card-title.css);
+   @import url(../blocks/element/__button-like/element__button-like.css);
+
 
