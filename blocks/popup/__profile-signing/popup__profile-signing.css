@@ -1,0 +1,12 @@
+.popup__profile-signing {
+  margin: 0 36px 48px;
+  padding: 0;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 1.21;
+  color: #000000;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
