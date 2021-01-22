@@ -88,14 +88,16 @@
         </p>
       </footer>
       <div class="popup">
-        <form class="popup__container">
+        <form class="popup__container" action=" " method="POST">
           <button class="popup__button-close"></button>
           <p class="popup__heading">
             Редактировать профиль
           </p>
-          <input class="popup__profile-name" type="text">
-          <input class="popup__profile-signing" type="text">
-          <button class="popup__button-save">
+          <fieldset class="">
+            <input class="popup__profile-name" type="text" name="profile-name" value="Жак-Ив Кусто" placeholder="Имя" required>
+            <input class="popup__profile-signing" type="text" name="profile-signing" value="Исследователь океана" placeholder="Подпись" required>
+        </fieldset>
+          <button class="popup__button-save" type="submit" value="Отправить на сервер">
             Сохранить
           </button>
         </form>
