@@ -1,7 +1,10 @@
 .popup__profile-signing {
-  margin: 0 36px 48px;
+  margin: 0 36px 0;
   padding: 0;
+  padding-bottom: 13px;
+  width: 358px;
   display: block;
+  box-sizing: border-box;
   font-family: 'Inter', Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
@@ -14,5 +17,4 @@
 
 .popup__profile-signing:focus {
   outline: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
 }

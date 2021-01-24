@@ -1,7 +1,10 @@
 .popup__profile-name {
   margin: 0 36px 30px;
   padding: 0;
+  padding-bottom: 13px;
+  width: 358px;
   display: block;
+  box-sizing: border-box;
   font-family: 'Inter', Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
@@ -13,6 +16,5 @@
 }
 
 .popup__profile-name:focus {
-  outline: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 1);
+  outline: 1px solid rgba(0, 0, 0, 0.2);
 }
