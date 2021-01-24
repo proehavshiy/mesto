@@ -1,14 +1,14 @@
 .profile__info {
   margin-left: 30px;
   margin-right: auto;
-  max-width: 880px;
+  max-width: 336px;
   display: grid;
-  grid-template-columns: repeat(2, auto);
-  grid-template-rows: repeat(1, auto);
+  grid-template-columns: 1fr 24px;
   row-gap: 16px;
   column-gap: 18px;
   align-items: center;
 }
+
 
 @media screen and (max-width: 942px) {
   .profile__info {
@@ -16,5 +16,12 @@
     margin-bottom: 36px;
     row-gap: 14px;
     column-gap: 10px;
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .profile__info {
+    grid-template-columns: 1fr 18px;
+    max-width: 282px;
   }
 }
