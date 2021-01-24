@@ -6,3 +6,17 @@
   line-height: 1.2;
   color: #000000;
 }
+
+@media screen and (max-width: 500px) {
+  .popup__heading {
+    margin: 25px 7.80141844% 54px;
+  }
+}
+
+@media screen and (max-width: 424px) {
+  .popup__heading {
+    margin-bottom: 75px;
+    font-size: 18px;
+    line-height: 1.22;
+  }
+}

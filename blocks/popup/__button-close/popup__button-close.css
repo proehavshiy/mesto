@@ -13,4 +13,18 @@
   position: absolute;
   top: -40px;
   left: 100%;
+  transition: opacity 0.2s ease;
+}
+
+.popup__button-close:hover {
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+
+@media screen and (max-width: 510px) {
+  .popup__button-close {
+    width: 26px;
+    height: 26px;;
+    left: calc(100% - 26px);
+  }
 }
