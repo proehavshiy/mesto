@@ -1,0 +1,4 @@
+.element__button-like_animation_hover:hover {
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}

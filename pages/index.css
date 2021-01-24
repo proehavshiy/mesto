@@ -21,8 +21,10 @@
   @import url(../blocks/profile/__info/profile__info.css);
   @import url(../blocks/profile/__title/profile__title.css);
   @import url(../blocks/profile/__add-button/profile__add-button.css);
+  @import url(../blocks/profile/__add-button/_animation/profile__add-button_animation_hover.css);
   @import url(../blocks/profile/__subtitle/profile__subtitle.css);
   @import url(../blocks/profile/__change-button/profile__change-button.css);
+  @import url(../blocks/profile/__change-button/_animation/profile__change-button_animation_hover.css);
    /*блок elements*/
    @import url(../blocks/elements/elements.css);
    @import url(../blocks/page/__section/_margin/page__section_margin_elements.css);
@@ -32,15 +34,21 @@
    @import url(../blocks/element/__figcaption/element__figcaption.css);
    @import url(../blocks/element/__card-title/element__card-title.css);
    @import url(../blocks/element/__button-like/element__button-like.css);
+   @import url(../blocks/element/__button-like/_animation/element__button-like_animation_disabled.css);
+   @import url(../blocks/element/__button-like/_animation/element__button-like_animation_hover.css);
+   @import url(../blocks/element/__button-like/_animation/element__button-like_animation_active.css);
 /*блок footer*/
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/footer/__copyright/footer__copyright.css);
 /*блок popup*/
 @import url(../blocks/popup/popup.css);
+@import url(../blocks/popup/_opened/popup_opened.css);
 @import url(../blocks/popup/__container/popup__container.css);
 @import url(../blocks/popup/__button-close/popup__button-close.css);
+@import url(../blocks/popup/__button-close/_animation/popup__button-close_animation-hover.css);
 @import url(../blocks/popup/__heading/popup__heading.css);
 @import url(../blocks/popup/__profile-information/popup__profile-information.css);
 @import url(../blocks/popup/__profile-name/popup__profile-name.css);
 @import url(../blocks/popup/__profile-signing/popup__profile-signing.css);
 @import url(../blocks/popup/__button-save/popup__button-save.css);
+@import url(../blocks/popup/__button-save/_animation/popup__button-save_animation_hover.css);

@@ -9,6 +9,7 @@
   background-color: #000000;
   background-position: center;
   background-repeat: no-repeat;
+  transition: opacity 0.2s ease;
 }
 
 @media screen and (max-width: 942px) {

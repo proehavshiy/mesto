@@ -1,0 +1,4 @@
+.profile__add-button_animation_hover:hover {
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}

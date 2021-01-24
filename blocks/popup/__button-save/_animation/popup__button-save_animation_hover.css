@@ -1,0 +1,4 @@
+.popup__button-save_animation_hover:hover {
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}

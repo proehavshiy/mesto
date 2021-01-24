@@ -4,10 +4,13 @@
   margin-right: 20px;
   width: 22px;
   height: 19px;
+  display: block;
+  outline: none;
   box-sizing: border-box;
   background-image: url(../../../images/vector-like-button.svg);
-  background-color: inherit;
+  background-color: transparent;
   border: none;
   background-position: center;
   background-repeat: no-repeat;
+  transition: opacity 0.2s ease;
 }
