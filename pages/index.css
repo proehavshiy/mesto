@@ -1,6 +1,5 @@
 /*normalize*/
 @import url(../vendor/normalize.css);
-@import url(../vendor/greed.css);
 
 /*подключение шрифта Inter*/
 @import url(../vendor/fonts/Font_Inter/inter.css);
