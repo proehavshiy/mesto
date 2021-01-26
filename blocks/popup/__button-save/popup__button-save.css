@@ -29,3 +29,10 @@
     line-height: 1.21;
   }
 }
+
+/* стили горизонтальной ориентации */
+@media screen and (max-width: 823px) and (max-height: 414px) {
+  .popup__button-save {
+    margin-bottom: 20px;
+  }
+}
