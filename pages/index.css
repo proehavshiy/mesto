@@ -1,6 +1,6 @@
 /*normalize*/
 @import url(../vendor/normalize.css);
-
+@import url(../vendor/greed.css);
 
 /*подключение шрифта Inter*/
 @import url(../vendor/fonts/Font_Inter/inter.css);
@@ -41,6 +41,7 @@
 @import url(../blocks/footer/__copyright/footer__copyright.css);
 /*блок popup*/
 @import url(../blocks/popup/popup.css);
+@import url(../blocks/popup/__wrapper/popup__wrapper.css);
 @import url(../blocks/popup/_opened/popup_opened.css);
 @import url(../blocks/popup/__container/popup__container.css);
 @import url(../blocks/popup/__button-close/popup__button-close.css);

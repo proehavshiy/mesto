@@ -14,3 +14,8 @@
   }
 }
 
+@media screen and (max-width: 823px) and (max-height: 414px) {
+  .popup__profile-information {
+    margin-bottom: 20px;
+  }
+}
