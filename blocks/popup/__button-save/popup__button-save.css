@@ -13,6 +13,7 @@
   line-height: 1.22;
   text-align: center;
   border: none;
+  -webkit-transition: opacity 0.2s ease;
   transition: opacity 0.2s ease;
 }
 

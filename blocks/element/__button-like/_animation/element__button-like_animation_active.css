@@ -1,4 +1,5 @@
 .element__button-like_animation_active:active {
   background-image: url(../../../../images/vector-like-button-active.svg);
   opacity: 1;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
 }

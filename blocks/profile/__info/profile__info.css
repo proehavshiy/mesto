@@ -2,11 +2,16 @@
   margin-left: 30px;
   margin-right: auto;
   max-width: 336px;
+  display: -ms-grid;
   display: grid;
-  grid-template-columns: 1fr 24px;
+  -ms-grid-columns: 1fr 24px;
+      grid-template-columns: 1fr 24px;
   row-gap: 16px;
-  column-gap: 18px;
-  align-items: center;
+  -webkit-column-gap: 18px;
+     -moz-column-gap: 18px;
+          column-gap: 18px;
+  -ms-grid-row-align: center;
+      align-items: center;
 }
 
 
@@ -15,13 +20,18 @@
     margin: 0;
     margin-bottom: 36px;
     row-gap: 14px;
-    column-gap: 10px;
+    -webkit-column-gap: 10px;
+       -moz-column-gap: 10px;
+            column-gap: 10px;
+            -ms-grid-column-align: center;
+                justify-items: center;
   }
 }
 
 @media screen and (max-width: 424px) {
   .profile__info {
-    grid-template-columns: 1fr 18px;
+    -ms-grid-columns: 1fr 18px;
+        grid-template-columns: 1fr 18px;
     max-width: 282px;
   }
 }

@@ -12,5 +12,6 @@
   border: none;
   background-position: center;
   background-repeat: no-repeat;
+  -webkit-transition: opacity 0.2s ease;
   transition: opacity 0.2s ease;
 }

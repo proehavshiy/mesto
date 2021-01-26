@@ -1,4 +1,6 @@
 .element__button-like_animation_hover:hover {
   opacity: 0.5;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+  -webkit-transition: opacity 0.2s ease;
   transition: opacity 0.2s ease;
 }
