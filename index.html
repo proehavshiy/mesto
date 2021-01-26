@@ -2,7 +2,10 @@
 <html lang="ru">
   <head>
     <meta charset="UTF-8">
+    <meta name="author" content="Егор Куркин">
+    <meta name="description" content="Страница-профиль о туристических местах России">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="./images/Mesto-logo.svg">
     <link rel="stylesheet" href="pages/index.css">
     <title>Место</title>
   </head>
@@ -18,65 +21,65 @@
             <h1 class="profile__title">
               Жак-Ив Кусто
             </h1>
-            <button class="profile__change-button profile__change-button_animation_hover"></button>
+            <button class="profile__change-button profile__change-button_animation_hover" aria-label="Кнопка Редактировать профиль"></button>
             <p class="profile__subtitle">
               Исследователь океана
             </p>
           </div>
-          <button class="profile__add-button profile__add-button_animation_hover"></button>
+          <button class="profile__add-button profile__add-button_animation_hover" aria-label="Кнопка Добавить карточку"></button>
         </section>
         <section class="elements page__section page__section_margin_elements">
           <figure class="element">
             <img class="element__image" src="./images/karachaevsk.jpg" alt="фото Карачаевск">
             <figcaption class="element__figcaption">
-              <p class="element__card-title">
+              <h2 class="element__card-title">
                 Карачаевск
-              </p>
+              </h2>
               <button class="element__button-like element__button-like_animation_hover element__button-like_animation_active"></button>
             </figcaption>
           </figure>
           <figure class="element">
             <img class="element__image" src="./images/elbrus.jpg" alt="фото горы Эльбрус">
             <figcaption class="element__figcaption">
-              <p class="element__card-title">
+              <h2 class="element__card-title">
                 Гора Эльбрус
-              </p>
+              </h2>
               <button class="element__button-like element__button-like_animation_hover element__button-like_animation_active"></button>
             </figcaption>
           </figure>
           <figure class="element">
             <img class="element__image" src="./images/dombai.jpg" alt="фото Домбай">
             <figcaption class="element__figcaption">
-              <p class="element__card-title">
+              <h2 class="element__card-title">
                 Домбай
-              </p>
+              </h2>
               <button class="element__button-like element__button-like_animation_hover element__button-like_animation_active"></button>
             </figcaption>
           </figure>
           <figure class="element">
             <img class="element__image" src="./images/elbrus.jpg" alt="фото горы Эльбрус">
             <figcaption class="element__figcaption">
-              <p class="element__card-title">
+              <h2 class="element__card-title">
                 Гора Эльбрус
-              </p>
+              </h2>
               <button class="element__button-like element__button-like_animation_hover element__button-like_animation_active"></button>
             </figcaption>
           </figure>
           <figure class="element">
             <img class="element__image" src="./images/dombai.jpg" alt="фото Домбай">
             <figcaption class="element__figcaption">
-              <p class="element__card-title">
+              <h2 class="element__card-title">
                 Домбай
-              </p>
+              </h2>
               <button class="element__button-like element__button-like_animation_hover element__button-like_animation_active"></button>
             </figcaption>
           </figure>
           <figure class="element">
             <img class="element__image" src="./images/karachaevo-cherkessk.jpg" alt="фото Карачаево-Черкессия">
             <figcaption class="element__figcaption">
-              <p class="element__card-title">
+              <h2 class="element__card-title">
                 Карачаево-Черкессия
-              </p>
+              </h2>
               <button class="element__button-like element__button-like_animation_hover element__button-like_animation_active"></button>
             </figcaption>
           </figure>
@@ -87,21 +90,23 @@
           &copy; 2020 Mesto Russia
         </p>
       </footer>
-      <div class="popup">
-        <form class="popup__container page__section" action=" " method="POST">
-          <button class="popup__button-close popup__button-close_animation-hover"></button>
-          <p class="popup__heading">
-            Редактировать профиль
-          </p>
-          <fieldset class="popup__profile-information">
-            <input class="popup__profile-name" type="text" name="profile-name" value="Жак-Ив Кусто" placeholder="Имя" required>
-            <input class="popup__profile-signing" type="text" name="profile-signing" value="Исследователь океана" placeholder="Подпись" required>
-          </fieldset>
-          <button class="popup__button-save popup__button-save_animation_hover" type="submit" value="Отправить на сервер">
-            Сохранить
-          </button>
-        </form>
-      </div>
+      <section class="popup">
+        <div class="popup__wrapper">
+          <button class="popup__button-close popup__button-close_animation-hover" aria-label="Кнопка Закрыть форму"></button>
+          <form class="popup__container page__section" action="#" method="POST">
+            <p class="popup__heading">
+              Редактировать профиль
+            </p>
+            <fieldset class="popup__profile-information">
+              <input class="popup__profile-name" type="text" name="profile-name" value="Жак-Ив Кусто" placeholder="Имя" required>
+              <input class="popup__profile-signing" type="text" name="profile-signing" value="Исследователь океана" placeholder="Подпись" required>
+            </fieldset>
+            <button class="popup__button-save popup__button-save_animation_hover" type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
+              Сохранить
+            </button>
+          </form>
+        </div>
+      </section>
     </div>
     <script src="./scripts/script.js"></script>
   </body>

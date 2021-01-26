@@ -1,0 +1,26 @@
+.popup__wrapper {
+  max-width: 430px;
+  position: relative;
+  top: 195px;
+  left: 0;
+  margin: 0 auto;
+  border-radius: 10px;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+}
+
+@media screen and (max-width: 492px) {
+  .popup__wrapper {
+    max-width: 88.125%;
+    top: 123px;
+  }
+}
+
+/* стили горизонтальной ориентации */
+@media screen and (max-width: 823px) and (max-height: 414px) {
+  .popup__wrapper {
+    max-width: 80vw;
+    max-height: 60vw;
+    top: 15%;
+  }
+}
