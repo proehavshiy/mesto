@@ -6,12 +6,20 @@
   box-sizing: border-box;
   border-radius: 2px;
   background-image: url(../../../images/big-button-plus-Vector.svg);
-  background-color: #000000;
+  background-color: transparent;
   background-position: center;
   background-repeat: no-repeat;
   -webkit-transition: opacity 0.2s ease;
   transition: opacity 0.2s ease;
 }
+
+.profile__add-button:hover {
+  opacity: 0.6;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=60)";
+  -webkit-transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease;
+}
+
 
 @media screen and (max-width: 942px) {
   .profile__add-button {

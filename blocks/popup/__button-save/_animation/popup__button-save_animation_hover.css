@@ -1,6 +1,0 @@
-.popup__button-save_animation_hover:hover {
-  opacity: 0.8;
-  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-  -webkit-transition: opacity 0.2s ease;
-  transition: opacity 0.2s ease;
-}

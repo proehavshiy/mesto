@@ -1,33 +1,40 @@
 let page = document.querySelector('.page'); // берем под контроль весь page. все нужные элементы лежат внутри
-let profileChangeButton = page.querySelector('.profile__change-button'); //берем кнопку редактирования автора
-let popup = page.querySelector('.popup'); //берем весь попап c подложкой
-let form = popup.querySelector('.popup__container'); //форма
-let formCloseButton = popup.querySelector('.popup__button-close'); //кнопка-крестик
-let formSaveButton = form.querySelector('.popup__button-save'); //кнопка-сохранить
+let profileChangeButton = page.querySelector('.profile__change-button'); //кнопка редактирования автора
+let popup = page.querySelector('.popup'); //весь попап c подложкой
 
-//функция переключения (открытия/закрытия) попапа
-function togglePopup() {
-  popup.classList.toggle('popup_opened');
+let form = popup.querySelector('.popup__container'); //форма
+let formCloseButton = form.querySelector('.popup__button-close'); //форма кнопка-крестик
+let formProfileName = form.querySelector('.popup__input_profile-name'); // форма поле Имя
+let formProfileSigning = form.querySelector('.popup__input_profile-signing'); // форма поле Подпись
+
+let profileTitle = page.querySelector('.profile__title'); //поле - имя профиля
+let profileSubtitle = page.querySelector('.profile__subtitle'); // поле - подпись профиля
+
+//функция открытия попапа
+function openPopup() {
+  popup.classList.add('popup_opened');
+  formProfileName.value = profileTitle.textContent;
+  formProfileSigning.value = profileSubtitle.textContent;
+};
+//функция закрытия попапа
+function closePopup() {
+  popup.classList.remove('popup_opened');
 };
 
 // Обработчик «отправки» формы
 function formSubmitHandler (evt) {
   evt.preventDefault();
-  // Получите значение полей jobInput и nameInput из свойства value
-  let formProfileName = form.querySelector('.popup__profile-name'); // поле формы Имя
-  let formProfileSigning = form.querySelector('.popup__profile-signing'); // поле формы Подпись
-  // Выберите элементы, куда должны быть вставлены значения полей
-  let profileTitle = page.querySelector('.profile__title');
-  let profileSubtitle = page.querySelector('.profile__subtitle');
-  // Вставьте новые значения с помощью textContent
-  profileTitle.textContent = formProfileName.value;
-  profileSubtitle.textContent = formProfileSigning.value;
-  togglePopup();
+  profileTitle.textContent = formProfileName.value; // вставка текста в поле - имя профиля из формы - поле Имя
+  profileSubtitle.textContent = formProfileSigning.value; // вставка текста в поле - подпись профиля  из формы - поле Подпись
+  closePopup();
 };
 // Прикрепляем обработчик к форме:
 // он будет следить за событием “submit” - «отправка»
 form.addEventListener('submit', formSubmitHandler);
 //при клике на кнопку редактирования профиля вызывается функция открытия попапа
-profileChangeButton.addEventListener('click', togglePopup);
+profileChangeButton.addEventListener('click', openPopup);
 //при клике на Крестик в форме форма закрывается
-formCloseButton.addEventListener('click', togglePopup);
+formCloseButton.addEventListener('click', closePopup);
+
+
+

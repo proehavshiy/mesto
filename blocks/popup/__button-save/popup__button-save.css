@@ -17,6 +17,14 @@
   transition: opacity 0.2s ease;
 }
 
+.popup__button-save:hover {
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  -webkit-transition: opacity 0.2s ease;
+  transition: opacity 0.2s ease;
+}
+
+
 @media screen and (max-width: 500px) {
   .popup__button-save {
     margin: 0 7.80141844% 25px;

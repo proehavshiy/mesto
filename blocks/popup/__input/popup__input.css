@@ -1,4 +1,4 @@
-.popup__profile-name {
+.popup__input {
   margin: 0 36px 30px;
   padding: 0;
   padding-bottom: 13px;
@@ -15,12 +15,12 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.popup__profile-name:focus {
+.popup__input:focus {
   outline: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 @media screen and (max-width: 500px) {
-  .popup__profile-name {
+  .popup__input {
     margin: 0 7.80141844% 30px;
     width: 84.3971631%;
   }
