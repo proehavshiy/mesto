@@ -13,7 +13,7 @@
   transition: opacity 0.2s ease;
 }
 
-@media screen and (max-width: 424px) {
+@media screen and (max-width: 468px) {
   .profile__change-button {
     width: 18px;
     height: 18px;
