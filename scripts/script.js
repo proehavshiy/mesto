@@ -4,8 +4,8 @@ let popup = page.querySelector('.popup'); //весь попап c подложк
 
 let form = popup.querySelector('.popup__container'); //форма
 let formCloseButton = form.querySelector('.popup__button-close'); //форма кнопка-крестик
-let formProfileName = form.querySelector('.popup__input_profile-name'); // форма поле Имя
-let formProfileSigning = form.querySelector('.popup__input_profile-signing'); // форма поле Подпись
+let formProfileName = form.querySelector('.popup__input_profile_name'); // форма поле Имя
+let formProfileSigning = form.querySelector('.popup__input_profile_signing'); // форма поле Подпись
 
 let profileTitle = page.querySelector('.profile__title'); //поле - имя профиля
 let profileSubtitle = page.querySelector('.profile__subtitle'); // поле - подпись профиля
