@@ -13,6 +13,7 @@ let profileSubtitle = page.querySelector('.profile__subtitle'); // поле - п
 //функция открытия попапа
 function openPopup() {
   popup.classList.add('popup_opened');
+  //в поля формы передаются значения из html-полей при открытии попапа
   formProfileName.value = profileTitle.textContent;
   formProfileSigning.value = profileSubtitle.textContent;
 };

@@ -8,6 +8,8 @@
 @import url(../blocks/page/page.css);
 @import url(../blocks/page/__section/page__section.css);
 @import url(../blocks/page/__button/page__button.css);
+/*блок content*/
+@import url(../blocks/content/content.css);
 
   /*блок header*/
   @import url(../blocks/header/header.css);
