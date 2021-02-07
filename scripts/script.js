@@ -1,25 +1,30 @@
 let page = document.querySelector('.page'); // берем под контроль весь page. все нужные элементы лежат внутри
 let profileChangeButton = page.querySelector('.profile__change-button'); //кнопка редактирования автора
-let popup = page.querySelector('.popup'); //весь попап c подложкой
+let popup = page.querySelector('.popup_change-profile'); //попап изменения профиля
 
-let form = popup.querySelector('.popup__container'); //форма
-let formCloseButton = form.querySelector('.popup__button-close'); //форма кнопка-крестик
-let formProfileName = form.querySelector('.popup__input_profile-name'); // форма поле Имя
-let formProfileSigning = form.querySelector('.popup__input_profile-signing'); // форма поле Подпись
+let form = popup.querySelector('.popup__container_change-profile'); //форма изменения профиля
+let formCloseButton = form.querySelector('.popup__button-close_change-profile'); //форма изменения профиля кнопка-крестик
+let formProfileName = form.querySelector('.popup__input_profile-name'); // форма изменения профиля поле Имя
+let formProfileSigning = form.querySelector('.popup__input_profile-signing'); // форма изменения профиля поле Подпись
 
 let profileTitle = page.querySelector('.profile__title'); //поле - имя профиля
 let profileSubtitle = page.querySelector('.profile__subtitle'); // поле - подпись профиля
 
-//функция открытия попапа
-function openPopup() {
-  popup.classList.add('popup_opened');
-  //в поля формы передаются значения из html-полей при открытии попапа
-  formProfileName.value = profileTitle.textContent;
-  formProfileSigning.value = profileSubtitle.textContent;
+//функция открытия попапов
+function openPopup(evt) {
+  const eventTarget = evt.target;
+  if (eventTarget === profileChangeButton) {
+     popup.classList.add('popup_opened');
+     formProfileName.value = profileTitle.textContent;//в поля формы передаются значения из html-полей при открытии попапа
+     formProfileSigning.value = profileSubtitle.textContent;//в поля формы передаются значения из html-полей при открытии попапа
+  }  else if (eventTarget === popupAddCardButtonAdd) {
+     popupAddCard.classList.add('popup_opened');
+  }
 };
 //функция закрытия попапа
 function closePopup() {
   popup.classList.remove('popup_opened');
+  popupAddCard.classList.remove('popup_opened');
 };
 
 // Обработчик «отправки» формы
@@ -69,19 +74,46 @@ const initialCards = [
 const elementTemplate = document.querySelector('.template-element').content;
 // 2. получаем под контроль секцию elements, куда будем добавлять заполненную карточку
 const sectionElements = document.querySelector('.elements');
+
 // 3. наполняем elementCard содержимым из initialCards: картинка, альт картинки, заголовок через метод forEach для каждого эллемента массива
 initialCards.forEach( function (item, itemIndex) {
-  // создаем из темплейта заготовку под карточку со всем содержимым внутри(дочерними элементами), которую нужно будет заполнить
-  const elementCard = elementTemplate.querySelector('.element').cloneNode(true);
+  const elementCard = elementTemplate.querySelector('.element').cloneNode(true);// создаем из темплейта заготовку под карточку со всем содержимым внутри(дочерними элементами), которую нужно будет заполнить
   elementCard.querySelector('.element__image').src = initialCards[itemIndex].link; //добавляем линк
-  elementCard.querySelector('.element__image').alt = initialCards[itemIndex].name; //добавляем alt
+  elementCard.querySelector('.element__image').alt = `Картинка ${initialCards[itemIndex].name}`; //добавляем alt
   elementCard.querySelector('.element__card-title').textContent = initialCards[itemIndex].name; //добавляем заголовок
-  return sectionElements.append(elementCard); // добавляем карточку в sectionElements в DOM
+  return sectionElements.append(elementCard); // добавляем карточки в sectionElements в DOM
 });
 
-//elementCard.querySelector('.element__image').src = initialCards[1].link; //добавляем линк
-//elementCard.querySelector('.element__image').alt = initialCards[1].name; //добавляем alt
-//elementCard.querySelector('.element__card-title').textContent = initialCards[1].name; //добавляем заголовок
-// 5. добавляем карточку в sectionElements в DOM
-//sectionElements.append(elementCard);
-//console.log(elementCard);
+// #2. Форма добавления карточки
+const popupAddCard = page.querySelector('.popup_add-card'); //форма добавления карточки
+const popupAddCardButtonAdd = page.querySelector('.profile__add-button'); //кнопка добавления карточки
+const popupAddCardButtonClose = popupAddCard.querySelector('.popup__button-close_add-card'); //форма добавления карточки - кнопка-крестик
+const popupAddCardInputLocationName = popupAddCard.querySelector('.popup__input_location-name'); // форма добавления карточки - поле Название места
+const popupAddCardInputImageLink = popupAddCard.querySelector('.popup__input_image-link'); // форма добавления карточки - Ссылка на картинку
+
+popupAddCardButtonAdd.addEventListener('click', openPopup);
+popupAddCardButtonClose.addEventListener('click', closePopup);
+
+// Обработчик «отправки» формы
+function formSubmitHandlerAddCard (evt) {
+  evt.preventDefault();
+  //initialCards.unshift({name: popupAddCardInputLocationName.value, link: popupAddCardInputImageLink.value});
+  addCards();
+  popupAddCardInputLocationName.value = ''; //очищаем поле Название после добавления карточки
+  popupAddCardInputImageLink.value = ''; //очищаем поле Картинка после добавления карточки
+  closePopup();
+};
+popupAddCard.addEventListener('submit', formSubmitHandlerAddCard);
+
+function addCards() { //функция добавления карточки по данным из формы
+  const inputLocatinName = popupAddCardInputLocationName.value;
+  const inputImageLink = popupAddCardInputImageLink.value;
+  const elementCard = elementTemplate.querySelector('.element').cloneNode(true);// создаем из темплейта заготовку под карточку со всем содержимым внутри(дочерними элементами), которую нужно будет заполнить
+  elementCard.querySelector('.element__image').src = inputImageLink; //добавляем линк
+  elementCard.querySelector('.element__image').alt = `Картинка ${inputLocatinName}`; //добавляем alt
+  elementCard.querySelector('.element__card-title').textContent = inputLocatinName; //добавляем заголовок
+  sectionElements.prepend(elementCard); // добавляем карточку в sectionElements в DOM в начало
+}
+
+console.log(initialCards);
+//console.log(initialCards[0].name);
