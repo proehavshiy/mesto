@@ -33,9 +33,9 @@
           &copy; 2020 Mesto Russia
         </p>
       </footer>
-      <div class="popup">
-        <div class="popup__container">
-          <button class="popup__button-close page__button" aria-label="Кнопка Закрыть форму" type="button"></button>
+      <div class="popup popup_change-profile">
+        <div class="popup__container popup__container_change-profile">
+          <button class="popup__button-close popup__button-close_change-profile page__button" aria-label="Кнопка Закрыть форму" type="button"></button>
           <form class="popup__form" action="#" method="POST" name="popup-form">
             <h2 class="popup__heading">
               Редактировать профиль
@@ -44,8 +44,25 @@
               <input class="popup__input popup__input_profile-name" type="text" name="profile-name" value="" placeholder="Имя" required>
               <input class="popup__input popup__input_profile-signing" type="text" name="profile-signing" value="" placeholder="Подпись" required>
             </fieldset>
-            <button class="popup__button-save page__button" type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
+            <button class="popup__button-save popup__button-save_change-profile page__button" type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
               Сохранить
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="popup popup_add-card">
+        <div class="popup__container popup__container_add-card">
+          <button class="popup__button-close popup__button-close_add-card page__button" aria-label="Кнопка Закрыть форму" type="button"></button>
+          <form class="popup__form" action="#" method="POST" name="popup-form">
+            <h2 class="popup__heading">
+              Новое место
+            </h2>
+            <fieldset class="popup__profile-information">
+              <input class="popup__input popup__input_location-name" type="text" name="profile-name" value="" placeholder="Название" required>
+              <input class="popup__input popup__input_image-link" type="text" name="profile-signing" value="" placeholder="Ссылка на картинку" required>
+            </fieldset>
+            <button class="popup__button-save popup__button-save_add-card page__button" type="submit" value="Отправить на сервер" aria-label="Кнопка Создать">
+              Создать
             </button>
           </form>
         </div>
