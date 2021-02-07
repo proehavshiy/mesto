@@ -74,7 +74,7 @@ initialCards.forEach( function (item, itemIndex) {
   // создаем из темплейта заготовку под карточку со всем содержимым внутри(дочерними элементами), которую нужно будет заполнить
   const elementCard = elementTemplate.querySelector('.element').cloneNode(true);
   elementCard.querySelector('.element__image').src = initialCards[itemIndex].link; //добавляем линк
-  elementCard.querySelector('.element__image').alt = `Картинка ${initialCards[itemIndex].name}`; //добавляем alt
+  elementCard.querySelector('.element__image').alt = initialCards[itemIndex].name; //добавляем alt
   elementCard.querySelector('.element__card-title').textContent = initialCards[itemIndex].name; //добавляем заголовок
   return sectionElements.append(elementCard); // добавляем карточку в sectionElements в DOM
 });
