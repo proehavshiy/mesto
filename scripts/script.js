@@ -37,5 +37,51 @@ profileChangeButton.addEventListener('click', openPopup);
 //при клике на Крестик в форме форма закрывается
 formCloseButton.addEventListener('click', closePopup);
 
+// 0. массив с данными для заполнения карточек
+const initialCards = [
+  {
+    name: 'Архыз',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+    name: 'Челябинская область',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+    name: 'Иваново',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+    name: 'Камчатка',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+    name: 'Холмогорский район',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+    name: 'Байкал',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  },
+];
+// #1. Шесть карточек «из коробки»
+// 1. получаем содержимое темплейта
+const elementTemplate = document.querySelector('.template-element').content;
+// 2. получаем под контроль секцию elements, куда будем добавлять заполненную карточку
+const sectionElements = document.querySelector('.elements');
+// 3. наполняем elementCard содержимым из initialCards: картинка, альт картинки, заголовок через метод forEach для каждого эллемента массива
+initialCards.forEach( function (item, itemIndex) {
+  // создаем из темплейта заготовку под карточку со всем содержимым внутри(дочерними элементами), которую нужно будет заполнить
+  const elementCard = elementTemplate.querySelector('.element').cloneNode(true);
+  elementCard.querySelector('.element__image').src = initialCards[itemIndex].link; //добавляем линк
+  elementCard.querySelector('.element__image').alt = initialCards[itemIndex].name; //добавляем alt
+  elementCard.querySelector('.element__card-title').textContent = initialCards[itemIndex].name; //добавляем заголовок
+  return sectionElements.append(elementCard); // добавляем карточку в sectionElements в DOM
+});
 
-
+//elementCard.querySelector('.element__image').src = initialCards[1].link; //добавляем линк
+//elementCard.querySelector('.element__image').alt = initialCards[1].name; //добавляем alt
+//elementCard.querySelector('.element__card-title').textContent = initialCards[1].name; //добавляем заголовок
+// 5. добавляем карточку в sectionElements в DOM
+//sectionElements.append(elementCard);
+//console.log(elementCard);
