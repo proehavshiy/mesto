@@ -30,6 +30,7 @@
    /*блок element*/
    @import url(../blocks/element/element.css);
    @import url(../blocks/element/__image/element__image.css);
+   @import url(../blocks/element/__button-delete/element__button-delete.css);
    @import url(../blocks/element/__figcaption/element__figcaption.css);
    @import url(../blocks/element/__card-title/element__card-title.css);
    @import url(../blocks/element/__button-like/element__button-like.css);
