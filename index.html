@@ -8,6 +8,7 @@
     <link rel="icon" href="./images/logo.svg">
     <link rel="stylesheet" href="pages/index.css">
     <title>Место</title>
+    <script src="./scripts/script.js" defer></script>
   </head>
   <body>
     <div class="page">
@@ -25,60 +26,7 @@
           <button class="profile__add-button page__button" type="button" aria-label="Кнопка Добавить карточку"></button>
         </section>
         <section class="elements page__section">
-          <figure class="element">
-            <img class="element__image" src="./images/karachaevsk.jpg" alt="фото Карачаевск">
-            <figcaption class="element__figcaption">
-              <h2 class="element__card-title">
-                Карачаевск
-              </h2>
-              <button class="element__button-like page__button" type="button"></button>
-            </figcaption>
-          </figure>
-          <figure class="element">
-            <img class="element__image" src="./images/elbrus.jpg" alt="фото горы Эльбрус">
-            <figcaption class="element__figcaption">
-              <h2 class="element__card-title">
-                Гора Эльбрус
-              </h2>
-              <button class="element__button-like page__button" type="button"></button>
-            </figcaption>
-          </figure>
-          <figure class="element">
-            <img class="element__image" src="./images/dombai.jpg" alt="фото Домбай">
-            <figcaption class="element__figcaption">
-              <h2 class="element__card-title">
-                Домбай
-              </h2>
-              <button class="element__button-like page__button" type="button"></button>
-            </figcaption>
-          </figure>
-          <figure class="element">
-            <img class="element__image" src="./images/elbrus.jpg" alt="фото горы Эльбрус">
-            <figcaption class="element__figcaption">
-              <h2 class="element__card-title">
-                Гора Эльбрус
-              </h2>
-              <button class="element__button-like page__button" type="button"></button>
-            </figcaption>
-          </figure>
-          <figure class="element">
-            <img class="element__image" src="./images/dombai.jpg" alt="фото Домбай">
-            <figcaption class="element__figcaption">
-              <h2 class="element__card-title">
-                Домбай
-              </h2>
-              <button class="element__button-like page__button" type="button"></button>
-            </figcaption>
-          </figure>
-          <figure class="element">
-            <img class="element__image" src="./images/karachaevo-cherkessk.jpg" alt="фото Карачаево-Черкессия">
-            <figcaption class="element__figcaption">
-              <h2 class="element__card-title">
-                Карачаево-Черкессия
-              </h2>
-              <button class="element__button-like page__button" type="button"></button>
-            </figcaption>
-          </figure>
+
         </section>
       </main>
       <footer class="footer page__section">
@@ -86,9 +34,9 @@
           &copy; 2020 Mesto Russia
         </p>
       </footer>
-      <div class="popup">
-        <div class="popup__container">
-          <button class="popup__button-close page__button" aria-label="Кнопка Закрыть форму" type="button"></button>
+      <div class="popup popup_change-profile">
+        <div class="popup__container popup__container_change-profile">
+          <button class="popup__button-close popup__button-close_change-profile page__button" aria-label="Кнопка Закрыть форму" type="button"></button>
           <form class="popup__form" action="#" method="POST" name="popup-form">
             <h2 class="popup__heading">
               Редактировать профиль
@@ -97,13 +45,39 @@
               <input class="popup__input popup__input_profile_name" type="text" name="profile-name" value="" placeholder="Имя" required>
               <input class="popup__input popup__input_profile_signing" type="text" name="profile-signing" value="" placeholder="Подпись" required>
             </fieldset>
-            <button class="popup__button-save page__button" type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
+            <button class="popup__button-save popup__button-save_change-profile page__button" type="submit" value="Отправить на сервер" aria-label="Кнопка Сохранить форму">
               Сохранить
             </button>
           </form>
         </div>
       </div>
+      <div class="popup popup_add-card">
+        <div class="popup__container popup__container_add-card">
+          <button class="popup__button-close popup__button-close_add-card page__button" aria-label="Кнопка Закрыть форму" type="button"></button>
+          <form class="popup__form" action="#" method="POST" name="popup-form">
+            <h2 class="popup__heading">
+              Новое место
+            </h2>
+            <fieldset class="popup__profile-information">
+              <input class="popup__input popup__input_location-name" type="text" name="profile-name" value="" placeholder="Название" required>
+              <input class="popup__input popup__input_image-link" type="text" name="profile-signing" value="" placeholder="Ссылка на картинку" required>
+            </fieldset>
+            <button class="popup__button-save popup__button-save_add-card page__button" type="submit" value="Отправить на сервер" aria-label="Кнопка Создать">
+              Создать
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
-    <script src="./scripts/script.js"></script>
+    <template class="template-element">
+      <figure class="element">
+        <img class="element__image" src="" alt="">
+        <button class="element__button-delete page__button" type="button" aria-label="Удалить карточку"></button>
+        <figcaption class="element__figcaption">
+          <h2 class="element__card-title"></h2>
+          <button class="element__button-like page__button" type="button"></button>
+        </figcaption>
+      </figure>
+    </template>
   </body>
 </html>
