@@ -17,11 +17,11 @@ function openPopup(evt) {
      popup.classList.add('popup_opened');
      formProfileName.value = profileTitle.textContent;//в поля формы передаются значения из html-полей при открытии попапа
      formProfileSigning.value = profileSubtitle.textContent;//в поля формы передаются значения из html-полей при открытии попапа
-  }  else if (eventTarget === popupAddCardButtonAdd) {
-     popupAddCard.classList.add('popup_opened');
+  }  else if (eventTarget === popupAddCardButtonOpen) {
+    popupAddCard.classList.add('popup_opened');
   }
 };
-//функция закрытия попапа
+//функция закрытия попапов
 function closePopup() {
   popup.classList.remove('popup_opened');
   popupAddCard.classList.remove('popup_opened');
@@ -69,51 +69,67 @@ const initialCards = [
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   },
 ];
-// #1. Шесть карточек «из коробки»
-// 1. получаем содержимое темплейта
-const elementTemplate = document.querySelector('.template-element').content;
-// 2. получаем под контроль секцию elements, куда будем добавлять заполненную карточку
-const sectionElements = document.querySelector('.elements');
 
-// 3. наполняем elementCard содержимым из initialCards: картинка, альт картинки, заголовок через метод forEach для каждого эллемента массива
-initialCards.forEach( function (item, itemIndex) {
-  const elementCard = elementTemplate.querySelector('.element').cloneNode(true);// создаем из темплейта заготовку под карточку со всем содержимым внутри(дочерними элементами), которую нужно будет заполнить
-  elementCard.querySelector('.element__image').src = initialCards[itemIndex].link; //добавляем линк
-  elementCard.querySelector('.element__image').alt = `Картинка ${initialCards[itemIndex].name}`; //добавляем alt
-  elementCard.querySelector('.element__card-title').textContent = initialCards[itemIndex].name; //добавляем заголовок
-  return sectionElements.append(elementCard); // добавляем карточки в sectionElements в DOM
-});
+const sectionEl = document.querySelector('.elements'); //секция elements, куда будем добавлять заполненную карточку
+const templateEl = document.querySelector('.template-element').content; //содержимое темплейта
 
-// #2. Форма добавления карточки
 const popupAddCard = page.querySelector('.popup_add-card'); //форма добавления карточки
-const popupAddCardButtonAdd = page.querySelector('.profile__add-button'); //кнопка добавления карточки
+const popupAddCardButtonOpen = page.querySelector('.profile__add-button'); //кнопка добавления карточки
 const popupAddCardButtonClose = popupAddCard.querySelector('.popup__button-close_add-card'); //форма добавления карточки - кнопка-крестик
 const popupAddCardInputLocationName = popupAddCard.querySelector('.popup__input_location-name'); // форма добавления карточки - поле Название места
 const popupAddCardInputImageLink = popupAddCard.querySelector('.popup__input_image-link'); // форма добавления карточки - Ссылка на картинку
 
-popupAddCardButtonAdd.addEventListener('click', openPopup);
-popupAddCardButtonClose.addEventListener('click', closePopup);
+
+
+function render() { //функция отображения собранной карточки в html
+  const html = initialCards.map(getItem);
+
+  sectionEl.append(...html);
+}
+
+function getItem(item) { //функция сбора карточки из темплейта
+  const newItem = templateEl.cloneNode(true); // заготовка карточки
+  const newItemLink = newItem.querySelector('.element__image');
+  newItemLink.src = item.link; //добавляем линк
+  const newItemAlt = newItem.querySelector('.element__image');
+  newItemAlt.alt = `Картинка ${item.name}`; //добавляем alt
+  const newItemTitle = newItem.querySelector('.element__card-title');
+  newItemTitle.textContent = item.name; //добавляем заголовок
+
+  const cardDeleteButton = newItem.querySelector('.element__button-delete'); //кнопки удаления карточки
+  cardDeleteButton.addEventListener('click', deleteCard);
+
+  const cardLikeButton = newItem.querySelector('.element__button-like');
+  cardLikeButton.addEventListener('click', likeCard);
+
+  return newItem;
+}
+
+function deleteCard(evt) { //функция удаления карточки
+  const eventTarget = evt.target;
+  const deleteCard = eventTarget.closest('.element');
+  deleteCard.remove();
+};
+
+function likeCard(evt) { //функция лайка
+  const eventTarget = evt.target;
+  const likeCard = eventTarget.closest('.element');
+  const like = likeCard.querySelector('.element__button-like');
+  like.classList.toggle('button-like_active');
+};
 
 // Обработчик «отправки» формы
-function formSubmitHandlerAddCard (evt) {
+function formSubmitAddCard (evt) {
   evt.preventDefault();
-  //initialCards.unshift({name: popupAddCardInputLocationName.value, link: popupAddCardInputImageLink.value});
-  addCards();
+  const values = ({name:popupAddCardInputLocationName.value, link:popupAddCardInputImageLink.value}); //значения из полей формы
+  sectionEl.prepend(getItem(values));
   popupAddCardInputLocationName.value = ''; //очищаем поле Название после добавления карточки
   popupAddCardInputImageLink.value = ''; //очищаем поле Картинка после добавления карточки
   closePopup();
 };
-popupAddCard.addEventListener('submit', formSubmitHandlerAddCard);
 
-function addCards() { //функция добавления карточки по данным из формы
-  const inputLocatinName = popupAddCardInputLocationName.value;
-  const inputImageLink = popupAddCardInputImageLink.value;
-  const elementCard = elementTemplate.querySelector('.element').cloneNode(true);// создаем из темплейта заготовку под карточку со всем содержимым внутри(дочерними элементами), которую нужно будет заполнить
-  elementCard.querySelector('.element__image').src = inputImageLink; //добавляем линк
-  elementCard.querySelector('.element__image').alt = `Картинка ${inputLocatinName}`; //добавляем alt
-  elementCard.querySelector('.element__card-title').textContent = inputLocatinName; //добавляем заголовок
-  sectionElements.prepend(elementCard); // добавляем карточку в sectionElements в DOM в начало
-}
 
-console.log(initialCards);
-//console.log(initialCards[0].name);
+popupAddCard.addEventListener('submit', formSubmitAddCard);
+popupAddCardButtonOpen.addEventListener('click', openPopup);
+popupAddCardButtonClose.addEventListener('click', closePopup);
+render() //отображение карточек в html
