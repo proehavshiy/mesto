@@ -81,6 +81,7 @@ const popupAddCardInputImageLink = popupAddCard.querySelector('.popup__input_ima
 
 
 
+
 function render() { //функция отображения собранной карточки в html
   const html = initialCards.map(getItem);
 
