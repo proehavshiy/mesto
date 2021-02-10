@@ -25,6 +25,7 @@ function openPopup(evt) {
 function closePopup() {
   popup.classList.remove('popup_opened');
   popupAddCard.classList.remove('popup_opened');
+  popupOpenImage.classList.remove('popup_opened');
 };
 
 // Обработчик «отправки» формы
@@ -79,7 +80,10 @@ const popupAddCardButtonClose = popupAddCard.querySelector('.popup__button-close
 const popupAddCardInputLocationName = popupAddCard.querySelector('.popup__input_location-name'); // форма добавления карточки - поле Название места
 const popupAddCardInputImageLink = popupAddCard.querySelector('.popup__input_image-link'); // форма добавления карточки - Ссылка на картинку
 
-
+const popupOpenImage = page.querySelector('.popup_open-image'); // попап раскрытия изображения
+const popupOpenImageButtonClose = popupOpenImage.querySelector('.popup__button-close_open-image');
+const popupOpenImageImage = popupOpenImage.querySelector('.popup__image');
+const popupOpenImageFigcaption = popupOpenImage.querySelector('.popup__figcaption');
 
 
 function render() { //функция отображения собранной карточки в html
@@ -103,7 +107,27 @@ function getItem(item) { //функция сбора карточки из те�
   const cardLikeButton = newItem.querySelector('.element__button-like');
   cardLikeButton.addEventListener('click', likeCard);
 
+  newItemLink.addEventListener('click', function() {
+    openImage(item)
+  });
+
   return newItem;
+}
+
+
+
+function openImageFunctionDraft() { //переписать. это временная функция открытия
+  popupOpenImage.classList.add('popup_opened');
+}
+
+function openImage(item) { //функция сбора попапа картинки
+  popupOpenImageImage.src = item.link;
+  console.log(popupOpenImageImage);
+  popupOpenImageImage.alt = item.name;
+  console.log(popupOpenImageImage);
+  popupOpenImageFigcaption.textContent = item.name;
+  console.log(popupOpenImageFigcaption);
+  openImageFunctionDraft()
 }
 
 function deleteCard(evt) { //функция удаления карточки
@@ -133,4 +157,5 @@ function formSubmitAddCard (evt) {
 popupAddCard.addEventListener('submit', formSubmitAddCard);
 popupAddCardButtonOpen.addEventListener('click', openPopup);
 popupAddCardButtonClose.addEventListener('click', closePopup);
+popupOpenImageButtonClose.addEventListener('click', closePopup);
 render() //отображение карточек в html
