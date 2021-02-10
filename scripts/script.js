@@ -1,58 +1,29 @@
-let page = document.querySelector('.page'); // берем под контроль весь page. все нужные элементы лежат внутри
-let profileChangeButton = page.querySelector('.profile__change-button'); //кнопка редактирования автора
-let popup = page.querySelector('.popup_change-profile'); //попап изменения профиля
-
-let form = popup.querySelector('.popup__container_change-profile'); //форма изменения профиля
-let formCloseButton = form.querySelector('.popup__button-close_change-profile'); //форма изменения профиля кнопка-крестик
-let formProfileName = form.querySelector('.popup__input_profile-name'); // форма изменения профиля поле Имя
-let formProfileSigning = form.querySelector('.popup__input_profile-signing'); // форма изменения профиля поле Подпись
-
-let profileTitle = page.querySelector('.profile__title'); //поле - имя профиля
-let profileSubtitle = page.querySelector('.profile__subtitle'); // поле - подпись профиля
-const cardImage = page.querySelector('.element__image'); // картинка карточки
-const sectionEl = document.querySelector('.elements'); //секция elements, куда будем добавлять заполненную карточку
-const templateEl = document.querySelector('.template-element').content; //содержимое темплейта
-
-const popupAddCard = page.querySelector('.popup_add-card'); //форма добавления карточки
-const popupAddCardButtonOpen = page.querySelector('.profile__add-button'); //кнопка добавления карточки
-const popupAddCardButtonClose = popupAddCard.querySelector('.popup__button-close_add-card'); //форма добавления карточки - кнопка-крестик
-const popupAddCardInputLocationName = popupAddCard.querySelector('.popup__input_location-name'); // форма добавления карточки - поле Название места
-const popupAddCardInputImageLink = popupAddCard.querySelector('.popup__input_image-link'); // форма добавления карточки - Ссылка на картинку
-
-const popupOpenImage = page.querySelector('.popup_open-image'); // попап раскрытия изображения
+const page = document.querySelector('.page');
+//попап редактирования профиля
+const profileChangeButton = page.querySelector('.profile__change-button');
+const profileTitle = page.querySelector('.profile__title');
+const profileSubtitle = page.querySelector('.profile__subtitle');
+const popupChangeProfile = page.querySelector('.popup_change-profile');
+const popupChangeProfileForm = popupChangeProfile.querySelector('.popup__container_change-profile');
+const popupChangeProfileCloseButton = popupChangeProfileForm.querySelector('.popup__button-close_change-profile');
+const popupChangeProfileName = popupChangeProfileForm.querySelector('.popup__input_profile-name');
+const popupChangeProfileSigning = popupChangeProfileForm.querySelector('.popup__input_profile-signing');
+//попап добавления карточки
+const popupAddCard = page.querySelector('.popup_add-card');
+const popupAddCardButtonOpen = page.querySelector('.profile__add-button');
+const popupAddCardButtonClose = popupAddCard.querySelector('.popup__button-close_add-card');
+const popupAddCardInputLocationName = popupAddCard.querySelector('.popup__input_location-name');
+const popupAddCardInputImageLink = popupAddCard.querySelector('.popup__input_image-link');
+//попап открытия картинки
+const popupOpenImage = page.querySelector('.popup_open-image');
 const popupOpenImageButtonClose = popupOpenImage.querySelector('.popup__button-close_open-image');
 const popupOpenImageImage = popupOpenImage.querySelector('.popup__image');
 const popupOpenImageFigcaption = popupOpenImage.querySelector('.popup__figcaption');
+//темплейт карточки
+const sectionEl = document.querySelector('.elements');
+const templateEl = document.querySelector('.template-element').content;
 
-
-function openPopup(popupType) { //функция открытия попапов
-  popupType.classList.add('popup_opened');
-}
-function closePopup(popupType) { //функция закрытия попапов
-  popupType.classList.remove('popup_opened');
-};
-
-function handlePopupChangeProfile() { //колбэк попапа изменения профиля
-  formProfileName.value = profileTitle.textContent;//в поля формы передаются значения из html-полей при открытии попапа
-  formProfileSigning.value = profileSubtitle.textContent;//в поля формы передаются значения из html-полей при открытии попапа
-  openPopup(popup);
-};
-
-function handlePopupAddCard() { //колбэк попапа добавления карточки
-  openPopup(popupAddCard);
-};
-
-// Обработчик «отправки» формы
-function formSubmitHandler (evt) {
-  evt.preventDefault();
-  profileTitle.textContent = formProfileName.value; // вставка текста в поле - имя профиля из формы - поле Имя
-  profileSubtitle.textContent = formProfileSigning.value; // вставка текста в поле - подпись профиля  из формы - поле Подпись
-  closePopup(popup);
-};
-// Прикрепляем обработчик к форме:
-
-
-// 0. массив с данными для заполнения карточек
+//массив с данными для заполнения карточек
 const initialCards = [
   {
     name: 'Архыз',
@@ -80,8 +51,24 @@ const initialCards = [
   },
 ];
 
+//функции
+function openPopup(popupType) {
+  popupType.classList.add('popup_opened');
+};
 
+function closePopup(popupType) {
+  popupType.classList.remove('popup_opened');
+};
 
+function handlePopupChangeProfile() { //колбэк попапа изменения профиля
+  popupChangeProfileName.value = profileTitle.textContent;
+  popupChangeProfileSigning.value = profileSubtitle.textContent;
+  openPopup(popupChangeProfile);
+};
+
+function handlePopupAddCard() { //колбэк попапа добавления карточки
+  openPopup(popupAddCard);
+};
 
 function render() { //функция отображения собранной карточки в html
   const html = initialCards.map(getItem);
@@ -101,10 +88,10 @@ function getItem(item) { //функция сбора карточки из те�
   const cardDeleteButton = newItem.querySelector('.element__button-delete'); //кнопки удаления карточки
   cardDeleteButton.addEventListener('click', deleteCard);
 
-  const cardLikeButton = newItem.querySelector('.element__button-like');
+  const cardLikeButton = newItem.querySelector('.element__button-like'); //кнопки лайка
   cardLikeButton.addEventListener('click', likeCard);
 
-  newItemLink.addEventListener('click', function() {
+  newItemLink.addEventListener('click', function() { //кнопка раскрытия картинки
     openImage(item)
   });
 
@@ -131,8 +118,15 @@ function likeCard(evt) { //функция лайка
   like.classList.toggle('button-like_active');
 };
 
-// Обработчик «отправки» формы
-function formSubmitAddCard (evt) {
+// Обработчики форм
+function formSubmitChangeProfile(evt) { //форма редактирования профиля
+  evt.preventDefault();
+  profileTitle.textContent = popupChangeProfileName.value;
+  profileSubtitle.textContent = popupChangeProfileSigning.value;
+  closePopup(popupChangeProfile);
+};
+
+function formSubmitAddCard(evt) { //форма добавления карточки
   evt.preventDefault();
   const values = ({name:popupAddCardInputLocationName.value, link:popupAddCardInputImageLink.value}); //значения из полей формы
   sectionEl.prepend(getItem(values));
@@ -142,11 +136,11 @@ function formSubmitAddCard (evt) {
 };
 
 //Слушатели
-form.addEventListener('submit', formSubmitHandler);
+popupChangeProfileForm.addEventListener('submit', formSubmitChangeProfile);
 popupAddCard.addEventListener('submit', formSubmitAddCard);
 profileChangeButton.addEventListener('click', handlePopupChangeProfile);
 popupAddCardButtonOpen.addEventListener('click', handlePopupAddCard);
-formCloseButton.addEventListener('click', () => closePopup(popup));
+popupChangeProfileCloseButton.addEventListener('click', () => closePopup(popupChangeProfile));
 popupAddCardButtonClose.addEventListener('click', () => closePopup(popupAddCard));
 popupOpenImageButtonClose.addEventListener('click', () => closePopup(popupOpenImage));
 render() //отображение карточек в html
