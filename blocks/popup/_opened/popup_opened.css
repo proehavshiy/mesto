@@ -1,5 +1,7 @@
 .popup_opened {
-  display: block;
+  width: 100%;
+  height: 100%;
   visibility: visible;
   opacity: 1;
+  transition: overflow .5s ease-in-out,  opacity .5s ease-in-out;
 }
