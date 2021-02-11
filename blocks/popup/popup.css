@@ -5,14 +5,21 @@
   position: fixed;
   top: 0;
   left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   visibility: hidden;
   opacity: 0;
-  transition: visibility .5s ease-in-out;
+  transition: all .5s ease;
 }
 
 
 /*
-  visibility: hidden;
-  opacity: 0;
-  transition: visibility .5s ease-in-out;
+
+
+  transition-property: visibility;
+  transition-duration: .5s;
+  transition-timing-function: ease-in-out;
 */
+
+
