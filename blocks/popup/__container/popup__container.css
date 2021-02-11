@@ -1,6 +1,4 @@
 .popup__container {
   position: relative;
-  top: 50%; /* выравнивание по центру по оси Y */
-  transform: translateY(-50%); /* выравнивание по центру по оси Y */
-  margin: 0 auto;
+  display: flex;
 }
