@@ -112,16 +112,18 @@ function openImage(item) { //функция сбора попапа картин
 }
 
 function deleteCard(evt) { //функция удаления карточки
-  const eventTarget = evt.target;
-  const deleteCard = eventTarget.closest('.element');
-  deleteCard.remove();
+  evt.target.closest('.element').remove();
+  //const eventTarget = evt.target;
+  //const deleteCard = eventTarget.closest('.element');
+  //deleteCard.remove();
 };
 
 function likeCard(evt) { //функция лайка
   const eventTarget = evt.target;
-  const likeCard = eventTarget.closest('.element');
-  const like = likeCard.querySelector('.element__button-like');
-  like.classList.toggle('button-like_active');
+  //const likeCard = eventTarget.closest('.element');
+  //const like = likeCard.querySelector('.element__button-like');
+  //like.classList.toggle('button-like_active');
+  evt.target.classList.toggle('button-like_active');
 };
 
 // Обработчики форм
