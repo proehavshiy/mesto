@@ -60,6 +60,12 @@ function closePopup(popupType) {
   popupType.classList.remove('popup_opened');
 };
 
+function handlePopup(evt) { //функция закрытия попапа по клику вне формы
+  if (evt.target === evt.currentTarget) {
+    closePopup(evt.currentTarget)
+  }
+}
+
 function handlePopupChangeProfile() { //колбэк попапа изменения профиля
   popupChangeProfileName.value = profileTitle.textContent;
   popupChangeProfileSigning.value = profileSubtitle.textContent;
@@ -136,6 +142,9 @@ function formSubmitAddCard(evt) { //форма добавления карточ
 };
 
 //Слушатели
+popupChangeProfile.addEventListener('click', handlePopup);
+popupAddCard.addEventListener('click', handlePopup);
+popupOpenImage.addEventListener('click', handlePopup);
 popupChangeProfileForm.addEventListener('submit', formSubmitChangeProfile);
 popupAddCard.addEventListener('submit', formSubmitAddCard);
 profileChangeButton.addEventListener('click', handlePopupChangeProfile);
