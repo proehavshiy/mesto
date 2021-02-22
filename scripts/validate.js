@@ -33,14 +33,37 @@ const checkInputValidity = (formElement, inputElement) => { //функция п�
   }
 };
 
+const toggleButtonState = (inputList, buttonElement) => {
+  //const findAtLeastOneNotValid = (inputElement) => !inputElement.validity.valid;
+  //const hasNotValidInput = inputList.some(findAtLeastOneNotValid);
+
+  const hasNotValidInput = inputList.some(inputElement => { //ищем хотя бы 1 невалидный инпут
+    return !inputElement.validity.valid
+  });
+
+
+  if (hasNotValidInput) {
+    buttonElement.setAttribute('disabled', true);
+  } else {
+    buttonElement.removeAttribute('disabled');
+  }
+
+  console.log(hasNotValidInput);
+  //console.log(buttonElement.disabled);
+};
+
 const setEventListeners = (formElement) => { //Формула установки слушателей на все формы
   const inputList = Array.from(formElement.querySelectorAll('.popup__input')); //получаем массив всех инпутов-полей всех форм
+  const buttonElement = formElement.querySelector('.popup__button-save');
   inputList.forEach(inputElement => { //на все поля всех форм ставим слушатели
     inputElement.addEventListener('input', (evt) => {
       checkInputValidity(formElement, inputElement);
+      toggleButtonState(inputList, buttonElement);
       //console.log(inputElement)
     })
   })
+  toggleButtonState(inputList, buttonElement);
+
   //console.log(inputList);
 }
 
