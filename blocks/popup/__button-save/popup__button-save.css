@@ -3,6 +3,7 @@
   padding: 0;
   width: 83.255814%;
   height: 50px;
+  box-sizing: border-box;
   background: #000000;
   border-radius: 2px;
   color: #FFFFFF;
@@ -22,6 +23,13 @@
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
   -webkit-transition: opacity 0.2s ease;
   transition: opacity 0.2s ease;
+}
+
+.popup__button-save:disabled {
+  border: 1px solid #000000;
+  background: transparent;
+  border-radius: 2px;
+  color: #000000;
 }
 
 
