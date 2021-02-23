@@ -25,12 +25,14 @@ const hideInputError = (formElement, inputElement) => { //функция сур�
 
 const checkInputValidity = (formElement, inputElement) => { //функция проверки поля на валидность
   const isElementValid = inputElement.validity.valid;
+
   if (!isElementValid) {
     const errorMessage = inputElement.validationMessage;
     showInputError(formElement, inputElement, errorMessage);
   } else {
     hideInputError(formElement, inputElement);
   }
+  console.log(inputElement.name, isElementValid);
 };
 
 const toggleButtonState = (inputList, buttonElement) => {
@@ -44,17 +46,20 @@ const toggleButtonState = (inputList, buttonElement) => {
 
   if (hasNotValidInput) {
     buttonElement.setAttribute('disabled', true);
+    buttonElement.classList.add('popup__button-save_disabled');
   } else {
     buttonElement.removeAttribute('disabled');
+    buttonElement.classList.remove('popup__button-save_disabled');
   }
 
-  console.log(hasNotValidInput);
+  //console.log( !hasNotValidInput);
   //console.log(buttonElement.disabled);
 };
 
 const setEventListeners = (formElement) => { //Формула установки слушателей на все формы
   const inputList = Array.from(formElement.querySelectorAll('.popup__input')); //получаем массив всех инпутов-полей всех форм
   const buttonElement = formElement.querySelector('.popup__button-save');
+
   inputList.forEach(inputElement => { //на все поля всех форм ставим слушатели
     inputElement.addEventListener('input', (evt) => {
       checkInputValidity(formElement, inputElement);
@@ -74,7 +79,6 @@ const enableValidation = () => {
 
 
 };
-
 enableValidation();
 
 //console.log(formList);

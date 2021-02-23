@@ -66,9 +66,14 @@ function handlePopup(evt) { //функция закрытия попапа по 
   }
 }
 
-function handlePopupChangeProfile() { //колбэк попапа изменения профиля
+function fillInputValue() {
   popupChangeProfileName.value = profileTitle.textContent;
   popupChangeProfileSigning.value = profileSubtitle.textContent;
+};
+fillInputValue(); //вызываем функцию, чтобы значения инпутов сразу записались и сработала валидация кнопки при открытии попапа. чтобы кнопка Сохранить была активна сразу
+
+function handlePopupChangeProfile() { //колбэк попапа изменения профиля
+  fillInputValue();
   openPopup(popupChangeProfile);
 };
 
