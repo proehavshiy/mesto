@@ -60,9 +60,15 @@ function closePopup(popupType) {
   popupType.classList.remove('popup_opened');
 };
 
-function handlePopup(evt) { //функция закрытия попапа по клику вне формы
+function handlePopup(evt) { //функция закрытия попапа по клику вне формы и нажатием Esc
   if (evt.target === evt.currentTarget) {
     closePopup(evt.currentTarget)
+  }
+  if (evt.key === 'Escape') {
+    const isOpenedPopup = evt.currentTarget.querySelector('.popup_opened');
+    if (isOpenedPopup) {
+      closePopup(isOpenedPopup);
+    }
   }
 }
 
@@ -149,6 +155,7 @@ function formSubmitAddCard(evt) { //форма добавления карточ
 };
 
 //Слушатели
+document.addEventListener('keydown', handlePopup); //слушатель для закрытия формы по esc
 popupChangeProfile.addEventListener('click', handlePopup);
 popupAddCard.addEventListener('click', handlePopup);
 popupOpenImage.addEventListener('click', handlePopup);
