@@ -86,6 +86,8 @@ function handlePopupChangeProfile() { //колбэк попапа изменен
 };
 
 function handlePopupAddCard() { //колбэк попапа добавления карточки
+  const popupForm = popupAddCard.querySelector('.popup__form');
+  popupForm.reset(); //сбрасываем значение полей при переоткрытии формы
   openPopup(popupAddCard);
 };
 
