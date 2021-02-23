@@ -1,12 +1,12 @@
 const showInputError = (formElement, inputElement, inputErrorClass, errorClass, errorMessage) => { //функция показа ошибки
-  const errorElement = formElement.querySelector(`.${inputElement.classList[1]}${inputErrorClass}`); //находим span ошибки
+  const errorElement = formElement.querySelector(`.${inputErrorClass}${inputElement.name}`); //находим span ошибки
   //const errorElement = inputElement.closest('.popup__input-section').querySelector('.popup__input-error'); //еще один способ
   errorElement.textContent = errorMessage; //добавляем соержание ошибки
   errorElement.classList.add(errorClass); //добавляем класс появления
 };
 
 const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) => { //функция скрытия ошибки
-  const errorElement = formElement.querySelector(`.${inputElement.classList[1]}${inputErrorClass}`);
+  const errorElement = formElement.querySelector(`.${inputErrorClass}${inputElement.name}`);
   errorElement.textContent = ''; //очищаем текст ошибки
   errorElement.classList.remove(errorClass);
 };
@@ -64,6 +64,6 @@ enableValidation({
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button-save',
   inactiveButtonClass: 'popup__button-save_disabled',
-  inputErrorClass: '-error',
+  inputErrorClass: 'popup__input-error_type_',
   errorClass: 'popup__input-error_active'
 });
