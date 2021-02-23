@@ -4,3 +4,10 @@
   width: 83.255814%;
   position: relative;
 }
+
+@media screen and (max-width: 500px) {
+  .popup__input-section {
+    margin: 0 7.80141844% 30px;
+    width: 84.3971631%;
+  }
+}
