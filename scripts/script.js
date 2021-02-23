@@ -54,10 +54,12 @@ const initialCards = [
 //функции
 function openPopup(popupType) {
   popupType.classList.add('popup_opened');
+  document.addEventListener('keydown', handlePopup); // добавляем слушатель для закрытия формы по esc
 };
 
 function closePopup(popupType) {
   popupType.classList.remove('popup_opened');
+  document.removeEventListener('keydown', handlePopup); // удаляем слушатель для закрытия формы по esc
 };
 
 function handlePopup(evt) { //функция закрытия попапа по клику вне формы и нажатием Esc
@@ -155,7 +157,6 @@ function formSubmitAddCard(evt) { //форма добавления карточ
 };
 
 //Слушатели
-document.addEventListener('keydown', handlePopup); //слушатель для закрытия формы по esc
 popupChangeProfile.addEventListener('click', handlePopup);
 popupAddCard.addEventListener('click', handlePopup);
 popupOpenImage.addEventListener('click', handlePopup);
