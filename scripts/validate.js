@@ -1,84 +1,69 @@
-// включение валидации вызовом enableValidation
-// все настройки передаются при вызове
-
-//enableValidation({
-//  formSelector: '.popup__form',
-//  inputSelector: '.popup__input',
-//  submitButtonSelector: '.popup__button',
-//  inactiveButtonClass: 'popup__button_disabled',
-//  inputErrorClass: 'popup__input_type_error',
-//  errorClass: 'popup__error_visible'
-//});
-
-const showInputError = (formElement, inputElement, errorMessage) => { //функция показа ошибки
-  const errorElement = formElement.querySelector(`.${inputElement.classList[1]}-error`); //находим span ошибки
+const showInputError = (formElement, inputElement, inputErrorClass, errorClass, errorMessage) => { //функция показа ошибки
+  const errorElement = formElement.querySelector(`.${inputElement.classList[1]}${inputErrorClass}`); //находим span ошибки
   //const errorElement = inputElement.closest('.popup__input-section').querySelector('.popup__input-error'); //еще один способ
   errorElement.textContent = errorMessage; //добавляем соержание ошибки
-  errorElement.classList.add('popup__input-error_active'); //добавляем класс появления
+  errorElement.classList.add(errorClass); //добавляем класс появления
 };
 
-const hideInputError = (formElement, inputElement) => { //функция сурытия ошибки
-  const errorElement = formElement.querySelector(`.${inputElement.classList[1]}-error`);
+const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) => { //функция скрытия ошибки
+  const errorElement = formElement.querySelector(`.${inputElement.classList[1]}${inputErrorClass}`);
   errorElement.textContent = ''; //очищаем текст ошибки
-  errorElement.classList.remove('popup__input-error_active');
+  errorElement.classList.remove(errorClass);
 };
 
-const checkInputValidity = (formElement, inputElement) => { //функция проверки поля на валидность
+const checkInputValidity = (formElement, inputElement, inputErrorClass, errorClass) => { //функция проверки поля на валидность
   const isElementValid = inputElement.validity.valid;
 
-  if (!isElementValid) {
+  if (!isElementValid) {//в зависимости от валидности поля показываем или прячем сообщение об ошибке
     const errorMessage = inputElement.validationMessage;
-    showInputError(formElement, inputElement, errorMessage);
+    showInputError(formElement, inputElement, inputErrorClass, errorClass, errorMessage);
   } else {
-    hideInputError(formElement, inputElement);
+    hideInputError(formElement, inputElement, inputErrorClass, errorClass);
   }
-  console.log(inputElement.name, isElementValid);
 };
 
-const toggleButtonState = (inputList, buttonElement) => {
-  //const findAtLeastOneNotValid = (inputElement) => !inputElement.validity.valid;
-  //const hasNotValidInput = inputList.some(findAtLeastOneNotValid);
-
+const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => { //функция переключения кнопки
   const hasNotValidInput = inputList.some(inputElement => { //ищем хотя бы 1 невалидный инпут
     return !inputElement.validity.valid
   });
 
-
-  if (hasNotValidInput) {
+  if (hasNotValidInput) { //в зависимости от валидности полей переключаем кнопку
     buttonElement.setAttribute('disabled', true);
-    buttonElement.classList.add('popup__button-save_disabled');
+    buttonElement.classList.add(inactiveButtonClass);
   } else {
     buttonElement.removeAttribute('disabled');
-    buttonElement.classList.remove('popup__button-save_disabled');
+    buttonElement.classList.remove(inactiveButtonClass);
   }
-
-  //console.log( !hasNotValidInput);
-  //console.log(buttonElement.disabled);
 };
 
-const setEventListeners = (formElement) => { //Формула установки слушателей на все формы
-  const inputList = Array.from(formElement.querySelectorAll('.popup__input')); //получаем массив всех инпутов-полей всех форм
-  const buttonElement = formElement.querySelector('.popup__button-save');
+const setEventListeners = (formElement, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass) => { //Формула установки слушателей
+  const inputList = Array.from(formElement.querySelectorAll(inputSelector)); //получаем массив всех инпутов-полей из формы
+  const buttonElement = formElement.querySelector(submitButtonSelector); //получаем кнопку формы
 
-  inputList.forEach(inputElement => { //на все поля всех форм ставим слушатели
+  inputList.forEach(inputElement => { //на все поля формы ставим слушатели
     inputElement.addEventListener('input', (evt) => {
-      checkInputValidity(formElement, inputElement);
-      toggleButtonState(inputList, buttonElement);
-      //console.log(inputElement)
+      checkInputValidity(formElement, inputElement, inputErrorClass, errorClass); //в слушателе проверяем валидность поля
+      toggleButtonState(inputList, buttonElement, inactiveButtonClass); //в слушателе переключаем состояние кнопки
     })
   })
-  toggleButtonState(inputList, buttonElement);
-
-  //console.log(inputList);
+  toggleButtonState(inputList, buttonElement, inactiveButtonClass); //вне слушателя переключаем состояние кнопки, чтобы изначально она была отключена
 }
 
-const enableValidation = () => {
-  const formList = Array.from(document.querySelectorAll('.popup__form'));
+const enableValidation = ({formSelector, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass}) => { //главная функция валидации
+  const formList = Array.from(document.querySelectorAll(formSelector));//получаем массив из всех форм на странице
 
-  formList.forEach(setEventListeners); // добавляем всем формам слушатели
-
+  formList.forEach((formElement) => { // для всех форм вызываем функцию setEventListeners
+    setEventListeners(formElement, inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass);
+  });
 
 };
-enableValidation();
-
-//console.log(formList);
+// включение валидации вызовом enableValidation
+// все настройки передаются при вызове
+enableValidation({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button-save',
+  inactiveButtonClass: 'popup__button-save_disabled',
+  inputErrorClass: '-error',
+  errorClass: 'popup__input-error_active'
+});
