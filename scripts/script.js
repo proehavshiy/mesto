@@ -31,11 +31,6 @@ function fillInputValue() { // переписать. используются г
   popupChangeProfileSigning.value = profileSubtitle.textContent;
 };
 
-function clearInputValue() { // переписать. используются глобальные переменные из другого файла
-  popupChangeProfileName.value = '';
-  popupChangeProfileSigning.value = '';
-};
-
 function openPopup(popupType) {
   popupType.classList.add('popup_opened');
   document.addEventListener('keyup', handlePopup); // добавляем слушатель для закрытия формы по esc
@@ -45,7 +40,6 @@ function openPopup(popupType) {
 function closePopup(popupType) {
   popupType.classList.remove('popup_opened');
   document.removeEventListener('keyup', handlePopup); // удаляем слушатель для закрытия формы по esc
-  //clearInputValue(); //не нужно обнулять инпуты. при открытии попапа они все равно перезапишутся. и так не будет верстка дергаться
 };
 
 function handlePopup(evt) { //функция закрытия попапа по клику вне формы и нажатием Esc
@@ -133,7 +127,6 @@ function formSubmitAddCard(evt) { //форма добавления карточ
   evt.preventDefault();
   const values = ({name:popupAddCardInputLocationName.value, link:popupAddCardInputImageLink.value}); //значения из полей формы
   sectionEl.prepend(getItem(values));
-  //clearInputValue() //очищаем поля
   closePopup(popupAddCard);
 };
 
