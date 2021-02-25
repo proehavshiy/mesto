@@ -74,7 +74,7 @@ function clearErrors (validationSettings) { //функция удаления о
       changeProfileSaveButton.classList.remove(validationSettings.inactiveButtonClass);
     }
 
-    console.log(changeProfileSaveButton.classList.contains(validationSettings.inactiveButtonClass));
+    //console.log(changeProfileSaveButton.classList.contains(validationSettings.inactiveButtonClass));
   }
 
 function enableValidation (validationSettings) { //главная функция валидации
