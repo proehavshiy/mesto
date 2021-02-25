@@ -10,6 +10,7 @@ const popupChangeProfileName = popupChangeProfileForm.querySelector('.popup__inp
 const popupChangeProfileSigning = popupChangeProfileForm.querySelector('.popup__input_profile-signing');
 //попап добавления карточки
 const popupAddCard = page.querySelector('.popup_add-card');
+const popupAddCardForm = popupAddCard.querySelector('.popup__form');
 const popupAddCardButtonOpen = page.querySelector('.profile__add-button');
 const popupAddCardButtonClose = popupAddCard.querySelector('.popup__button-close_add-card');
 const popupAddCardInputLocationName = popupAddCard.querySelector('.popup__input_location-name');
@@ -23,43 +24,28 @@ const popupOpenImageFigcaption = popupOpenImage.querySelector('.popup__figcaptio
 const sectionEl = document.querySelector('.elements');
 const templateEl = document.querySelector('.template-element').content;
 
-//массив с данными для заполнения карточек
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  },
-];
-
 //функции
+
+function fillInputValue() { // переписать. используются глобальные переменные из другого файла
+  popupChangeProfileName.value = profileTitle.textContent;
+  popupChangeProfileSigning.value = profileSubtitle.textContent;
+};
+
+function clearInputValue() { // переписать. используются глобальные переменные из другого файла
+  popupChangeProfileName.value = '';
+  popupChangeProfileSigning.value = '';
+};
+
 function openPopup(popupType) {
   popupType.classList.add('popup_opened');
-  document.addEventListener('keydown', handlePopup); // добавляем слушатель для закрытия формы по esc
+  document.addEventListener('keyup', handlePopup); // добавляем слушатель для закрытия формы по esc
+
 };
 
 function closePopup(popupType) {
   popupType.classList.remove('popup_opened');
-  document.removeEventListener('keydown', handlePopup); // удаляем слушатель для закрытия формы по esc
+  document.removeEventListener('keyup', handlePopup); // удаляем слушатель для закрытия формы по esc
+  clearInputValue();
 };
 
 function handlePopup(evt) { //функция закрытия попапа по клику вне формы и нажатием Esc
@@ -74,27 +60,21 @@ function handlePopup(evt) { //функция закрытия попапа по 
   }
 }
 
-function fillInputValue() {
-  popupChangeProfileName.value = profileTitle.textContent;
-  popupChangeProfileSigning.value = profileSubtitle.textContent;
-};
-fillInputValue(); //вызываем функцию, чтобы значения инпутов сразу записались и сработала валидация кнопки при открытии попапа. чтобы кнопка Сохранить была активна сразу
-
 function handlePopupChangeProfile() { //колбэк попапа изменения профиля
-  fillInputValue();
   openPopup(popupChangeProfile);
+  fillInputValue(); //вызываем функцию, чтобы при переоткрытии снова подставились значения
 };
+
 
 function handlePopupAddCard() { //колбэк попапа добавления карточки
-  const popupForm = popupAddCard.querySelector('.popup__form');
-  popupForm.reset(); //сбрасываем значение полей при переоткрытии формы
+  popupAddCardForm.reset(); //сбрасываем значение полей при переоткрытии формы
   openPopup(popupAddCard);
 };
 
-function render() { //функция отображения собранной карточки в html
-  const html = initialCards.map(getItem);
+function renderInitialCards() { //функция отображения собранной карточки в html
+  const cards = initialCards.map(getItem);
 
-  sectionEl.append(...html);
+  sectionEl.append(...cards);
 }
 
 function getItem(item) { //функция сбора карточки из темплейта
@@ -153,8 +133,7 @@ function formSubmitAddCard(evt) { //форма добавления карточ
   evt.preventDefault();
   const values = ({name:popupAddCardInputLocationName.value, link:popupAddCardInputImageLink.value}); //значения из полей формы
   sectionEl.prepend(getItem(values));
-  popupAddCardInputLocationName.value = ''; //очищаем поле Название после добавления карточки
-  popupAddCardInputImageLink.value = ''; //очищаем поле Картинка после добавления карточки
+  clearInputValue() //очищаем поля
   closePopup(popupAddCard);
 };
 
@@ -169,4 +148,4 @@ popupAddCardButtonOpen.addEventListener('click', handlePopupAddCard);
 popupChangeProfileCloseButton.addEventListener('click', () => closePopup(popupChangeProfile));
 popupAddCardButtonClose.addEventListener('click', () => closePopup(popupAddCard));
 popupOpenImageButtonClose.addEventListener('click', () => closePopup(popupOpenImage));
-render() //отображение карточек в html
+renderInitialCards() //отображение карточек в html
