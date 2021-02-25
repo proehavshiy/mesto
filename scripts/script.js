@@ -45,7 +45,7 @@ function openPopup(popupType) {
 function closePopup(popupType) {
   popupType.classList.remove('popup_opened');
   document.removeEventListener('keyup', handlePopup); // удаляем слушатель для закрытия формы по esc
-  clearInputValue();
+  //clearInputValue(); //не нужно обнулять инпуты. при открытии попапа они все равно перезапишутся. и так не будет верстка дергаться
 };
 
 function handlePopup(evt) { //функция закрытия попапа по клику вне формы и нажатием Esc
@@ -133,7 +133,7 @@ function formSubmitAddCard(evt) { //форма добавления карточ
   evt.preventDefault();
   const values = ({name:popupAddCardInputLocationName.value, link:popupAddCardInputImageLink.value}); //значения из полей формы
   sectionEl.prepend(getItem(values));
-  clearInputValue() //очищаем поля
+  //clearInputValue() //очищаем поля
   closePopup(popupAddCard);
 };
 

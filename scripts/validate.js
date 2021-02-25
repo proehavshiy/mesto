@@ -67,6 +67,15 @@ function clearErrors (validationSettings) { //функция удаления о
     newCardSaveButton.classList.add(validationSettings.inactiveButtonClass);
   }
 
+  function activateSaveButton (validationSettings) {
+    const changeProfileSaveButton = document.querySelector(validationSettings.submitButtonChangeProfileSelector);
+    if (changeProfileSaveButton.classList.contains(validationSettings.inactiveButtonClass)) { //если у кнопки есть класс неактивности
+      changeProfileSaveButton.removeAttribute('disabled');
+      changeProfileSaveButton.classList.remove(validationSettings.inactiveButtonClass);
+    }
+
+    console.log(changeProfileSaveButton.classList.contains(validationSettings.inactiveButtonClass));
+  }
 
 function enableValidation (validationSettings) { //главная функция валидации
 
@@ -82,6 +91,8 @@ function enableValidation (validationSettings) { //главная функция
   profileChangeButton.addEventListener('click', () => {clearErrors(validationSettings)}); //вешаем обработчики на кнопку открытия формы
   cardAddButton.addEventListener('click', () => {clearErrors(validationSettings)}); //вешаем обработчики на кнопку открытия формы
   cardAddButton.addEventListener('click', () => {disableSaveButton(validationSettings)}); //отключаем при открытии кнопку submit в форме добавления новой карточки
+  // в форме редактир профиля при повторном открытии формы кнопка неактивна если в форме до этого поля были невалидны. исправление
+  profileChangeButton.addEventListener('click', () => {activateSaveButton(validationSettings)}); //вешаем обработчики на кнопку открытия формы
 };
 // включение валидации вызовом enableValidation
 // все настройки передаются при вызове
@@ -95,6 +106,7 @@ enableValidation({
   profileChangeButtonSelector: '.profile__change-button',
   cardAddButtonSelector: '.profile__add-button',
   submitButtonAddNewCardSelector: '.popup__button-save_add-card',
+  submitButtonChangeProfileSelector: '.popup__button-save_change-profile',
 });
 
 
