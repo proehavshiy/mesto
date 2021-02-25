@@ -94,7 +94,7 @@ function enableValidation (validationSettings) { //главная функция
   // в форме редактир профиля при повторном открытии формы кнопка неактивна если в форме до этого поля были невалидны. исправление
   profileChangeButton.addEventListener('click', () => {activateSaveButton(validationSettings)}); //вешаем обработчики на кнопку открытия формы
 };
-// включение валидации вызовом enableValidation
+//  включение валидации вызовом enableValidation
 // все настройки передаются при вызове
 enableValidation({
   formSelector: '.popup__form',
