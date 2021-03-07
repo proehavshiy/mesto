@@ -40,24 +40,24 @@ function toggleButtonState (inputList, buttonElement, inactiveButtonClass) { //�
 };
 
 // подстановка значений в инпуты формы редактир профиля при открытии
-function fillInputValuesPopupChangeProfile(validationSettings) {
-  const page = document.querySelector(validationSettings.Selector_page);
-  const popupChangeProfile = page.querySelector(validationSettings.Selector_popupChangeProfile);
-  const profileTitle = page.querySelector(validationSettings.Selector_profileTitle);
-  const profileSubtitle = page.querySelector(validationSettings.Selector_profileSubtitle);
-  const popupChangeProfileInputName = popupChangeProfile.querySelector(validationSettings.Selector_popupChangeProfileInputName);
-  const popupChangeProfileInputSigning = popupChangeProfile.querySelector(validationSettings.Selector_popupChangeProfileInputSigning);
-
-  popupChangeProfileInputName.value = profileTitle.textContent;
-  popupChangeProfileInputSigning.value = profileSubtitle.textContent;
-};
+//function fillInputValuesPopupChangeProfile(validationSettings) {
+//  const page = document.querySelector(validationSettings.pageSelector);
+//  const popupChangeProfile = page.querySelector(validationSettings.popupChangeProfileSelector);
+//  const profileTitle = page.querySelector(validationSettings.profileTitleSelector);
+//  const profileSubtitle = page.querySelector(validationSettings.profileSubtitleSelector);
+//  const popupChangeProfileInputName = popupChangeProfile.querySelector(validationSettings.popupChangeProfileInputNameSelector);
+//  const popupChangeProfileInputSigning = popupChangeProfile.querySelector(validationSettings.popupChangeProfileInputSigningSelector);
+//
+//  popupChangeProfileInputName.value = profileTitle.textContent;
+//  popupChangeProfileInputSigning.value = profileSubtitle.textContent;
+//};
 
 function setEventListeners (formElement, validationSettings) {
   const inputList = Array.from(formElement.querySelectorAll(validationSettings.inputSelector)); //получаем массив всех инпутов-полей из формы
   const buttonElement = formElement.querySelector(validationSettings.submitButtonSelector); //получаем кнопку формы
 
   //вызываем ее, чтобы поля в попапе редактирования профиля заполнялись перед валидацией, чтобы кнопка изначально была активной
-  fillInputValuesPopupChangeProfile(validationSettings);
+  //fillInputValuesPopupChangeProfile(validationSettings); // отключил, потому что стала не нужна. пока не понял, почему так
   //вне слушателя переключаем состояние кнопки, чтобы изначально она была отключена
   toggleButtonState(inputList, buttonElement, validationSettings.inactiveButtonClass);
 
@@ -71,10 +71,14 @@ function setEventListeners (formElement, validationSettings) {
 
 
 function clearErrors (validationSettings) { //функция удаления ошибок при открытии форм
-  const errorElementsIsActive = Array.from(document.querySelectorAll(`.${validationSettings.errorClass}`)); // получаем все активные span с ошибками
-  errorElementsIsActive.forEach( (errorElement) => {
+  const errorSpanElementsIsActive = Array.from(document.querySelectorAll(`.${validationSettings.errorClass}`)); // получаем все активные span с ошибками
+  const errorInputElementsIsActive = Array.from(document.querySelectorAll(`.${validationSettings.popupInputErrorClass}`)); // получаем все активные input с ошибками
+  errorSpanElementsIsActive.forEach( (errorElement) => {
     errorElement.textContent = ''; //удаляем у каждого текст
     errorElement.classList.remove(validationSettings.errorClass); //удаляем класс активности
+  });
+  errorInputElementsIsActive.forEach( (errorElement) => {
+    errorElement.classList.remove(validationSettings.popupInputErrorClass); //удаляем класс активности
   });
 }
 
@@ -97,7 +101,6 @@ function clearErrors (validationSettings) { //функция удаления о
 function enableValidation (validationSettings) { //главная функция валидации
 
   const formList = Array.from(document.querySelectorAll(validationSettings.formSelector));//получаем массив из всех форм на странице
-
   formList.forEach((formElement) => { // для всех форм вызываем функцию setEventListeners
     setEventListeners(formElement, validationSettings);
   });
@@ -125,12 +128,12 @@ enableValidation({
   submitButtonAddNewCardSelector: '.popup__button-save_add-card',
   submitButtonChangeProfileSelector: '.popup__button-save_change-profile',
   popupInputErrorClass:'popup__input_error',
-  Selector_page:'.page',
-  Selector_profileTitle: '.profile__title',
-  Selector_profileSubtitle: '.profile__subtitle',
-  Selector_popupChangeProfile: '.popup_change-profile',
-  Selector_popupChangeProfileInputName: '.popup__input_profile-name',
-  Selector_popupChangeProfileInputSigning: '.popup__input_profile-signing',
+  pageSelector:'.page',
+  profileTitleSelector: '.profile__title',
+  profileSubtitleSelector: '.profile__subtitle',
+  popupChangeProfileSelector: '.popup_change-profile',
+  popupChangeProfileInputNameSelector: '.popup__input_profile-name',
+  popupChangeProfileInputSigningSelector: '.popup__input_profile-signing',
 });
 
 
