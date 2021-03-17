@@ -4,186 +4,113 @@ class FormValidator {
     this._form = form;
   }
   enableValidation() {
-
     const _inputList = Array.from(this._form.querySelectorAll(this._validationSettings.inputSelector)); //получаем массив всех инпутов-полей из формы
-    //const _buttonElement = this._form.querySelector(this._validationSettings.submitButtonSelector); //получаем кнопку формы
-    //console.log('_inputList', _inputList);
-    //console.log('_buttonElement', _buttonElement);
-    this._toggleButtonState();
+    const _buttonElement = this._form.querySelector(this._validationSettings.submitButtonSelector); //получаем кнопку формы
 
-    this._setEventListeners(_inputList);
+    this._toggleButtonState(_inputList, _buttonElement);
+
+    this._setEventListeners(_inputList, _buttonElement);
 
 
   }
-  _setEventListeners(_inputList) {
+  _setEventListeners(_inputList, _buttonElement) {
     //лисенер на каждый инпут формы
-    _inputList.forEach(inputElement => {
-      inputElement.addEventListener('input', () => {
-        this._checkInputValidity(inputElement); //проверка валидности инпута
-        this._toggleButtonState(); //переключение состояния кнопки в завис от валидности
+    _inputList.forEach(_inputElement => {
+      _inputElement.addEventListener('input', () => {
+        this._checkInputValidity(_inputElement); //проверка валидности инпута
+        this._toggleButtonState(_inputList, _buttonElement); //переключение состояния кнопки в завис от валидности
       })
     })
+      //удаление ошибок в полях при закрытии формы
+    const _profileChangeButton = document.querySelector(this._validationSettings.profileChangeButtonSelector); //вешаем обработчики на кнопку открытия формы
+    const _cardAddButton = document.querySelector(this._validationSettings.cardAddButtonSelector); //вешаем обработчики на кнопку открытия формы
 
-  //  //удаление ошибок в полях при закрытии формы
-  //const _profileChangeButton = document.querySelector(this._validationSettings.profileChangeButtonSelector);
-  //const cardAddButton = document.querySelector(validationSettings.cardAddButtonSelector); //вешаем обработчики на кнопку открытия формы
-  //profileChangeButton.addEventListener('click', () => {clearErrors(validationSettings)}); //вешаем обработчики на кнопку открытия формы
-  //cardAddButton.addEventListener('click', () => {clearErrors(validationSettings)}); //вешаем обработчики на кнопку открытия формы
-  //cardAddButton.addEventListener('click', () => {disableSaveButton(validationSettings)}); //отключаем при открытии кнопку submit в форме добавления новой карточки
-  //// в форме редактир профиля при повторном открытии формы кнопка неактивна если в форме до этого поля были невалидны. исправление
-  //profileChangeButton.addEventListener('click', () => {activateSaveButton(validationSettings)}); //вешаем обработчики на кнопку открытия формы
+    _profileChangeButton.addEventListener('click', () => {this._clearErrors()}); //вешаем обработчики на кнопку открытия формы
+    // в форме редактир профиля при повторном открытии формы кнопка неактивна если в форме до этого поля были невалидны. исправление
+    _profileChangeButton.addEventListener('click', () => {this._activateSaveButton()}); //вешаем обработчики на кнопку открытия формы
+
+    _cardAddButton.addEventListener('click', () => {this._clearErrors()}); //вешаем обработчики на кнопку открытия формы
+    _cardAddButton.addEventListener('click', () => {this._disableSaveButton()}); //отключаем при открытии кнопку submit в форме добавления новой карточки
   }
-  _checkInputValidity(inputElement) {
-    const _isElementValid = inputElement.validity.valid;
+  _checkInputValidity(_inputElement) {
+    const _isElementValid = _inputElement.validity.valid;
 
     if (!_isElementValid) {//в зависимости от валидности поля показываем или прячем сообщение об ошибке
-      const _errorMessage = inputElement.validationMessage;
-      _showInputError(inputElement, _errorMessage);
+      const _errorMessage = _inputElement.validationMessage;
+      this._showInputError(_inputElement, _errorMessage);
     } else {
-      _hideInputError(inputElement);
+      this._hideInputError(_inputElement);
     }
-
-    //function checkInputValidity (formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass) { //функция проверки поля на валидность
-    //  const isElementValid = inputElement.validity.valid;
-    //
-    //  if (!isElementValid) {//в зависимости от валидности поля показываем или прячем сообщение об ошибке
-    //    const errorMessage = inputElement.validationMessage;
-    //    showInputError(formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass, errorMessage);
-    //  } else {
-    //    hideInputError(formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass);
-    //  }
-    //};
   }
-  _showInputError(inputElement, _errorMessage) {
+  _showInputError(_inputElement, _errorMessage) {
+    //находим span ошибки
+    const _errorElement = this._form.querySelector(`.${this._validationSettings.inputErrorClass}${_inputElement.name}`);
+    //добавляем соержание ошибки
+    _errorElement.textContent = _errorMessage;
 
+    //добавляем класс ошибки инпуту
+    _inputElement.classList.add(this._validationSettings.popupInputErrorClass);
+    //добавляем класс появления
+    _errorElement.classList.add(this._validationSettings.errorClass);
   }
-  _hideInputError() {}
-  _toggleButtonState() {}
-  _clearErrors() {}
-  _disableSaveButton() {}
-  _activateSaveButton() {}
+  _hideInputError(_inputElement) {
+    //находим span ошибки
+    const _errorElement = this._form.querySelector(`.${this._validationSettings.inputErrorClass}${_inputElement.name}`);
+    //очищаем текст ошибки
+    _errorElement.textContent = '';
+    //удаляем класс ошибки инпуту
+    _inputElement.classList.remove(this._validationSettings.popupInputErrorClass);
+    _errorElement.classList.remove(this._validationSettings.errorClass);
+  }
+  _toggleButtonState(_inputList, _buttonElement) {
+    //ищем хотя бы 1 невалидный инпут
+    const _hasNotValidInput = _inputList.some(_inputElement => {
+      return !_inputElement.validity.valid
+    });
+    //в зависимости от валидности полей переключаем кнопку
+    if (_hasNotValidInput) {
+      _buttonElement.setAttribute('disabled', true);
+      _buttonElement.classList.add(this._validationSettings.inactiveButtonClass);
+    } else {
+      _buttonElement.removeAttribute('disabled');
+      _buttonElement.classList.remove(this._validationSettings.inactiveButtonClass);
+    }
+  }
+  _clearErrors() {
+    // получаем все активные span с ошибками
+    const _errorSpanElementsIsActive = Array.from(document.querySelectorAll(`.${this._validationSettings.errorClass}`));
+    // получаем все активные input с ошибками
+    const _errorInputElementsIsActive = Array.from(document.querySelectorAll(`.${this._validationSettings.popupInputErrorClass}`));
+    _errorSpanElementsIsActive.forEach( (_errorElement) => {
+      //удаляем у каждого текст
+      _errorElement.textContent = '';
+      //удаляем класс активности
+      _errorElement.classList.remove(this._validationSettings.errorClass);
+    });
+    _errorInputElementsIsActive.forEach( (_errorElement) => {
+      //удаляем класс активности
+      _errorElement.classList.remove(this._validationSettings.popupInputErrorClass);
+    });
+  }
+  _disableSaveButton() {
+    // функция отключения кнопки submit в форме добавления карточки при открытии формы
+    const _newCardSaveButton = document.querySelector(this._validationSettings.submitButtonAddNewCardSelector);
+    _newCardSaveButton.setAttribute('disabled', true);
+    _newCardSaveButton.classList.add(this._validationSettings.inactiveButtonClass);
+  }
+  _activateSaveButton() {
+    // функция активации кнопки сохранить при открытии формы, если есть подставленные данные, и они валидны
+    const _changeProfileSaveButton = document.querySelector(this._validationSettings.submitButtonChangeProfileSelector);
+    //если у кнопки есть класс неактивности
+    if (_changeProfileSaveButton.classList.contains(this._validationSettings.inactiveButtonClass)) {
+      _changeProfileSaveButton.removeAttribute('disabled');
+      _changeProfileSaveButton.classList.remove(this._validationSettings.inactiveButtonClass);
+    }
+  }
 }
 
 
-function showInputError (formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass, errorMessage) { //функция показа ошибки
-  const errorElement = formElement.querySelector(`.${inputErrorClass}${inputElement.name}`); //находим span ошибки
-  //const errorElement = inputElement.closest('.popup__input-section').querySelector('.popup__input-error'); //еще один способ
-  errorElement.textContent = errorMessage; //добавляем соержание ошибки
-
-  inputElement.classList.add(popupInputErrorClass); //добавляем класс ошибки инпуту
-  errorElement.classList.add(errorClass); //добавляем класс появления
-};
-
-function hideInputError (formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass) { //функция скрытия ошибки
-  const errorElement = formElement.querySelector(`.${inputErrorClass}${inputElement.name}`);
-  errorElement.textContent = ''; //очищаем текст ошибки
-  inputElement.classList.remove(popupInputErrorClass); //удаляем класс ошибки инпуту
-  errorElement.classList.remove(errorClass);
-};
-
-function checkInputValidity (formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass) { //функция проверки поля на валидность
-  const isElementValid = inputElement.validity.valid;
-
-  if (!isElementValid) {//в зависимости от валидности поля показываем или прячем сообщение об ошибке
-    const errorMessage = inputElement.validationMessage;
-    showInputError(formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass, errorMessage);
-  } else {
-    hideInputError(formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass);
-  }
-};
-
-function toggleButtonState (inputList, buttonElement, inactiveButtonClass) { //функция переключения кнопки
-  const hasNotValidInput = inputList.some(inputElement => { //ищем хотя бы 1 невалидный инпут
-    return !inputElement.validity.valid
-  });
-
-  if (hasNotValidInput) { //в зависимости от валидности полей переключаем кнопку
-    buttonElement.setAttribute('disabled', true);
-    buttonElement.classList.add(inactiveButtonClass);
-  } else {
-    buttonElement.removeAttribute('disabled');
-    buttonElement.classList.remove(inactiveButtonClass);
-  }
-};
-
-// подстановка значений в инпуты формы редактир профиля при открытии
-//function fillInputValuesPopupChangeProfile(validationSettings) {
-//  const page = document.querySelector(validationSettings.pageSelector);
-//  const popupChangeProfile = page.querySelector(validationSettings.popupChangeProfileSelector);
-//  const profileTitle = page.querySelector(validationSettings.profileTitleSelector);
-//  const profileSubtitle = page.querySelector(validationSettings.profileSubtitleSelector);
-//  const popupChangeProfileInputName = popupChangeProfile.querySelector(validationSettings.popupChangeProfileInputNameSelector);
-//  const popupChangeProfileInputSigning = popupChangeProfile.querySelector(validationSettings.popupChangeProfileInputSigningSelector);
-//
-//  popupChangeProfileInputName.value = profileTitle.textContent;
-//  popupChangeProfileInputSigning.value = profileSubtitle.textContent;
-//};
-
-function setEventListeners (formElement, validationSettings) {
-  const inputList = Array.from(formElement.querySelectorAll(validationSettings.inputSelector)); //получаем массив всех инпутов-полей из формы
-  const buttonElement = formElement.querySelector(validationSettings.submitButtonSelector); //получаем кнопку формы
-
-  //вызываем ее, чтобы поля в попапе редактирования профиля заполнялись перед валидацией, чтобы кнопка изначально была активной
-  //fillInputValuesPopupChangeProfile(validationSettings); // отключил, потому что стала не нужна. пока не понял, почему так
-  //вне слушателя переключаем состояние кнопки, чтобы изначально она была отключена
-  toggleButtonState(inputList, buttonElement, validationSettings.inactiveButtonClass);
-
-  inputList.forEach(inputElement => { //на все поля формы ставим слушатели
-    inputElement.addEventListener('input', (evt) => {
-      checkInputValidity(formElement, inputElement, validationSettings.inputErrorClass, validationSettings.errorClass, validationSettings.popupInputErrorClass); //в слушателе проверяем валидность поля
-      toggleButtonState(inputList, buttonElement, validationSettings.inactiveButtonClass); //в слушателе переключаем состояние кнопки
-    })
-  })
-};
-
-
-function clearErrors (validationSettings) { //функция удаления ошибок при открытии форм
-  const errorSpanElementsIsActive = Array.from(document.querySelectorAll(`.${validationSettings.errorClass}`)); // получаем все активные span с ошибками
-  const errorInputElementsIsActive = Array.from(document.querySelectorAll(`.${validationSettings.popupInputErrorClass}`)); // получаем все активные input с ошибками
-  errorSpanElementsIsActive.forEach( (errorElement) => {
-    errorElement.textContent = ''; //удаляем у каждого текст
-    errorElement.classList.remove(validationSettings.errorClass); //удаляем класс активности
-  });
-  errorInputElementsIsActive.forEach( (errorElement) => {
-    errorElement.classList.remove(validationSettings.popupInputErrorClass); //удаляем класс активности
-  });
-}
-
-  function disableSaveButton (validationSettings) { // функция отключения кнопки submit в форме добавления карточки при открытии формы
-    const newCardSaveButton = document.querySelector(validationSettings.submitButtonAddNewCardSelector);
-    newCardSaveButton.setAttribute('disabled', true);
-    newCardSaveButton.classList.add(validationSettings.inactiveButtonClass);
-  }
-
-  function activateSaveButton (validationSettings) {
-    const changeProfileSaveButton = document.querySelector(validationSettings.submitButtonChangeProfileSelector);
-    if (changeProfileSaveButton.classList.contains(validationSettings.inactiveButtonClass)) { //если у кнопки есть класс неактивности
-      changeProfileSaveButton.removeAttribute('disabled');
-      changeProfileSaveButton.classList.remove(validationSettings.inactiveButtonClass);
-    }
-
-    //console.log(changeProfileSaveButton.classList.contains(validationSettings.inactiveButtonClass));
-  }
-
-function enableValidation (validationSettings) { //главная функция валидации
-
-  const formList = Array.from(document.querySelectorAll(validationSettings.formSelector));//получаем массив из всех форм на странице
-  formList.forEach((formElement) => { // для всех форм вызываем функцию setEventListeners
-    setEventListeners(formElement, validationSettings);
-  });
-
-  //удаление ошибок в полях при закрытии формы
-  const profileChangeButton = document.querySelector(validationSettings.profileChangeButtonSelector); //вешаем обработчики на кнопку открытия формы
-  const cardAddButton = document.querySelector(validationSettings.cardAddButtonSelector); //вешаем обработчики на кнопку открытия формы
-  profileChangeButton.addEventListener('click', () => {clearErrors(validationSettings)}); //вешаем обработчики на кнопку открытия формы
-  cardAddButton.addEventListener('click', () => {clearErrors(validationSettings)}); //вешаем обработчики на кнопку открытия формы
-  cardAddButton.addEventListener('click', () => {disableSaveButton(validationSettings)}); //отключаем при открытии кнопку submit в форме добавления новой карточки
-  // в форме редактир профиля при повторном открытии формы кнопка неактивна если в форме до этого поля были невалидны. исправление
-  profileChangeButton.addEventListener('click', () => {activateSaveButton(validationSettings)}); //вешаем обработчики на кнопку открытия формы
-};
-//  включение валидации вызовом enableValidation
-// все настройки передаются при вызове
-enableValidation({
+const validationSettings = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button-save',
@@ -201,27 +128,11 @@ enableValidation({
   popupChangeProfileSelector: '.popup_change-profile',
   popupChangeProfileInputNameSelector: '.popup__input_profile-name',
   popupChangeProfileInputSigningSelector: '.popup__input_profile-signing',
+}
+
+
+const formList = Array.from(document.querySelectorAll(validationSettings.formSelector));//получаем массив из всех форм на странице
+formList.forEach((formElement) => {
+  const formValidation = new FormValidator (validationSettings, formElement);
+  formValidation.enableValidation();
 });
-
-
-const exVal = new FormValidator ({
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button-save',
-  inactiveButtonClass: 'popup__button-save_disabled',
-  inputErrorClass: 'popup__input-error_type_',
-  errorClass: 'popup__input-error_active',
-  profileChangeButtonSelector: '.profile__change-button',
-  cardAddButtonSelector: '.profile__add-button',
-  submitButtonAddNewCardSelector: '.popup__button-save_add-card',
-  submitButtonChangeProfileSelector: '.popup__button-save_change-profile',
-  popupInputErrorClass:'popup__input_error',
-  pageSelector:'.page',
-  profileTitleSelector: '.profile__title',
-  profileSubtitleSelector: '.profile__subtitle',
-  popupChangeProfileSelector: '.popup_change-profile',
-  popupChangeProfileInputNameSelector: '.popup__input_profile-name',
-  popupChangeProfileInputSigningSelector: '.popup__input_profile-signing',
-}, document.querySelector('.popup__form'));
-
-exVal.enableValidation();
