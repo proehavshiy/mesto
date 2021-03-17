@@ -1,57 +1,18 @@
-class Card {
-  constructor (item, config) {
-    this._item = item;
-    this._config = config;
-  }
-  generateCard() {
-    this._cardElement = this._getTemplate(this._config);
-    this._setEventListeners(this._cardElement); //устанавливаем все лисенеры в карточке
-    this._cardElement.querySelector(this._config.templateImageSelector).src = this._item.link; //добавляем линк
-    this._cardElement.querySelector(this._config.templateImageSelector).alt = `Картинка ${this._item.name}`; //добавляем alt
-    this._cardElement.querySelector(this._config.templateCardTitleSelector).textContent = this._item.name; //добавляем заголовок
-    return  this._cardElement;
-  }
-  _getTemplate() {
-    const _templateElement = document
-    .querySelector(this._config.templateElementSelector)
-    .content
-    .cloneNode(true);
-    return _templateElement;
-  }
-  _setEventListeners(card) {
-    const _cardDeleteButton = card.querySelector(this._config.templateDeleteButtonSelector); //кнопка удаления карточки
-    _cardDeleteButton.addEventListener('click', (evt) => this._deleteCard(evt));
-    const _cardLikeButton = card.querySelector(this._config.templateLikeButtonSelector); //кнопки лайка
-    _cardLikeButton.addEventListener('click', (evt) => this._likeCard(evt, config));
-    const _cardImage = card.querySelector(this._config.templateImageSelector); // картинка карточки
-    _cardImage.addEventListener('click', () => this._openImage()); //раскрытие картинки
-  }
-  _deleteCard(evt) {
-    evt.target.closest(this._config.templateCardBodySelector).remove();
-  }
-  _likeCard(evt) {
-    evt.target.classList.toggle(this._config.LikeIsActiveClass);
-  }
-  _openImage() {
-      const _popupOpenImage = document.querySelector(this._config.popupOpenImageSelector);
-      this._fillpopupOpenImage(_popupOpenImage);
-      openPopup(_popupOpenImage, this._config); //обращение к глобальной функции открытия попапа
-  }
-  _fillpopupOpenImage(_popupOpenImage) {
-    const _popupOpenImageImage = _popupOpenImage.querySelector(this._config.popupOpenImageImageSelector);
-    const _popupOpenImageFigcaption = _popupOpenImage.querySelector(this._config.popupOpenImageFigcaptionSelector);
-    _popupOpenImageImage.src = this._item.link;
-    _popupOpenImageImage.alt = this._item.name;
-    _popupOpenImageFigcaption.textContent = this._item.name;
-  }
-}
-
+import { initialCards } from './initial-сards.js';
+import { Card } from './Card.js';
+import { FormValidator, validationSettings } from './FormValidator.js';
 
 //функции
 function openPopup(popupType, config) {
   popupType.classList.add(config.openedPopupClass);
   document.addEventListener('keyup', handlePopup); // добавляем слушатель для закрытия формы по esc
   popupType.addEventListener('click', handlePopup); // добавляем слушатель на клик для формы и ее дочерних элементов (для закрытия по клику по вне формы и по крестику. Тут работает всплытие)
+  //подключение валидации формы
+  const formList = Array.from(document.querySelectorAll(validationSettings.formSelector));//получаем массив из всех форм на странице
+  formList.forEach((formElement) => {
+  const formValidation = new FormValidator (validationSettings, formElement);
+  formValidation.enableValidation();
+});
 };
 
 function closePopup(popupType, config) {
@@ -116,6 +77,22 @@ function renderInitialCards(sectionElement, config) {
   });
 };
 
+//функция сбора попапа картинки
+function openImage(item, config) {
+  const popupOpenImage = document.querySelector(config.popupOpenImageSelector);
+  const popupOpenImageImage = popupOpenImage.querySelector(config.popupOpenImageImageSelector);
+  const popupOpenImageFigcaption = popupOpenImage.querySelector(config.popupOpenImageFigcaptionSelector);
+  fillpopupOpenImage(popupOpenImageImage, popupOpenImageFigcaption, item);
+  openPopup(popupOpenImage, config);
+};
+
+// наполнение содержанием попапа открытия картинки
+function fillpopupOpenImage(popupOpenImageImage, popupOpenImageFigcaption, item) {
+  popupOpenImageImage.src = item.link;
+  popupOpenImageImage.alt = item.name;
+  popupOpenImageFigcaption.textContent = item.name;
+};
+
 // Обработчики форм
 //форма редактирования профиля
 function formSubmitChangeProfile(evt, popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config) {
@@ -154,12 +131,22 @@ function popupControl(config) {
   const popupChangeProfileInputName = popupChangeProfile.querySelector(config.popupChangeProfileInputNameSelector);
   const popupChangeProfileInputSigning = popupChangeProfile.querySelector(config.popupChangeProfileInputSigningSelector);
   const sectionElement = document.querySelector(config.sectionElementSelector);
+  const cardSection = page.querySelector(config.cardSectionSelector);
 
   //Слушатели - точки входа
   popupChangeProfile.addEventListener('submit', (evt) => formSubmitChangeProfile(evt, popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config));
   popupAddCard.addEventListener('submit', (evt) => formSubmitAddCard(evt, popupAddCard, sectionElement, config));
   changeProfileButton.addEventListener('click', () => handlePopupChangeProfile(popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config));
   AddCardButton.addEventListener('click', () => handlePopupAddCard(popupAddCard, config));
+  //для открытия popupImage
+  cardSection.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains(config.templateImageClass)) {
+      const cardTitle = evt.target.closest(config.templateCardBodySelector).querySelector(config.templateCardTitleSelector).textContent;
+      const cardImageLink = evt.target.src;
+      const popupImageData = ({name:cardTitle, link:cardImageLink});
+      openImage(popupImageData, config);
+    }
+  })
 
   renderInitialCards(sectionElement, config) //отображение карточек в html
 };
@@ -172,6 +159,7 @@ const config = {
   openedPopupSelector: '.popup_opened',
   profileTitleSelector: '.profile__title',
   profileSubtitleSelector: '.profile__subtitle',
+  cardSectionSelector: '.elements',
   //универсальные
   formSelector: '.popup__form',
   closeButtonSelector: '.popup__button-close',
@@ -193,6 +181,7 @@ const config = {
   sectionElementSelector: '.elements',
   templateElementSelector: '.template-element',
   templateCardBodySelector: '.element',
+  templateImageClass: 'element__image',
   templateImageSelector: '.element__image',
   templateCardTitleSelector:'.element__card-title',
   templateDeleteButtonSelector:'.element__button-delete',
