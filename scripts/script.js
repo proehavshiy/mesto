@@ -1,3 +1,52 @@
+class Card {
+  constructor (item, config) {
+    this._item = item;
+    this._config = config;
+  }
+  generateCard() {
+    this._cardElement = this._getTemplate(this._config);
+    this._setEventListeners(this._cardElement); //устанавливаем все лисенеры в карточке
+    this._cardElement.querySelector(this._config.templateImageSelector).src = this._item.link; //добавляем линк
+    this._cardElement.querySelector(this._config.templateImageSelector).alt = `Картинка ${this._item.name}`; //добавляем alt
+    this._cardElement.querySelector(this._config.templateCardTitleSelector).textContent = this._item.name; //добавляем заголовок
+    return  this._cardElement;
+  }
+  _getTemplate() {
+    const _templateElement = document
+    .querySelector(this._config.templateElementSelector)
+    .content
+    .cloneNode(true);
+    return _templateElement;
+  }
+  _setEventListeners(card) {
+    const _cardDeleteButton = card.querySelector(this._config.templateDeleteButtonSelector); //кнопка удаления карточки
+    _cardDeleteButton.addEventListener('click', (evt) => this._deleteCard(evt));
+    const _cardLikeButton = card.querySelector(this._config.templateLikeButtonSelector); //кнопки лайка
+    _cardLikeButton.addEventListener('click', (evt) => this._likeCard(evt, config));
+    const _cardImage = card.querySelector(this._config.templateImageSelector); // картинка карточки
+    _cardImage.addEventListener('click', () => this._openImage()); //раскрытие картинки
+  }
+  _deleteCard(evt) {
+    evt.target.closest(this._config.templateCardBodySelector).remove();
+  }
+  _likeCard(evt) {
+    evt.target.classList.toggle(this._config.LikeIsActiveClass);
+  }
+  _openImage() {
+      const _popupOpenImage = document.querySelector(this._config.popupOpenImageSelector);
+      this._fillpopupOpenImage(_popupOpenImage);
+      openPopup(_popupOpenImage, this._config); //обращение к глобальной функции открытия попапа
+  }
+  _fillpopupOpenImage(_popupOpenImage) {
+    const _popupOpenImageImage = _popupOpenImage.querySelector(this._config.popupOpenImageImageSelector);
+    const _popupOpenImageFigcaption = _popupOpenImage.querySelector(this._config.popupOpenImageFigcaptionSelector);
+    _popupOpenImageImage.src = this._item.link;
+    _popupOpenImageImage.alt = this._item.name;
+    _popupOpenImageFigcaption.textContent = this._item.name;
+  }
+}
+
+
 //функции
 function openPopup(popupType, config) {
   popupType.classList.add(config.openedPopupClass);
@@ -61,60 +110,10 @@ function resetPopupAddCardForm(popupAddCard, config) {
 
 //функция отображения собранной карточки в html
 function renderInitialCards(sectionElement, config) {
-  const cards = initialCards.map((item) => getItem(item, config));
-
-  sectionElement.append(...cards);
-};
-
-//функция сбора карточки из темплейта
-function getItem(item, config) {
-  const templateElement = document.querySelector(config.templateElementSelector).content;
-  const newItem = templateElement.cloneNode(true); // заготовка карточки
-  const newItemLink = newItem.querySelector(config.templateImageSelector);
-  newItemLink.src = item.link; //добавляем линк
-  const newItemAlt = newItem.querySelector(config.templateImageSelector);
-  newItemAlt.alt = `Картинка ${item.name}`; //добавляем alt
-  const newItemTitle = newItem.querySelector(config.templateCardTitleSelector);
-  newItemTitle.textContent = item.name; //добавляем заголовок
-  const cardDeleteButton = newItem.querySelector(config.templateDeleteButtonSelector); //кнопки удаления карточки
-  cardDeleteButton.addEventListener('click', (evt) => deleteCard(evt, config));
-  const cardLikeButton = newItem.querySelector(config.templateLikeButtonSelector); //кнопки лайка
-  cardLikeButton.addEventListener('click', (evt) => likeCard(evt, config));
-  newItemLink.addEventListener('click', () => openImage(item, config)); //кнопка раскрытия картинки
-  return newItem;
-};
-
-//функция сбора попапа картинки
-function openImage(item, config) {
-  const popupOpenImage = document.querySelector(config.popupOpenImageSelector);
-  const popupOpenImageImage = popupOpenImage.querySelector(config.popupOpenImageImageSelector);
-  const popupOpenImageFigcaption = popupOpenImage.querySelector(config.popupOpenImageFigcaptionSelector);
-  fillpopupOpenImage(popupOpenImageImage, popupOpenImageFigcaption, item);
-  openPopup(popupOpenImage, config);
-};
-
-// наполнение содержанием попапа открытия картинки
-function fillpopupOpenImage(popupOpenImageImage, popupOpenImageFigcaption, item) {
-  popupOpenImageImage.src = item.link;
-  popupOpenImageImage.alt = item.name;
-  popupOpenImageFigcaption.textContent = item.name;
-};
-
-//функция удаления карточки
-function deleteCard(evt, config) {
-  evt.target.closest(config.templateCardBodySelector).remove();
-  //const eventTarget = evt.target;
-  //const deleteCard = eventTarget.closest('.element');
-  //deleteCard.remove();
-};
-
-//функция лайка
-function likeCard(evt, config) {
-  evt.target.classList.toggle(config.LikeIsActiveClass);
-  //const eventTarget = evt.target;
-  //const likeCard = eventTarget.closest('.element');
-  //const like = likeCard.querySelector('.element__button-like');
-  //like.classList.toggle('button-like_active');
+  const cards = initialCards.map((item) => {
+    const newCard = new Card (item, config);
+    sectionElement.append(newCard.generateCard());
+  });
 };
 
 // Обработчики форм
@@ -136,7 +135,8 @@ function formSubmitAddCard(evt, popupAddCard, sectionElement, config) {
   const InputImageLink = popupAddCard.querySelector(config.popupAddCardInputImageLinkSelector).value;
 
   const values = ({name:InputLocationName, link:InputImageLink}); //значения из полей формы
-  sectionElement.prepend(getItem(values, config));
+  const newCard = new Card (values, config);
+  sectionElement.prepend(newCard.generateCard());
 
   closePopup(popupAddCard, config);
 };
@@ -200,3 +200,4 @@ const config = {
   LikeIsActiveClass: 'button-like_active',
 };
 popupControl(config);
+

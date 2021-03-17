@@ -1,3 +1,70 @@
+class FormValidator {
+  constructor(validationSettings, form) {
+    this._validationSettings = validationSettings;
+    this._form = form;
+  }
+  enableValidation() {
+
+    const _inputList = Array.from(this._form.querySelectorAll(this._validationSettings.inputSelector)); //получаем массив всех инпутов-полей из формы
+    //const _buttonElement = this._form.querySelector(this._validationSettings.submitButtonSelector); //получаем кнопку формы
+    //console.log('_inputList', _inputList);
+    //console.log('_buttonElement', _buttonElement);
+    this._toggleButtonState();
+
+    this._setEventListeners(_inputList);
+
+
+  }
+  _setEventListeners(_inputList) {
+    //лисенер на каждый инпут формы
+    _inputList.forEach(inputElement => {
+      inputElement.addEventListener('input', () => {
+        this._checkInputValidity(inputElement); //проверка валидности инпута
+        this._toggleButtonState(); //переключение состояния кнопки в завис от валидности
+      })
+    })
+
+  //  //удаление ошибок в полях при закрытии формы
+  //const _profileChangeButton = document.querySelector(this._validationSettings.profileChangeButtonSelector);
+  //const cardAddButton = document.querySelector(validationSettings.cardAddButtonSelector); //вешаем обработчики на кнопку открытия формы
+  //profileChangeButton.addEventListener('click', () => {clearErrors(validationSettings)}); //вешаем обработчики на кнопку открытия формы
+  //cardAddButton.addEventListener('click', () => {clearErrors(validationSettings)}); //вешаем обработчики на кнопку открытия формы
+  //cardAddButton.addEventListener('click', () => {disableSaveButton(validationSettings)}); //отключаем при открытии кнопку submit в форме добавления новой карточки
+  //// в форме редактир профиля при повторном открытии формы кнопка неактивна если в форме до этого поля были невалидны. исправление
+  //profileChangeButton.addEventListener('click', () => {activateSaveButton(validationSettings)}); //вешаем обработчики на кнопку открытия формы
+  }
+  _checkInputValidity(inputElement) {
+    const _isElementValid = inputElement.validity.valid;
+
+    if (!_isElementValid) {//в зависимости от валидности поля показываем или прячем сообщение об ошибке
+      const _errorMessage = inputElement.validationMessage;
+      _showInputError(inputElement, _errorMessage);
+    } else {
+      _hideInputError(inputElement);
+    }
+
+    //function checkInputValidity (formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass) { //функция проверки поля на валидность
+    //  const isElementValid = inputElement.validity.valid;
+    //
+    //  if (!isElementValid) {//в зависимости от валидности поля показываем или прячем сообщение об ошибке
+    //    const errorMessage = inputElement.validationMessage;
+    //    showInputError(formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass, errorMessage);
+    //  } else {
+    //    hideInputError(formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass);
+    //  }
+    //};
+  }
+  _showInputError(inputElement, _errorMessage) {
+
+  }
+  _hideInputError() {}
+  _toggleButtonState() {}
+  _clearErrors() {}
+  _disableSaveButton() {}
+  _activateSaveButton() {}
+}
+
+
 function showInputError (formElement, inputElement, inputErrorClass, errorClass, popupInputErrorClass, errorMessage) { //функция показа ошибки
   const errorElement = formElement.querySelector(`.${inputErrorClass}${inputElement.name}`); //находим span ошибки
   //const errorElement = inputElement.closest('.popup__input-section').querySelector('.popup__input-error'); //еще один способ
@@ -137,3 +204,24 @@ enableValidation({
 });
 
 
+const exVal = new FormValidator ({
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button-save',
+  inactiveButtonClass: 'popup__button-save_disabled',
+  inputErrorClass: 'popup__input-error_type_',
+  errorClass: 'popup__input-error_active',
+  profileChangeButtonSelector: '.profile__change-button',
+  cardAddButtonSelector: '.profile__add-button',
+  submitButtonAddNewCardSelector: '.popup__button-save_add-card',
+  submitButtonChangeProfileSelector: '.popup__button-save_change-profile',
+  popupInputErrorClass:'popup__input_error',
+  pageSelector:'.page',
+  profileTitleSelector: '.profile__title',
+  profileSubtitleSelector: '.profile__subtitle',
+  popupChangeProfileSelector: '.popup_change-profile',
+  popupChangeProfileInputNameSelector: '.popup__input_profile-name',
+  popupChangeProfileInputSigningSelector: '.popup__input_profile-signing',
+}, document.querySelector('.popup__form'));
+
+exVal.enableValidation();
