@@ -1,7 +1,7 @@
 export class Card {
-  constructor (item, config) {
-    this._item = item;
+  constructor (config, item) {
     this._config = config;
+    this._item = item;
   }
   generateCard() {
     this._cardElement = this._getTemplate(this._config);

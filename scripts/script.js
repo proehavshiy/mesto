@@ -1,6 +1,6 @@
 import { initialCards } from './initial-сards.js';
 import { Card } from './Card.js';
-import { FormValidator, validationSettings } from './FormValidator.js';
+import { FormValidator } from './FormValidator.js';
 
 //функции
 function openPopup(popupType, config) {
@@ -8,9 +8,10 @@ function openPopup(popupType, config) {
   document.addEventListener('keyup', handlePopup); // добавляем слушатель для закрытия формы по esc
   popupType.addEventListener('click', handlePopup); // добавляем слушатель на клик для формы и ее дочерних элементов (для закрытия по клику по вне формы и по крестику. Тут работает всплытие)
   //подключение валидации формы
-  const formList = Array.from(document.querySelectorAll(validationSettings.formSelector));//получаем массив из всех форм на странице
+  const formList = Array.from(document.querySelectorAll(config.formSelector));//получаем массив из всех форм на странице
+  //!!думаю, что логичнее было бы брать 1 конкретную форму, которую открывает пользователь, и проверять только ее, чем всегда проверять все
   formList.forEach((formElement) => {
-  const formValidation = new FormValidator (validationSettings, formElement);
+  const formValidation = new FormValidator (config, formElement);
   formValidation.enableValidation();
 });
 };
@@ -72,7 +73,7 @@ function resetPopupAddCardForm(popupAddCard, config) {
 //функция отображения собранной карточки в html
 function renderInitialCards(sectionElement, config) {
   const cards = initialCards.map((item) => {
-    const newCard = new Card (item, config);
+    const newCard = new Card (config, item);
     sectionElement.append(newCard.generateCard());
   });
 };
@@ -82,6 +83,7 @@ function openImage(item, config) {
   const popupOpenImage = document.querySelector(config.popupOpenImageSelector);
   const popupOpenImageImage = popupOpenImage.querySelector(config.popupOpenImageImageSelector);
   const popupOpenImageFigcaption = popupOpenImage.querySelector(config.popupOpenImageFigcaptionSelector);
+
   fillpopupOpenImage(popupOpenImageImage, popupOpenImageFigcaption, item);
   openPopup(popupOpenImage, config);
 };
@@ -112,19 +114,18 @@ function formSubmitAddCard(evt, popupAddCard, sectionElement, config) {
   const InputImageLink = popupAddCard.querySelector(config.popupAddCardInputImageLinkSelector).value;
 
   const values = ({name:InputLocationName, link:InputImageLink}); //значения из полей формы
-  const newCard = new Card (values, config);
+  const newCard = new Card (config, values);
   sectionElement.prepend(newCard.generateCard());
 
   closePopup(popupAddCard, config);
 };
 
-
 function popupControl(config) {
   const page = document.querySelector(config.pageSelector);
   const popupChangeProfile = page.querySelector(config.popupChangeProfileSelector);
   const popupAddCard = page.querySelector(config.popupAddCardSelector);
-  const changeProfileButton = page.querySelector(config.changeProfileButtonSelector);
-  const AddCardButton = page.querySelector(config.addCardButtonSelector);
+  const changeProfileButton = page.querySelector(config.profileChangeButtonSelector);
+  const AddCardButton = page.querySelector(config.cardAddButtonSelector);
 
   const profileTitle = page.querySelector(config.profileTitleSelector);
   const profileSubtitle = page.querySelector(config.profileSubtitleSelector);
@@ -144,6 +145,7 @@ function popupControl(config) {
       const cardTitle = evt.target.closest(config.templateCardBodySelector).querySelector(config.templateCardTitleSelector).textContent;
       const cardImageLink = evt.target.src;
       const popupImageData = ({name:cardTitle, link:cardImageLink});
+
       openImage(popupImageData, config);
     }
   })
@@ -160,19 +162,27 @@ const config = {
   profileTitleSelector: '.profile__title',
   profileSubtitleSelector: '.profile__subtitle',
   cardSectionSelector: '.elements',
-  //универсальные
+  //универсальные для форм
   formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button-save',
+  inactiveButtonClass: 'popup__button-save_disabled',
   closeButtonSelector: '.popup__button-close',
+  popupInputErrorClass:'popup__input_error',
+  inputErrorClass: 'popup__input-error_type_',
+  errorClass: 'popup__input-error_active',
   //попап редактирования профиля
   popupChangeProfileSelector: '.popup_change-profile',
   popupChangeProfileInputNameSelector: '.popup__input_profile-name',
   popupChangeProfileInputSigningSelector: '.popup__input_profile-signing',
+  submitButtonChangeProfileSelector: '.popup__button-save_change-profile',
   //попап добавления карточки
   popupAddCardSelector: '.popup_add-card',
   popupAddCardInputLocationNameSelector: '.popup__input_location-name',
   popupAddCardInputImageLinkSelector: '.popup__input_image-link',
-  changeProfileButtonSelector: '.profile__change-button',
-  addCardButtonSelector: '.profile__add-button',
+  profileChangeButtonSelector: '.profile__change-button',
+  cardAddButtonSelector: '.profile__add-button',
+  submitButtonAddNewCardSelector: '.popup__button-save_add-card',
   //попап открытия карточки
   popupOpenImageSelector: '.popup_open-image',
   popupOpenImageImageSelector: '.popup__image',
@@ -188,5 +198,6 @@ const config = {
   templateLikeButtonSelector: '.element__button-like',
   LikeIsActiveClass: 'button-like_active',
 };
+
 popupControl(config);
 
