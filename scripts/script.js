@@ -7,13 +7,6 @@ function openPopup(popupType, config) {
   popupType.classList.add(config.openedPopupClass);
   document.addEventListener('keyup', handlePopup); // добавляем слушатель для закрытия формы по esc
   popupType.addEventListener('click', handlePopup); // добавляем слушатель на клик для формы и ее дочерних элементов (для закрытия по клику по вне формы и по крестику. Тут работает всплытие)
-  //подключение валидации формы
-  const formList = Array.from(document.querySelectorAll(config.formSelector));//получаем массив из всех форм на странице
-  //!!думаю, что логичнее было бы брать 1 конкретную форму, которую открывает пользователь, и проверять только ее, чем всегда проверять все
-  formList.forEach((formElement) => {
-  const formValidation = new FormValidator (config, formElement);
-  formValidation.enableValidation();
-});
 };
 
 function closePopup(popupType, config) {
@@ -110,10 +103,10 @@ function formSubmitChangeProfile(evt, popupChangeProfile, profileTitle, profileS
 function formSubmitAddCard(evt, popupAddCard, sectionElement, config) {
   evt.preventDefault();
 
-  const InputLocationName = popupAddCard.querySelector(config.popupAddCardInputLocationNameSelector).value;
-  const InputImageLink = popupAddCard.querySelector(config.popupAddCardInputImageLinkSelector).value;
+  const inputLocationName = popupAddCard.querySelector(config.popupAddCardinputLocationNameSelector).value;
+  const inputImageLink = popupAddCard.querySelector(config.popupAddCardinputImageLinkSelector).value;
 
-  const values = ({name:InputLocationName, link:InputImageLink}); //значения из полей формы
+  const values = ({name:inputLocationName, link:inputImageLink}); //значения из полей формы
   const newCard = new Card (config, values);
   sectionElement.prepend(newCard.generateCard());
 
@@ -125,7 +118,7 @@ function popupControl(config) {
   const popupChangeProfile = page.querySelector(config.popupChangeProfileSelector);
   const popupAddCard = page.querySelector(config.popupAddCardSelector);
   const changeProfileButton = page.querySelector(config.profileChangeButtonSelector);
-  const AddCardButton = page.querySelector(config.cardAddButtonSelector);
+  const addCardButton = page.querySelector(config.cardAddButtonSelector);
 
   const profileTitle = page.querySelector(config.profileTitleSelector);
   const profileSubtitle = page.querySelector(config.profileSubtitleSelector);
@@ -138,7 +131,7 @@ function popupControl(config) {
   popupChangeProfile.addEventListener('submit', (evt) => formSubmitChangeProfile(evt, popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config));
   popupAddCard.addEventListener('submit', (evt) => formSubmitAddCard(evt, popupAddCard, sectionElement, config));
   changeProfileButton.addEventListener('click', () => handlePopupChangeProfile(popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config));
-  AddCardButton.addEventListener('click', () => handlePopupAddCard(popupAddCard, config));
+  addCardButton.addEventListener('click', () => handlePopupAddCard(popupAddCard, config));
   //для открытия popupImage
   cardSection.addEventListener('click', (evt) => {
     if (evt.target.classList.contains(config.templateImageClass)) {
@@ -151,6 +144,20 @@ function popupControl(config) {
   })
 
   renderInitialCards(sectionElement, config) //отображение карточек в html
+
+  //подключение валидации формы
+  const formList = Array.from(document.querySelectorAll(config.formSelector));//получаем массив из всех форм на странице
+  //!!думаю, что логичнее было бы брать 1 конкретную форму, которую открывает пользователь, и проверять только ее, чем всегда проверять все
+  formList.forEach((formElement) => {
+    const popup = formElement.closest(config.popupSelector);
+    if (popup.classList.contains(config.popupChangeProfileClass)) {
+      const formValidation = new FormValidator (config, formElement, config.profileChangeButtonSelector);
+      formValidation.enableValidation();
+    } else if (popup.classList.contains(config.popupAddCardClass)) {
+      const formValidation = new FormValidator (config, formElement, config.cardAddButtonSelector);
+      formValidation.enableValidation();
+    }
+  });
 };
 
 // конфиг с настройками
@@ -159,10 +166,14 @@ const config = {
   pageSelector:'.page',
   openedPopupClass: 'popup_opened',
   openedPopupSelector: '.popup_opened',
+  profileSectionSelector: '.profile',
+  pageButtonSelector: '.page__button',
+  pageButtonClass: 'page__button',
   profileTitleSelector: '.profile__title',
   profileSubtitleSelector: '.profile__subtitle',
   cardSectionSelector: '.elements',
   //универсальные для форм
+  popupSelector: '.popup',
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button-save',
@@ -172,14 +183,16 @@ const config = {
   inputErrorClass: 'popup__input-error_type_',
   errorClass: 'popup__input-error_active',
   //попап редактирования профиля
+  popupChangeProfileClass: 'popup_change-profile',
   popupChangeProfileSelector: '.popup_change-profile',
   popupChangeProfileInputNameSelector: '.popup__input_profile-name',
   popupChangeProfileInputSigningSelector: '.popup__input_profile-signing',
   submitButtonChangeProfileSelector: '.popup__button-save_change-profile',
   //попап добавления карточки
+  popupAddCardClass: 'popup_add-card',
   popupAddCardSelector: '.popup_add-card',
-  popupAddCardInputLocationNameSelector: '.popup__input_location-name',
-  popupAddCardInputImageLinkSelector: '.popup__input_image-link',
+  popupAddCardinputLocationNameSelector: '.popup__input_location-name',
+  popupAddCardinputImageLinkSelector: '.popup__input_image-link',
   profileChangeButtonSelector: '.profile__change-button',
   cardAddButtonSelector: '.profile__add-button',
   submitButtonAddNewCardSelector: '.popup__button-save_add-card',
