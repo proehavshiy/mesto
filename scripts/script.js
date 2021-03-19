@@ -13,6 +13,7 @@ function openPopup(popupType, config) {
 function closePopup(popupType, config) {
   popupType.classList.remove(config.openedPopupClass);
   document.removeEventListener('keyup', closeByEscape); // удаляем слушатель для закрытия формы по esc
+  popupType.removeEventListener('click', handlepopup);
 };
 
 function closeByEscape(evt) {
