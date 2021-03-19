@@ -2,44 +2,38 @@ import { initialCards } from './initial-сards.js';
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
 
+
 //функции
 function openPopup(popupType, config) {
   popupType.classList.add(config.openedPopupClass);
-  document.addEventListener('keyup', handlePopup); // добавляем слушатель для закрытия формы по esc
-  popupType.addEventListener('click', handlePopup); // добавляем слушатель на клик для формы и ее дочерних элементов (для закрытия по клику по вне формы и по крестику. Тут работает всплытие)
+  document.addEventListener('keyup', closeByEscape); // добавляем слушатель для закрытия формы по esc
+  popupType.addEventListener('click', handlepopup); // добавляем слушатель на клик для формы и ее дочерних элементов (для закрытия по клику по вне формы и по крестику. Тут работает всплытие)
 };
 
 function closePopup(popupType, config) {
   popupType.classList.remove(config.openedPopupClass);
-  document.removeEventListener('keyup', handlePopup); // удаляем слушатель для закрытия формы по esc
-  popupType.removeEventListener('click', handlePopup); // удаляем слушатель на клик для формы и ее дочерних элементов (для закрытия по клику по вне формы и по крестику. Тут работает всплытие)
+  document.removeEventListener('keyup', closeByEscape); // удаляем слушатель для закрытия формы по esc
 };
 
-function handlePopup(evt) { // обработчик типа закрытия формы
-  const target = evt.target;
-  const currentTarget = evt.currentTarget;
-  const targetKey = evt.key;
-  const openedPopup = currentTarget.querySelector(config.openedPopupSelector);
-  const closeButton = currentTarget.querySelector(config.closeButtonSelector)
-  if (isOutFormClicked(target, currentTarget) || isButtonCloseClicked(target, closeButton)) {
-    closePopup(currentTarget, config);
-  } else if (isKeyEscClicked(targetKey)) {
-    closePopup(openedPopup, config);
+function closeByEscape(evt) {
+  if(evt.key === 'Escape') {
+    const openedPopup = evt.currentTarget.querySelector(config.openedPopupSelector);
+    closePopup(openedPopup, config)
   }
-};
+}
 
-function isOutFormClicked(target, currentTarget) { // по пустому полю вне формы
-  return target === currentTarget
-};
-function isButtonCloseClicked(target, closeButton) { // по крестику
-  return target === closeButton
-};
-function isKeyEscClicked(targetKey) { // по Esc
-  return targetKey === 'Escape'
-};
+function handlepopup(evt) { // обработчик типа закрытия формы
+  const currentPopup = evt.currentTarget;
+  if (evt.target.classList.contains(config.openedPopupClass)) {
+    closePopup(currentPopup, config)
+  }
+  if (evt.target.classList.contains(config.closeButtonClass)) {
+    closePopup(currentPopup, config)
+  }
+}
 
 //колбэк попапа изменения профиля
-function handlePopupChangeProfile(popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config) {
+function handlePopupChangeProfile({popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config}) {
   //вызываем функцию, чтобы при переоткрытии снова подставились значения
   fillInputValue(profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning);
   openPopup(popupChangeProfile, config);
@@ -53,13 +47,12 @@ function fillInputValue(profileTitle, profileSubtitle, popupChangeProfileInputNa
 };
 
 //колбэк попапа добавления карточки
-function handlePopupAddCard(popupAddCard, config) {
-  resetPopupAddCardForm(popupAddCard, config); //сбрасываем значение полей при переоткрытии формы
+function handlePopupAddCard(popupAddCard, popupAddCardForm, config) {
+  resetPopupAddCardForm(popupAddCardForm); //сбрасываем значение полей при переоткрытии формы
   openPopup(popupAddCard, config);
 };
 
-function resetPopupAddCardForm(popupAddCard, config) {
-  const popupAddCardForm =  popupAddCard.querySelector(config.formSelector);
+function resetPopupAddCardForm(popupAddCardForm) {
   popupAddCardForm.reset();
 };
 
@@ -72,25 +65,21 @@ function renderInitialCards(sectionElement, config) {
 };
 
 //функция сбора попапа картинки
-function openImage(item, config) {
-  const popupOpenImage = document.querySelector(config.popupOpenImageSelector);
-  const popupOpenImageImage = popupOpenImage.querySelector(config.popupOpenImageImageSelector);
-  const popupOpenImageFigcaption = popupOpenImage.querySelector(config.popupOpenImageFigcaptionSelector);
-
-  fillpopupOpenImage(popupOpenImageImage, popupOpenImageFigcaption, item);
+function openImage({popupImageData, popupOpenImage, popupOpenImageImage, popupOpenImageFigcaption, config}) {
+  fillpopupOpenImage(popupOpenImageImage, popupOpenImageFigcaption, popupImageData);
   openPopup(popupOpenImage, config);
 };
 
 // наполнение содержанием попапа открытия картинки
-function fillpopupOpenImage(popupOpenImageImage, popupOpenImageFigcaption, item) {
-  popupOpenImageImage.src = item.link;
-  popupOpenImageImage.alt = item.name;
-  popupOpenImageFigcaption.textContent = item.name;
+function fillpopupOpenImage(popupOpenImageImage, popupOpenImageFigcaption, popupImageData) {
+  popupOpenImageImage.src = popupImageData.link;
+  popupOpenImageImage.alt = popupImageData.name;
+  popupOpenImageFigcaption.textContent = popupImageData.name;
 };
 
 // Обработчики форм
 //форма редактирования профиля
-function formSubmitChangeProfile(evt, popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config) {
+function formSubmitChangeProfile({evt, popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config}) {
   evt.preventDefault();
 
   profileTitle.textContent = popupChangeProfileInputName.value;
@@ -100,13 +89,10 @@ function formSubmitChangeProfile(evt, popupChangeProfile, profileTitle, profileS
 };
 
 //форма добавления карточки
-function formSubmitAddCard(evt, popupAddCard, sectionElement, config) {
+function formSubmitAddCard({evt, popupAddCard, inputLocationName, inputImageLink, sectionElement, config}) {
   evt.preventDefault();
 
-  const inputLocationName = popupAddCard.querySelector(config.popupAddCardinputLocationNameSelector).value;
-  const inputImageLink = popupAddCard.querySelector(config.popupAddCardinputImageLinkSelector).value;
-
-  const values = ({name:inputLocationName, link:inputImageLink}); //значения из полей формы
+  const values = ({name:inputLocationName.value, link:inputImageLink.value}); //значения из полей формы
   const newCard = new Card (config, values);
   sectionElement.prepend(newCard.generateCard());
 
@@ -118,20 +104,28 @@ function popupControl(config) {
   const popupChangeProfile = page.querySelector(config.popupChangeProfileSelector);
   const popupAddCard = page.querySelector(config.popupAddCardSelector);
   const changeProfileButton = page.querySelector(config.profileChangeButtonSelector);
+
   const addCardButton = page.querySelector(config.cardAddButtonSelector);
+  const popupAddCardForm =  popupAddCard.querySelector(config.formSelector);
+  const inputLocationName = popupAddCard.querySelector(config.popupAddCardinputLocationNameSelector);
+  const inputImageLink = popupAddCard.querySelector(config.popupAddCardinputImageLinkSelector);
+
+  const popupOpenImage = page.querySelector(config.popupOpenImageSelector);
+  const popupOpenImageImage = popupOpenImage.querySelector(config.popupOpenImageImageSelector);
+  const popupOpenImageFigcaption = popupOpenImage.querySelector(config.popupOpenImageFigcaptionSelector);
 
   const profileTitle = page.querySelector(config.profileTitleSelector);
   const profileSubtitle = page.querySelector(config.profileSubtitleSelector);
   const popupChangeProfileInputName = popupChangeProfile.querySelector(config.popupChangeProfileInputNameSelector);
   const popupChangeProfileInputSigning = popupChangeProfile.querySelector(config.popupChangeProfileInputSigningSelector);
-  const sectionElement = document.querySelector(config.sectionElementSelector);
+  const sectionElement = page.querySelector(config.sectionElementSelector);
   const cardSection = page.querySelector(config.cardSectionSelector);
 
   //Слушатели - точки входа
-  popupChangeProfile.addEventListener('submit', (evt) => formSubmitChangeProfile(evt, popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config));
-  popupAddCard.addEventListener('submit', (evt) => formSubmitAddCard(evt, popupAddCard, sectionElement, config));
-  changeProfileButton.addEventListener('click', () => handlePopupChangeProfile(popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config));
-  addCardButton.addEventListener('click', () => handlePopupAddCard(popupAddCard, config));
+  popupChangeProfile.addEventListener('submit', (evt) => formSubmitChangeProfile({evt, popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config}));
+  popupAddCard.addEventListener('submit', (evt) => formSubmitAddCard({evt, popupAddCard, inputLocationName, inputImageLink, sectionElement, config}));
+  changeProfileButton.addEventListener('click', () => handlePopupChangeProfile({popupChangeProfile, profileTitle, profileSubtitle, popupChangeProfileInputName, popupChangeProfileInputSigning, config}));
+  addCardButton.addEventListener('click', () => handlePopupAddCard(popupAddCard, popupAddCardForm, config));
   //для открытия popupImage
   cardSection.addEventListener('click', (evt) => {
     if (evt.target.classList.contains(config.templateImageClass)) {
@@ -139,7 +133,7 @@ function popupControl(config) {
       const cardImageLink = evt.target.src;
       const popupImageData = ({name:cardTitle, link:cardImageLink});
 
-      openImage(popupImageData, config);
+      openImage({popupImageData, popupOpenImage, popupOpenImageImage, popupOpenImageFigcaption, config});
     }
   })
 
@@ -178,6 +172,7 @@ const config = {
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__button-save',
   inactiveButtonClass: 'popup__button-save_disabled',
+  closeButtonClass: 'popup__button-close',
   closeButtonSelector: '.popup__button-close',
   popupInputErrorClass:'popup__input_error',
   inputErrorClass: 'popup__input-error_type_',
