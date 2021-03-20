@@ -9,6 +9,7 @@ export class Card {
     this._cardElement.querySelector(this._config.templateImageSelector).src = this._item.link; //добавляем линк
     this._cardElement.querySelector(this._config.templateImageSelector).alt = `Картинка ${this._item.name}`; //добавляем alt
     this._cardElement.querySelector(this._config.templateCardTitleSelector).textContent = this._item.name; //добавляем заголовок
+
     return  this._cardElement;
   }
   _getTemplate() {
