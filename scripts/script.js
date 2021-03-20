@@ -142,16 +142,10 @@ function popupControl(config) {
 
   //подключение валидации формы
   const formList = Array.from(document.querySelectorAll(config.formSelector));//получаем массив из всех форм на странице
-  //!!думаю, что логичнее было бы брать 1 конкретную форму, которую открывает пользователь, и проверять только ее, чем всегда проверять все
   formList.forEach((formElement) => {
-    const popup = formElement.closest(config.popupSelector);
-    if (popup.classList.contains(config.popupChangeProfileClass)) {
-      const formValidation = new FormValidator (config, formElement, config.profileChangeButtonSelector);
+    const openButton = page.querySelector(`.${formElement.name}-open-button`);
+    const formValidation = new FormValidator (config, formElement, openButton);
       formValidation.enableValidation();
-    } else if (popup.classList.contains(config.popupAddCardClass)) {
-      const formValidation = new FormValidator (config, formElement, config.cardAddButtonSelector);
-      formValidation.enableValidation();
-    }
   });
 };
 

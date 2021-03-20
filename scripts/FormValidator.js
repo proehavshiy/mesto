@@ -4,7 +4,7 @@ export class FormValidator {
     this._form = form;
     this._inputList = Array.from(this._form.querySelectorAll(this._config.inputSelector)); //массив всех инпутов из формы
     this._buttonElement = this._form.querySelector(this._config.submitButtonSelector); //submit кнопка формы
-    this._formOpenButton = document.querySelector(formOpenButton); //кнопка открытия формы
+    this._formOpenButton = formOpenButton; //кнопка открытия формы
   }
   enableValidation() {
     this._setEventListeners();

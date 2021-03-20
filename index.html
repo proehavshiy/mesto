@@ -20,10 +20,10 @@
           <img class="profile__avatar" src="./images/author-photo.jpg" alt="аватар автора">
           <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
-            <button class="profile__change-button page__button" type="button" aria-label="Кнопка Редактировать профиль"></button>
+            <button class="profile__change-button page__button profile-form-open-button" type="button" aria-label="Кнопка Редактировать профиль"></button>
             <p class="profile__subtitle">Исследователь океана</p>
           </div>
-          <button class="profile__add-button page__button" type="button" aria-label="Кнопка Добавить карточку"></button>
+          <button class="profile__add-button page__button new-card-form-open-button" type="button" aria-label="Кнопка Добавить карточку"></button>
         </section>
         <section class="elements page__section">
         </section>
@@ -36,7 +36,7 @@
       <div class="popup popup_change-profile">
         <div class="popup__container popup__container_form popup__container_change-profile">
           <button class="popup__button-close popup__button-close_change-profile page__button" aria-label="Кнопка Закрыть форму" type="button"></button>
-          <form class="popup__form" action="#" method="POST" name="popup-form" novalidate autocomplete="off">
+          <form class="popup__form" action="#" method="POST" name="profile-form" novalidate autocomplete="off">
             <h2 class="popup__heading">
               Редактировать профиль
             </h2>
@@ -59,7 +59,7 @@
       <div class="popup popup_add-card">
         <div class="popup__container popup__container_form popup__container_add-card">
           <button class="popup__button-close popup__button-close_add-card page__button" aria-label="Кнопка Закрыть форму" type="button"></button>
-          <form class="popup__form" action="#" method="POST" name="popup-form" novalidate autocomplete="off">
+          <form class="popup__form" action="#" method="POST" name="new-card-form" novalidate autocomplete="off">
             <h2 class="popup__heading">
               Новое место
             </h2>
