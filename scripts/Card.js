@@ -9,6 +9,7 @@ export class Card {
     this._cardElement.querySelector(this._config.templateImageSelector).src = this._item.link; //добавляем линк
     this._cardElement.querySelector(this._config.templateImageSelector).alt = `Картинка ${this._item.name}`; //добавляем alt
     this._cardElement.querySelector(this._config.templateCardTitleSelector).textContent = this._item.name; //добавляем заголовок
+    this._cardElement.style.animationDelay = ".2s";
 
     return  this._cardElement;
   }
@@ -16,7 +17,9 @@ export class Card {
     const _templateElement = document
     .querySelector(this._config.templateElementSelector)
     .content
+    .querySelector(this._config.templateCardBodySelector)
     .cloneNode(true);
+
     return _templateElement;
   }
   _setEventListeners(card) {

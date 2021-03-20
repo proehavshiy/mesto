@@ -60,7 +60,8 @@ function resetPopupAddCardForm(popupAddCardForm) {
 //функция отображения собранной карточки в html
 function renderInitialCards(sectionElement, config) {
   const cards = initialCards.map((cardData) => {
-    sectionElement.append(createCard(cardData, config));
+    const finishedCard = createCard(cardData, config);
+    sectionElement.append(finishedCard);
   });
 };
 
