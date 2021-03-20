@@ -59,11 +59,17 @@ function resetPopupAddCardForm(popupAddCardForm) {
 
 //функция отображения собранной карточки в html
 function renderInitialCards(sectionElement, config) {
-  const cards = initialCards.map((item) => {
-    const newCard = new Card (config, item);
-    sectionElement.append(newCard.generateCard());
+  const cards = initialCards.map((cardData) => {
+    sectionElement.append(createCard(cardData, config));
   });
 };
+
+//функция получения готовой карточки
+function createCard(cardData, config) {
+    const newCard = new Card (config, cardData);
+    return newCard.generateCard();
+  };
+
 
 //функция сбора попапа картинки
 function openImage({popupImageData, popupOpenImage, popupOpenImageImage, popupOpenImageFigcaption, config}) {
@@ -93,10 +99,10 @@ function formSubmitChangeProfile({evt, popupChangeProfile, profileTitle, profile
 function formSubmitAddCard({evt, popupAddCard, inputLocationName, inputImageLink, sectionElement, config}) {
   evt.preventDefault();
 
-  const values = ({name:inputLocationName.value, link:inputImageLink.value}); //значения из полей формы
-  const newCard = new Card (config, values);
-  sectionElement.prepend(newCard.generateCard());
+  const cardData = ({name:inputLocationName.value, link:inputImageLink.value}); //значения из полей формы
+  const newCard = createCard(cardData, config);
 
+  sectionElement.prepend(newCard);
   closePopup(popupAddCard, config);
 };
 
