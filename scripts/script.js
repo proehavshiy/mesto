@@ -77,6 +77,14 @@ function resetPopupAddCardForm() {
   popupAddCardForm.reset();
 };
 
+//колбэк для открытия попапа картинки из экземпляра класса
+function handleCardClick(name, link) {
+  popupOpenImageImage.src = link;
+  popupOpenImageImage.alt = name;
+  popupOpenImageFigcaption.textContent = name;
+  openPopup(popupOpenImage);
+}
+
 //функция отображения собранной карточки в html
 function renderInitialCards() {
   const cards = initialCards.map((cardData) => {
@@ -87,23 +95,9 @@ function renderInitialCards() {
 
 //функция получения готовой карточки
 function createCard(cardData) {
-    const newCard = new Card (config, cardData);
+    const newCard = new Card (cardData, handleCardClick);
     return newCard.generateCard();
   };
-
-
-//функция сбора попапа картинки
-function openImage(popupImageData) {
-  fillpopupOpenImage(popupImageData);
-  openPopup(popupOpenImage);
-};
-
-// наполнение содержанием попапа открытия картинки
-function fillpopupOpenImage(popupImageData) {
-  popupOpenImageImage.src = popupImageData.link;
-  popupOpenImageImage.alt = popupImageData.name;
-  popupOpenImageFigcaption.textContent = popupImageData.name;
-};
 
 // Обработчики форм
 //форма редактирования профиля
@@ -121,7 +115,7 @@ function formSubmitAddCard(evt) {
   evt.preventDefault();
 
   const cardData = ({name:inputLocationName.value, link:inputImageLink.value}); //значения из полей формы
-  const newCard = createCard(cardData, config);
+  const newCard = createCard(cardData);
 
   sectionElement.prepend(newCard);
   closePopup(popupAddCard);
@@ -134,16 +128,6 @@ function popupControl() {
   popupAddCard.addEventListener('submit', (evt) => formSubmitAddCard(evt));
   changeProfileButton.addEventListener('click', () => handlePopupChangeProfile());
   addCardButton.addEventListener('click', () => handlePopupAddCard());
-  //для открытия popupImage
-  cardSection.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains(config.templateImageClass)) {
-      const cardTitle = evt.target.closest(config.templateCardBodySelector).querySelector(config.templateCardTitleSelector).textContent;
-      const cardImageLink = evt.target.src;
-      const popupImageData = ({name:cardTitle, link:cardImageLink});
-
-      openImage(popupImageData);
-    }
-  })
 
   renderInitialCards() //отображение карточек в html
 
