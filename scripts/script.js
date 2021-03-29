@@ -1,6 +1,7 @@
 import { initialCards } from './initial-сards.js';
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
+import { Section } from './Section.js';
 import {
   config,
   page,
@@ -85,19 +86,29 @@ function handleCardClick(name, link) {
   openPopup(popupOpenImage);
 }
 
-//функция отображения собранной карточки в html
-function renderInitialCards() {
-  const cards = initialCards.map((cardData) => {
-    const finishedCard = createCard(cardData);
-    sectionElement.append(finishedCard);
-  });
-};
+////функция отображения собранной карточки в html
+//function renderInitialCards() {
+//  const cards = initialCards.map((cardData) => {
+//    const finishedCard = createCard(cardData);
+//    sectionElement.append(finishedCard);
+//  });
+//};
+
+
 
 //функция получения готовой карточки
 function createCard(cardData) {
     const newCard = new Card (cardData, handleCardClick);
     return newCard.generateCard();
   };
+
+const defaultCardList = new Section({
+  items: initialCards,
+  renderer: (item) => {
+    const newCard = createCard(item); //создание карточки
+    defaultCardList.appendItem(newCard); //вставка карточки
+    }
+  }, sectionElement);
 
 // Обработчики форм
 //форма редактирования профиля
@@ -118,6 +129,7 @@ function formSubmitAddCard(evt) {
   const newCard = createCard(cardData);
 
   sectionElement.prepend(newCard);
+
   closePopup(popupAddCard);
 };
 
@@ -129,7 +141,8 @@ function popupControl() {
   changeProfileButton.addEventListener('click', () => handlePopupChangeProfile());
   addCardButton.addEventListener('click', () => handlePopupAddCard());
 
-  renderInitialCards() //отображение карточек в html
+  //renderInitialCards() //отображение карточек в html
+  defaultCardList.renderItems();
 
   //подключение валидации формы
   const formList = Array.from(document.querySelectorAll(config.formSelector));//получаем массив из всех форм на странице
