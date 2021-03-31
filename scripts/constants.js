@@ -52,23 +52,15 @@ export const config = {
 };
 //глобальные константы
 export const page = document.querySelector(config.pageSelector);
-export const popupChangeProfile = page.querySelector(config.popupChangeProfileSelector);
-export const popupAddCard = page.querySelector(config.popupAddCardSelector);
+const popupChangeProfile = page.querySelector(config.popupChangeProfileSelector);
 export const changeProfileButton = page.querySelector(config.profileChangeButtonSelector);
 export const addCardButton = page.querySelector(config.cardAddButtonSelector);
-export const popupAddCardForm =  popupAddCard.querySelector(config.formSelector);
-export const inputLocationName = popupAddCard.querySelector(config.popupAddCardinputLocationNameSelector);
-export const inputImageLink = popupAddCard.querySelector(config.popupAddCardinputImageLinkSelector);
-export const popupOpenImage = page.querySelector(config.popupOpenImageSelector);
-export const popupOpenImageImage = popupOpenImage.querySelector(config.popupOpenImageImageSelector);
-export const popupOpenImageFigcaption = popupOpenImage.querySelector(config.popupOpenImageFigcaptionSelector);
-export const profileTitle = page.querySelector(config.profileTitleSelector);
-export const profileSubtitle = page.querySelector(config.profileSubtitleSelector);
 export const popupChangeProfileInputName = popupChangeProfile.querySelector(config.popupChangeProfileInputNameSelector);
 export const popupChangeProfileInputSigning = popupChangeProfile.querySelector(config.popupChangeProfileInputSigningSelector);
 export const sectionElement = page.querySelector(config.sectionElementSelector);
-export const cardSection = page.querySelector(config.cardSectionSelector);
-//export const closePopupButton = page.querySelector(config.closeButtonSelector);
+
+
+
 
 
 

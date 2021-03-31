@@ -1,24 +1,4 @@
-import {
-  config,
-  page,
-  popupChangeProfile,
-  popupAddCard,
-  changeProfileButton,
-  addCardButton,
-  popupAddCardForm,
-  inputLocationName,
-  inputImageLink,
-  popupOpenImage,
-  popupOpenImageImage,
-  popupOpenImageFigcaption,
-  profileTitle,
-  profileSubtitle,
-  popupChangeProfileInputName,
-  popupChangeProfileInputSigning,
-  sectionElement,
-  cardSection
-} from './constants.js';
-
+import { config } from './constants.js';
 
 export class Card {
   constructor ({name, link}, handleCardClick) {

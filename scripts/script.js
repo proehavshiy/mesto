@@ -2,163 +2,102 @@ import { initialCards } from './initial-сards.js';
 import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
 import { Section } from './Section.js';
-import { Popup } from './Popup.js';
 import { PopupWithForm } from './PopupWithForm.js';
 import { PopupWithImage } from './PopupWithImage.js';
 import { UserInfo } from './UserInfo.js';
 import {
   config,
   page,
-  popupChangeProfile,
-  popupAddCard,
   changeProfileButton,
   addCardButton,
-  popupAddCardForm,
-  inputLocationName,
-  inputImageLink,
-  popupOpenImage,
-  popupOpenImageImage,
-  popupOpenImageFigcaption,
-  profileTitle,
-  profileSubtitle,
   popupChangeProfileInputName,
   popupChangeProfileInputSigning,
-  sectionElement,
-  cardSection
+  sectionElement
 } from './constants.js';
 
+//функция получения готовой карточки
+function createCard(cardData) {
+  //как handleCardClick передаем метод open popupWithImage. чтобы получить картинку и подпись карточки и подставить их в попап
+  const handleCardClick = popupWithImage.open.bind(popupWithImage); //если .bind(popupWithImage) не поставить, ошибка потери контекста
+  const newCard = new Card (cardData, handleCardClick);
+  return newCard.generateCard();
+  };
 
+//функционал отрисовки карточек
+const cardDisplay = new Section({
+  items: initialCards,
+  renderer: (item) => {
+    const newCard = createCard(item); //создание изначальных карточек
+    cardDisplay.appendItem(newCard); //вставка изначальных карточек
+    }
+  }, sectionElement);
 
+//попап с картинкой
+const popupWithImage = new PopupWithImage(config.popupOpenImageSelector);
 
-
-//функции
-function openPopup(popupType) {
-  popupType.classList.add(config.openedPopupClass);
-  document.addEventListener('keyup', closeByEscape); // добавляем слушатель для закрытия формы по esc
-  popupType.addEventListener('click', handlepopup); // добавляем слушатель на клик для формы и ее дочерних элементов (для закрытия по клику по вне формы и по крестику. Тут работает всплытие)
-};
-
-function closePopup(popupType) {
-  popupType.classList.remove(config.openedPopupClass);
-  document.removeEventListener('keyup', closeByEscape); // удаляем слушатель для закрытия формы по esc
-  popupType.removeEventListener('click', handlepopup);
-};
-
-function closeByEscape(evt) {
-  if(evt.key === 'Escape') {
-    const openedPopup = evt.currentTarget.querySelector(config.openedPopupSelector);
-    closePopup(openedPopup)
+//попап добавления карточки
+const popupAddCard = new PopupWithForm({
+  popupSelector: config.popupAddCardSelector,
+  handleForm: (formData) => {
+    const newCard = createCard({name:formData['location-name'], link:formData['image-link']});//через колбэк создаем новую карточку с данными из инпутов формы
+    cardDisplay.prependItem(newCard);//вставляем карточку в html методом cardDisplay
+    popupAddCard.close();
   }
-}
+});
 
-function handlepopup(evt) { // обработчик типа закрытия формы
-  const currentPopup = evt.currentTarget;
-  if (evt.target.classList.contains(config.openedPopupClass)) {
-    closePopup(currentPopup)
+//попап редактирования профиля
+const popupChangeProfile = new PopupWithForm({
+  popupSelector: config.popupChangeProfileSelector,
+  handleForm: (formData) => {
+    //обновление данных профиля страницы из инпутов формы при сабмите
+    popupChangeProfileInfo.setUserInfo({name:formData['profile-name'], signing:formData['profile-signing']});
+    popupChangeProfile.close();
   }
-  if (evt.target.classList.contains(config.closeButtonClass)) {
-    closePopup(currentPopup)
-  }
-}
+});
+
+// данные для попапа редактирования профиля
+const popupChangeProfileInfo = new UserInfo({
+  profileTitle: config.profileTitleSelector,
+  profileSubtitle: config.profileSubtitleSelector
+});
 
 //колбэк попапа изменения профиля
 function handlePopupChangeProfile() {
   //вызываем функцию, чтобы при переоткрытии снова подставились значения
   fillInputValue();
-  openPopup(popupChangeProfile);
+  popupChangeProfile.open();
 };
 
-
-// подстановка значений в инпуты формы редактир профиля при открытии
+// заполнение полей формы редактир профиля при открытии
 function fillInputValue() {
-  popupChangeProfileInputName.value = profileTitle.textContent;
-  popupChangeProfileInputSigning.value = profileSubtitle.textContent;
+  const formValues = popupChangeProfileInfo.getUserInfo(); //объект с данными из профиля для заполнения полей
+  popupChangeProfileInputName.value = formValues.inputName;
+  popupChangeProfileInputSigning.value = formValues.inputSigning;
 };
 
-//колбэк попапа добавления карточки
+//колбэк открытия попапа добавления карточки
 function handlePopupAddCard() {
-  resetPopupAddCardForm(); //сбрасываем значение полей при переоткрытии формы
-  openPopup(popupAddCard);
-};
-
-function resetPopupAddCardForm() {
-  popupAddCardForm.reset();
-};
-
-//колбэк для открытия попапа картинки из экземпляра класса
-function handleCardClick(name, link) {
-  popupOpenImageImage.src = link;
-  popupOpenImageImage.alt = `картинка ${name}`;
-  popupOpenImageFigcaption.textContent = name;
-  openPopup(popupOpenImage);
-}
-
-////функция отображения собранной карточки в html
-//function renderInitialCards() {
-//  const cards = initialCards.map((cardData) => {
-//    const finishedCard = createCard(cardData);
-//    sectionElement.append(finishedCard);
-//  });
-//};
-
-// экземпляр класса попап с картинкой
-const popupWithImage = new PopupWithImage(config.popupOpenImageSelector);
-popupWithImage.setEventListeners();
-
-//функция получения готовой карточки
-function createCard(cardData) {
-    const newCard = new Card (cardData, popupWithImage.open.bind(popupWithImage));//если .bind(popupWithImage) не поставить, ошибка потери котекста
-    return newCard.generateCard();
-  };
-
-const defaultCardList = new Section({
-  items: initialCards,
-  renderer: (item) => {
-    const newCard = createCard(item); //создание карточки
-    defaultCardList.appendItem(newCard); //вставка карточки
-    }
-  }, sectionElement);
-
-// Обработчики форм
-//форма редактирования профиля
-function formSubmitChangeProfile(evt) {
-  evt.preventDefault();
-
-  profileTitle.textContent = popupChangeProfileInputName.value;
-  profileSubtitle.textContent = popupChangeProfileInputSigning.value;
-
-  closePopup(popupChangeProfile);
-};
-
-//форма добавления карточки
-function formSubmitAddCard(evt) {
-  evt.preventDefault();
-
-  const cardData = ({name:inputLocationName.value, link:inputImageLink.value}); //значения из полей формы
-  const newCard = createCard(cardData);
-
-  sectionElement.prepend(newCard); //это надо как-то переделать через метод класса Section, но пока не знаю, как
-
-  closePopup(popupAddCard);
+  popupAddCard.open()
 };
 
 function popupControl() {
-
-  //Слушатели - точки входа
-  popupChangeProfile.addEventListener('submit', (evt) => formSubmitChangeProfile(evt));
-  popupAddCard.addEventListener('submit', (evt) => formSubmitAddCard(evt));
+  //Слушатели - кнопки
   changeProfileButton.addEventListener('click', () => handlePopupChangeProfile());
   addCardButton.addEventListener('click', () => handlePopupAddCard());
+  //Слушатели - попапы
+  popupWithImage.setEventListeners();
+  popupAddCard.setEventListeners();
+  popupChangeProfile.setEventListeners();
 
-  //renderInitialCards() //отображение карточек в html
-  defaultCardList.renderItems();
+  //отображение карточек в html
+  cardDisplay.renderItems();
 
-  //подключение валидации формы
+  //подключение валидации формам
   const formList = Array.from(document.querySelectorAll(config.formSelector));//получаем массив из всех форм на странице
   formList.forEach((formElement) => {
     const openButton = page.querySelector(`.${formElement.name}-open-button`);
     const formValidation = new FormValidator (config, formElement, openButton);
-      formValidation.enableValidation();
+    formValidation.enableValidation();
   });
 };
 
