@@ -3,6 +3,8 @@ import { Card } from './Card.js';
 import { FormValidator } from './FormValidator.js';
 import { Section } from './Section.js';
 import { Popup } from './Popup.js';
+import { PopupWithForm } from './PopupWithForm.js';
+import { PopupWithImage } from './PopupWithImage.js';
 import {
   config,
   page,
@@ -82,7 +84,7 @@ function resetPopupAddCardForm() {
 //колбэк для открытия попапа картинки из экземпляра класса
 function handleCardClick(name, link) {
   popupOpenImageImage.src = link;
-  popupOpenImageImage.alt = name;
+  popupOpenImageImage.alt = `картинка ${name}`;
   popupOpenImageFigcaption.textContent = name;
   openPopup(popupOpenImage);
 }

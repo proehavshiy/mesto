@@ -68,6 +68,7 @@ export const popupChangeProfileInputName = popupChangeProfile.querySelector(conf
 export const popupChangeProfileInputSigning = popupChangeProfile.querySelector(config.popupChangeProfileInputSigningSelector);
 export const sectionElement = page.querySelector(config.sectionElementSelector);
 export const cardSection = page.querySelector(config.cardSectionSelector);
+//export const closePopupButton = page.querySelector(config.closeButtonSelector);
 
 
 
