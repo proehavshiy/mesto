@@ -5,6 +5,7 @@ import { Section } from './Section.js';
 import { Popup } from './Popup.js';
 import { PopupWithForm } from './PopupWithForm.js';
 import { PopupWithImage } from './PopupWithImage.js';
+import { UserInfo } from './UserInfo.js';
 import {
   config,
   page,
@@ -25,6 +26,9 @@ import {
   sectionElement,
   cardSection
 } from './constants.js';
+
+
+
 
 
 //функции
@@ -97,11 +101,13 @@ function handleCardClick(name, link) {
 //  });
 //};
 
-
+// экземпляр класса попап с картинкой
+const popupWithImage = new PopupWithImage(config.popupOpenImageSelector);
+popupWithImage.setEventListeners();
 
 //функция получения готовой карточки
 function createCard(cardData) {
-    const newCard = new Card (cardData, handleCardClick);
+    const newCard = new Card (cardData, popupWithImage.open.bind(popupWithImage));//если .bind(popupWithImage) не поставить, ошибка потери котекста
     return newCard.generateCard();
   };
 
@@ -131,7 +137,7 @@ function formSubmitAddCard(evt) {
   const cardData = ({name:inputLocationName.value, link:inputImageLink.value}); //значения из полей формы
   const newCard = createCard(cardData);
 
-  sectionElement.prepend(newCard);
+  sectionElement.prepend(newCard); //это надо как-то переделать через метод класса Section, но пока не знаю, как
 
   closePopup(popupAddCard);
 };
