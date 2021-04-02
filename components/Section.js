@@ -1,17 +1,17 @@
 export class Section {
   constructor({items, renderer}, appendSection) {
-    this._initialArray = items; // initialCards
-    this._renderer = renderer; // колбэк, отвечающий за то, как отрисовывать
+    this._initialСardsData = items; // initialCards
+    this._renderer = renderer; // колбэк, отвечающий за то, каким способом отрисовывать
     this._sectionForAddition = appendSection; //куда вставлять готовый элемент
   }
   //метод, который отвечает за отрисовку всех элементов
   renderItems() {
-    const cards = this._initialArray.forEach((item) => {
+    const _cards = this._initialСardsData.forEach((item) => {
       this._renderer(item); //колбэк - то, как именно отрисовывать карточки
     })
   }
 
-  //вставка в html
+  //методы вставки в html
   appendItem(element) {
     this._sectionForAddition.append(element);
   }

@@ -1,4 +1,4 @@
-import { config } from './constants.js';
+import { config } from '../utils/constants.js';
 
 export class Card {
   constructor ({name, link}, handleCardClick) {

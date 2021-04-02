@@ -1,10 +1,10 @@
-import { initialCards } from './initial-сards.js';
-import { Card } from './Card.js';
-import { FormValidator } from './FormValidator.js';
-import { Section } from './Section.js';
-import { PopupWithForm } from './PopupWithForm.js';
-import { PopupWithImage } from './PopupWithImage.js';
-import { UserInfo } from './UserInfo.js';
+import { initialCards } from '../utils/initial-сards.js';
+import { Card } from '../components/Card.js';
+import { FormValidator } from '../components/FormValidator.js';
+import { Section } from '../components/Section.js';
+import { PopupWithForm } from '../components/PopupWithForm.js';
+import { PopupWithImage } from '../components/PopupWithImage.js';
+import { UserInfo } from '../components/UserInfo.js';
 import {
   config,
   page,
@@ -13,12 +13,12 @@ import {
   popupChangeProfileInputName,
   popupChangeProfileInputSigning,
   sectionElement
-} from './constants.js';
+} from '../utils/constants.js';
 
-//функция получения готовой карточки
+//функция сборки готовой карточки
 function createCard(cardData) {
   //как handleCardClick передаем метод open popupWithImage. чтобы получить картинку и подпись карточки и подставить их в попап
-  const handleCardClick = popupWithImage.open.bind(popupWithImage); //если .bind(popupWithImage) не поставить, ошибка потери контекста
+  const handleCardClick = popupWithImage.open.bind(popupWithImage); //потеря контекста. эта функция навешивается как колбэк слушателю картинки карточки. И this будет определяться как картинка, куда мы кликнем
   const newCard = new Card (cardData, handleCardClick);
   return newCard.generateCard();
   };
@@ -38,8 +38,8 @@ const popupWithImage = new PopupWithImage(config.popupOpenImageSelector);
 //попап добавления карточки
 const popupAddCard = new PopupWithForm({
   popupSelector: config.popupAddCardSelector,
-  handleForm: (formData) => {
-    const newCard = createCard({name:formData['location-name'], link:formData['image-link']});//через колбэк создаем новую карточку с данными из инпутов формы
+  handleForm: (formInputValues) => {
+    const newCard = createCard({name:formInputValues['location-name'], link:formInputValues['image-link']});//через колбэк создаем новую карточку с данными из инпутов формы
     cardDisplay.prependItem(newCard);//вставляем карточку в html методом cardDisplay
     popupAddCard.close();
   }
@@ -48,17 +48,17 @@ const popupAddCard = new PopupWithForm({
 //попап редактирования профиля
 const popupChangeProfile = new PopupWithForm({
   popupSelector: config.popupChangeProfileSelector,
-  handleForm: (formData) => {
+  handleForm: (formInputValues) => {
     //обновление данных профиля страницы из инпутов формы при сабмите
-    popupChangeProfileInfo.setUserInfo({name:formData['profile-name'], signing:formData['profile-signing']});
+    changingProfileInfo.setUserInfo({name:formInputValues['profile-name'], signing:formInputValues['profile-signing']});
     popupChangeProfile.close();
   }
 });
 
 // данные для попапа редактирования профиля
-const popupChangeProfileInfo = new UserInfo({
-  profileTitle: config.profileTitleSelector,
-  profileSubtitle: config.profileSubtitleSelector
+const changingProfileInfo = new UserInfo({
+  profileTitleSelector: config.profileTitleSelector,
+  profileSubtitleSelector: config.profileSubtitleSelector
 });
 
 //колбэк попапа изменения профиля
@@ -70,7 +70,7 @@ function handlePopupChangeProfile() {
 
 // заполнение полей формы редактир профиля при открытии
 function fillInputValue() {
-  const formValues = popupChangeProfileInfo.getUserInfo(); //объект с данными из профиля для заполнения полей
+  const formValues = changingProfileInfo.getUserInfo(); //объект с данными из профиля для заполнения полей
   popupChangeProfileInputName.value = formValues.inputName;
   popupChangeProfileInputSigning.value = formValues.inputSigning;
 };

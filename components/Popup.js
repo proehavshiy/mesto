@@ -1,25 +1,19 @@
-import { config } from './constants.js';
+import { config } from '../utils/constants.js';
 
 export class Popup {
   constructor(popupSelector) {
     this._popupElement = document.querySelector(popupSelector);
-    this._closePopupButton = this._popupElement.querySelector(config.closeButtonSelector);
-    this._handleEscCloseBind = this._handleEscClose.bind(this); //если bind не привязать к слушателю, потеряется контекст
-    this._handleClickCloseBind = this._handleClickClose.bind(this); //если bind не привязать к слушателю, потеряется контекст
   }
   open() {
     this._popupElement.classList.add(config.openedPopupClass);
-    document.addEventListener('keyup', this._handleEscCloseBind);
-    //this._popupElement.addEventListener('click', this._handleClickCloseBind);
+    document.addEventListener('keyup', this._handleEscClose.bind(this));//если bind не привязать к слушателю, потеряется контекст
   }
   close() {
     this._popupElement.classList.remove(config.openedPopupClass);
-    document.removeEventListener('keyup', this._handleEscCloseBind);
-    //this._popupElement.removeEventListener('click', this._handleClickCloseBind);
+    document.removeEventListener('keyup', this._handleEscClose.bind(this));//если bind не привязать к слушателю, потеряется контекст
   }
   _handleEscClose(evt) {
     if(evt.key === 'Escape') {
-      //const openedPopup = evt.currentTarget.querySelector(config.openedPopupSelector);
       this.close();
     }
   }
@@ -34,6 +28,6 @@ export class Popup {
   setEventListeners() {
     //Содержит публичный метод setEventListeners, который добавляет слушатель клика иконке закрытия попапа.
     //добавляем слушатель на закрытие попапа кликом по кнопке и кликом вне формы
-    this._popupElement.addEventListener('click',  this._handleClickCloseBind);
+    this._popupElement.addEventListener('click',  this._handleClickClose.bind(this));//если колбэк не забиндить, будет потеря контекста/ привязываем this к экземпляру класса
   }
 }
