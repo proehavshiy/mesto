@@ -97,7 +97,15 @@ function managePopup() {
   const formList = Array.from(document.querySelectorAll(config.formSelector));//получаем массив из всех форм на странице
   formList.forEach((formElement) => {
     const openButton = page.querySelector(`.${formElement.name}-open-button`);
-    const formValidation = new FormValidator (config, formElement, openButton);
+
+    const formValidation = new FormValidator (config, formElement);
+    //слушатель на кнопку открытия попапа для очистки ошибок в полях форм при открытии.
+    //Биндим, чтобы не потерять контекст
+    openButton.addEventListener('click', formValidation.hideInputErrors.bind(formValidation));
+    //слушатель на кнопку открытия попапа для изменения состояния кнопки
+    // сабмита формы в зависимости от валидации инпутов
+    //Биндим, чтобы не потерять контекст
+    openButton.addEventListener('click', formValidation.toggleButtonState.bind(formValidation));
     formValidation.enableValidation();
   });
 };

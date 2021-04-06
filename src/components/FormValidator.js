@@ -1,30 +1,27 @@
 export class FormValidator {
-  constructor(config, form, formOpenButton) {
+  constructor(config, form) {
     this._config = config;
     this._form = form;
     this._inputList = Array.from(this._form.querySelectorAll(this._config.inputSelector)); //массив всех инпутов из формы
     this._buttonElement = this._form.querySelector(this._config.submitButtonSelector); //submit кнопка формы
-    this._formOpenButton = formOpenButton; //кнопка открытия формы
   }
   enableValidation() {
     this._setEventListeners();
+  }
+  //публичный метод для очистки ошибок в полях форм при открытии формы по кнопке
+  hideInputErrors() {
+    this._inputList.forEach(_inputElement => {
+      this._hideInputError(_inputElement);
+    })
   }
   _setEventListeners() {
     //лисенер на каждый инпут формы
     this._inputList.forEach(_inputElement => {
       _inputElement.addEventListener('input', () => {
         this._checkInputValidity(_inputElement); //проверка валидности инпута
-        this._toggleButtonState(); //переключение состояния кнопки в завис от валидности
+        this.toggleButtonState(); //переключение состояния кнопки в завис от валидности
       })
     })
-    //лисенер на кнопку открытия формы для очистки ошибок в полях форм
-    this._formOpenButton.addEventListener('click', () => {
-      this._inputList.forEach(_inputElement => {
-        this._hideInputError(_inputElement);
-      })
-    });
-    //изменение состояния кнопки сабмита формы в зависимости от валидации инпутов
-    this._formOpenButton.addEventListener('click', () => {this._toggleButtonState()});
   }
   _checkInputValidity(_inputElement) {
     if (!_inputElement.validity.valid) {//в зависимости от валидности поля показываем или прячем сообщение об ошибке
@@ -53,7 +50,7 @@ export class FormValidator {
     _inputElement.classList.remove(this._config.popupInputErrorClass);
     _errorElement.classList.remove(this._config.errorClass);
   }
-  _toggleButtonState() {
+  toggleButtonState() {
     //ищем хотя бы 1 невалидный инпут
     const _hasNotValidInput = this._inputList.some(_inputElement => {
       return !_inputElement.validity.valid
