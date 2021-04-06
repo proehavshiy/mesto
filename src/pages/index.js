@@ -1,10 +1,10 @@
-import { initialCards } from './utils/initial-сards.js';
-import { Card } from './components/Card.js';
-import { FormValidator } from './components/FormValidator.js';
-import { Section } from './components/Section.js';
-import { PopupWithForm } from './components/PopupWithForm.js';
-import { PopupWithImage } from './components/PopupWithImage.js';
-import { UserInfo } from './components/UserInfo.js';
+import { initialCards } from '../utils/initial-сards.js';
+import { Card } from '../components/Card.js';
+import { FormValidator } from '../components/FormValidator.js';
+import { Section } from '../components/Section.js';
+import { PopupWithForm } from '../components/PopupWithForm.js';
+import { PopupWithImage } from '../components/PopupWithImage.js';
+import { UserInfo } from '../components/UserInfo.js';
 import {
   config,
   page,
@@ -13,8 +13,8 @@ import {
   popupChangeProfileInputName,
   popupChangeProfileInputSigning,
   sectionElement
-} from './utils/constants.js';
-import './pages/index.css';
+} from '../utils/constants';
+import './index.css';
 
 //функция сборки готовой карточки
 function createCard(cardData) {
@@ -81,7 +81,7 @@ function handlePopupAddCard() {
   popupAddCard.open()
 };
 
-function popupControl() {
+function managePopup() {
   //Слушатели - кнопки
   changeProfileButton.addEventListener('click', () => handlePopupChangeProfile());
   addCardButton.addEventListener('click', () => handlePopupAddCard());
@@ -102,4 +102,4 @@ function popupControl() {
   });
 };
 
-popupControl();
+managePopup();
