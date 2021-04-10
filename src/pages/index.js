@@ -66,12 +66,29 @@ function createCard(cardData) {
 //попап с картинкой
 const popupWithImage = new PopupWithImage(config.popupOpenImageSelector);
 
+
+
 //попап добавления карточки
 const popupAddCard = new PopupWithForm({
   popupSelector: config.popupAddCardSelector,
   handleForm: (formInputValues) => {
-    const newCard = createCard({name:formInputValues['location-name'], link:formInputValues['image-link']});//через колбэк создаем новую карточку с данными из инпутов формы
-    cardDisplay.prependItem(newCard);//вставляем карточку в html методом cardDisplay
+    apiConnection.sendNewCard({
+      name: formInputValues['location-name'],
+      link: formInputValues['image-link']
+    })
+    .then(cardInfo => {
+      //console.log('новая карточка',cardInfo)
+      const newCard = createCard({name:cardInfo.name, link:cardInfo.link});//через колбэк создаем новую карточку с данными из инпутов формы
+      const newCardDisplay = new Section({
+        items: cardInfo,
+        renderer: () => {}
+      },
+        sectionElement);
+      newCardDisplay.prependItem(newCard); //вставка новой карточки
+    })
+    .catch(error => {
+      console.log(error)
+    })
     popupAddCard.close();
   }
 });
@@ -90,7 +107,7 @@ const popupChangeProfile = new PopupWithForm({
       changingProfileInfo.setUserInfo({name:userInfo.name, signing:userInfo.about, avatar: userInfo.avatar});
     })
     .catch(error => {
-      console.log(error)
+      console.log('error')
     })
     popupChangeProfile.close();
   }
