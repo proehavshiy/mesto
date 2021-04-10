@@ -25,6 +25,8 @@ const apiConnection = new Api({
   token: 'a039ff03-9c34-4fce-91e0-77cd409474e3'
 })
 
+
+
 //функционал отрисовки карточек из API
 apiConnection.getCards()
 .then(serverCardsData => {
@@ -78,8 +80,18 @@ const popupAddCard = new PopupWithForm({
 const popupChangeProfile = new PopupWithForm({
   popupSelector: config.popupChangeProfileSelector,
   handleForm: (formInputValues) => {
-    //обновление данных профиля страницы из инпутов формы при сабмите
-    changingProfileInfo.setUserInfo({name:formInputValues['profile-name'], signing:formInputValues['profile-signing']});
+    //обновление данных профиля страницы из инпутов формы при сабмите + отправка их на сервер по api
+    apiConnection.sendUserInfo({
+      newName: formInputValues['profile-name'],
+      newAbout: formInputValues['profile-signing']
+    })
+    .then(userInfo => {
+      //console.log('s', result)
+      changingProfileInfo.setUserInfo({name:userInfo.name, signing:userInfo.about, avatar: userInfo.avatar});
+    })
+    .catch(error => {
+      console.log(error)
+    })
     popupChangeProfile.close();
   }
 });
@@ -91,7 +103,7 @@ const changingProfileInfo = new UserInfo({
   avatar: config.profileAvatar
 });
 
-//получаем данные профиля с сервера и отображаем их на странице
+//получаем данные профиля по api и отображаем их на странице
 apiConnection.getUserInfo()
 .then(userInfo => {
   changingProfileInfo.setUserInfo({

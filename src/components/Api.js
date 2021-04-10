@@ -31,4 +31,25 @@ export class Api {
       return Promise.reject(`Ошибка ${response.status}`)
     });
   }
+  //отправка на сервер новых данных пользователя
+  //Метод PATCH обычно используют для обновления сущностей, уже существующих на сервере
+  sendUserInfo({ newName, newAbout }) {
+    return fetch(`${this._serverUrl}/${this._cohort}/users/me`, {
+      method: 'PATCH',
+      headers: {
+        authorization: this._token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: newName,
+        about: newAbout
+      })
+    })
+    .then(response => {
+      if(response.ok) {
+        return response.json();
+      }
+      return Promise.reject(`ошибка ${response.status}`)
+    })
+  }
 }
