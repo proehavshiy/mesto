@@ -5,6 +5,7 @@ import { Section } from '../components/Section.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
 import { UserInfo } from '../components/UserInfo.js';
+import { Api } from '../components/Api.js';
 import {
   config,
   page,
@@ -13,8 +14,18 @@ import {
   popupChangeProfileInputName,
   popupChangeProfileInputSigning,
   sectionElement
-} from '../utils/constants';
-import './index.css';
+} from '../utils/constants.js';
+////////////////////ВКЛЮЧИТЬ ПОТОМ ПЕРЕД СБОРКОЙ ВЕБПАКОМ!!!!
+//import './index.css';
+
+//запрос к api
+const getApi = new Api({
+  serverUrl: 'https://mesto.nomoreparties.co/v1',
+  cohort: 'cohort-22',
+  token: 'a039ff03-9c34-4fce-91e0-77cd409474e3'
+})
+
+
 
 //функция сборки готовой карточки
 function createCard(cardData) {
@@ -59,8 +70,23 @@ const popupChangeProfile = new PopupWithForm({
 // данные для попапа редактирования профиля
 const changingProfileInfo = new UserInfo({
   profileTitleSelector: config.profileTitleSelector,
-  profileSubtitleSelector: config.profileSubtitleSelector
+  profileSubtitleSelector: config.profileSubtitleSelector,
+  avatar: config.profileAvatar
 });
+
+//получаем данные профиля с сервера и отображаем их на странице
+getApi.getUserInfo()
+.then(userInfo => {
+  changingProfileInfo.setUserInfo({
+    name: userInfo.name,
+    signing: userInfo.about,
+    avatar: userInfo.avatar
+  })
+})
+.catch(error => {
+  console.log("ошибка! получить данные имя и профиль не вышло");
+})
+
 
 //колбэк попапа изменения профиля
 function handlePopupChangeProfile() {
@@ -111,3 +137,17 @@ function managePopup() {
 };
 
 managePopup();
+
+
+
+//Токен: a039ff03-9c34-4fce-91e0-77cd409474e3
+//Идентификатор группы: cohort-22
+//fetch('https://mesto.nomoreparties.co/v1/cohort-22/users/me', {
+//  headers: {
+//    authorization: 'a039ff03-9c34-4fce-91e0-77cd409474e3'
+//  }
+//})
+//  .then(res => res.json())
+//  .then((result) => {
+//    console.log(result);
+//  });

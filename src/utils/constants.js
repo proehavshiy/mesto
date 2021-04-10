@@ -7,6 +7,7 @@ export const config = {
   profileSectionSelector: '.profile',
   pageButtonSelector: '.page__button',
   pageButtonClass: 'page__button',
+  profileAvatar: '.profile__avatar',
   profileTitleSelector: '.profile__title',
   profileSubtitleSelector: '.profile__subtitle',
   cardSectionSelector: '.elements',
