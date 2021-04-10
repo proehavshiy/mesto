@@ -19,6 +19,7 @@ export class UserInfo {
     this._profileTitle.textContent = name;
     this._profileSubtitle.textContent = signing;
     this._profileAvatar.src = avatar;
+
   }
 }
 

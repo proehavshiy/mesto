@@ -6,6 +6,7 @@ export class Section {
   }
   //метод, который отвечает за отрисовку всех элементов
   renderItems() {
+    //console.log('this._initialСardsData',this._initialСardsData);
     const _cards = this._initialСardsData.forEach((item) => {
       this._renderer(item); //колбэк - то, как именно отрисовывать карточки
     })

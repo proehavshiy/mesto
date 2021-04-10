@@ -19,13 +19,29 @@ import {
 //import './index.css';
 
 //запрос к api
-const getApi = new Api({
+const apiConnection = new Api({
   serverUrl: 'https://mesto.nomoreparties.co/v1',
   cohort: 'cohort-22',
   token: 'a039ff03-9c34-4fce-91e0-77cd409474e3'
 })
 
-
+//функционал отрисовки карточек из API
+apiConnection.getCards()
+.then(serverCardsData => {
+  //console.log(result)
+  const cardDisplay = new Section({
+    //сюда нужно передать из апи name и link // initialCards
+    items: serverCardsData,
+    renderer: (item) => {
+      const newCard = createCard(item); //создание изначальных карточек
+      cardDisplay.appendItem(newCard); //вставка изначальных карточек
+      }
+    }, sectionElement);
+  cardDisplay.renderItems();
+})
+.catch(err => {
+  console.log('error')
+})
 
 //функция сборки готовой карточки
 function createCard(cardData) {
@@ -36,13 +52,14 @@ function createCard(cardData) {
   };
 
 //функционал отрисовки карточек
-const cardDisplay = new Section({
-  items: initialCards,
-  renderer: (item) => {
-    const newCard = createCard(item); //создание изначальных карточек
-    cardDisplay.appendItem(newCard); //вставка изначальных карточек
-    }
-  }, sectionElement);
+//const cardDisplay = new Section({
+//  //сюда нужно передать из апи name и link // initialCards
+//  items: initialCards,
+//  renderer: (item) => {
+//    const newCard = createCard(item); //создание изначальных карточек
+//    cardDisplay.appendItem(newCard); //вставка изначальных карточек
+//    }
+//  }, sectionElement);
 
 //попап с картинкой
 const popupWithImage = new PopupWithImage(config.popupOpenImageSelector);
@@ -75,7 +92,7 @@ const changingProfileInfo = new UserInfo({
 });
 
 //получаем данные профиля с сервера и отображаем их на странице
-getApi.getUserInfo()
+apiConnection.getUserInfo()
 .then(userInfo => {
   changingProfileInfo.setUserInfo({
     name: userInfo.name,
@@ -117,7 +134,7 @@ function managePopup() {
   popupChangeProfile.setEventListeners();
 
   //отображение карточек в html
-  cardDisplay.renderItems();
+  //cardDisplay.renderItems();
 
   //подключение валидации формам
   const formList = Array.from(document.querySelectorAll(config.formSelector));//получаем массив из всех форм на странице
