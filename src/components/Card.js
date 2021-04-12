@@ -1,9 +1,10 @@
 import { config } from '../utils/constants.js';
 
 export class Card {
-  constructor ({name, link}, handleCardClick) {
+  constructor ({name, link, likes}, handleCardClick) {
     this._name = name;
     this._link = link;
+    this._likes = likes.length;
     this._handleCardClick = handleCardClick;
   }
   generateCard() {
@@ -12,6 +13,8 @@ export class Card {
     this._cardElement.querySelector(config.templateImageSelector).src = this._link; //добавляем линк
     this._cardElement.querySelector(config.templateImageSelector).alt = `Картинка ${this._name}`; //добавляем alt
     this._cardElement.querySelector(config.templateCardTitleSelector).textContent = this._name; //добавляем заголовок
+    this._cardElement.querySelector(config.cardLikeCounterSelector).textContent = this._likes; //добавляем кол-во лайков карточке
+
     this._cardElement.style.animationDelay = ".2s";
 
     return  this._cardElement;

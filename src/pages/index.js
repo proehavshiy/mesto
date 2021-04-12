@@ -30,9 +30,9 @@ const apiConnection = new Api({
 //функционал отрисовки карточек из API
 apiConnection.getCards()
 .then(serverCardsData => {
-  //console.log(result)
+  //console.log(serverCardsData)
   const cardDisplay = new Section({
-    //сюда нужно передать из апи name и link // initialCards
+    //сюда нужно передать из апи name и link, likes // initialCards
     items: serverCardsData,
     renderer: (item) => {
       const newCard = createCard(item); //создание изначальных карточек
