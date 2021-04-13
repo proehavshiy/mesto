@@ -78,7 +78,7 @@ const popupAddCard = new PopupWithForm({
     })
     .then(cardInfo => {
       //console.log('новая карточка',cardInfo)
-      const newCard = createCard({name:cardInfo.name, link:cardInfo.link});//через колбэк создаем новую карточку с данными из инпутов формы
+      const newCard = createCard({name:cardInfo.name, link:cardInfo.link, likes:cardInfo.likes});//через колбэк создаем новую карточку с данными из инпутов формы
       const newCardDisplay = new Section({
         items: cardInfo,
         renderer: () => {}
