@@ -1,10 +1,11 @@
 import { config } from '../utils/constants.js';
 
 export class Card {
-  constructor ({name, link, likes}, handleCardClick) {
+  constructor ({name, link, likes, owner}, handleCardClick) {
     this._name = name;
     this._link = link;
     this._likes = likes.length;
+    this.ownerId = owner._id; //"b939b1d8959802541ab0c34b"
     this._handleCardClick = handleCardClick;
   }
   generateCard() {
@@ -14,6 +15,10 @@ export class Card {
     this._cardElement.querySelector(config.templateImageSelector).alt = `Картинка ${this._name}`; //добавляем alt
     this._cardElement.querySelector(config.templateCardTitleSelector).textContent = this._name; //добавляем заголовок
     this._cardElement.querySelector(config.cardLikeCounterSelector).textContent = this._likes; //добавляем кол-во лайков карточке
+    //если владелец карточки не я, то удаляем кнопку "удалить"
+    if(this.ownerId !== "b939b1d8959802541ab0c34b") {
+      this._cardElement.querySelector(config.templateDeleteButtonSelector).style.display = "none";
+    }
 
     this._cardElement.style.animationDelay = ".2s";
 

@@ -30,7 +30,7 @@ const apiConnection = new Api({
 //функционал отрисовки карточек из API
 apiConnection.getCards()
 .then(serverCardsData => {
-  //console.log(serverCardsData)
+  console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера',serverCardsData)
   const cardDisplay = new Section({
     //сюда нужно передать из апи name и link, likes // initialCards
     items: serverCardsData,
@@ -77,8 +77,9 @@ const popupAddCard = new PopupWithForm({
       link: formInputValues['image-link']
     })
     .then(cardInfo => {
-      //console.log('новая карточка',cardInfo)
-      const newCard = createCard({name:cardInfo.name, link:cardInfo.link, likes:cardInfo.likes});//через колбэк создаем новую карточку с данными из инпутов формы
+      console.log('api-попап добавления карточки-результат-новая карточка',cardInfo)
+      const newCard = createCard(cardInfo);//через колбэк создаем новую карточку с данными из инпутов формы
+      //{name:cardInfo.name, link:cardInfo.link, likes:cardInfo.likes, owner:cardInfo.owner}
       const newCardDisplay = new Section({
         items: cardInfo,
         renderer: () => {}
@@ -103,11 +104,11 @@ const popupChangeProfile = new PopupWithForm({
       newAbout: formInputValues['profile-signing']
     })
     .then(userInfo => {
-      //console.log('s', result)
+      console.log('api-редактирование профиля-результат', userInfo)
       changingProfileInfo.setUserInfo({name:userInfo.name, signing:userInfo.about, avatar: userInfo.avatar});
     })
     .catch(error => {
-      console.log('error')
+      console.log(error)
     })
     popupChangeProfile.close();
   }
@@ -168,17 +169,19 @@ function managePopup() {
   //подключение валидации формам
   const formList = Array.from(document.querySelectorAll(config.formSelector));//получаем массив из всех форм на странице
   formList.forEach((formElement) => {
-    const openButton = page.querySelector(`.${formElement.name}-open-button`);
+    if (page.querySelector(`.${formElement.name}-open-button`)) {
+      const openButton = page.querySelector(`.${formElement.name}-open-button`);
 
-    const formValidation = new FormValidator (config, formElement);
-    //слушатель на кнопку открытия попапа для очистки ошибок в полях форм при открытии.
-    //Биндим, чтобы не потерять контекст
-    openButton.addEventListener('click', formValidation.hideInputErrors.bind(formValidation));
-    //слушатель на кнопку открытия попапа для изменения состояния кнопки
-    // сабмита формы в зависимости от валидации инпутов
-    //Биндим, чтобы не потерять контекст
-    openButton.addEventListener('click', formValidation.toggleButtonState.bind(formValidation));
-    formValidation.enableValidation();
+      const formValidation = new FormValidator (config, formElement);
+      //слушатель на кнопку открытия попапа для очистки ошибок в полях форм при открытии.
+      //Биндим, чтобы не потерять контекст
+      openButton.addEventListener('click', formValidation.hideInputErrors.bind(formValidation));
+      //слушатель на кнопку открытия попапа для изменения состояния кнопки
+      // сабмита формы в зависимости от валидации инпутов
+      //Биндим, чтобы не потерять контекст
+      openButton.addEventListener('click', formValidation.toggleButtonState.bind(formValidation));
+      formValidation.enableValidation();
+    }
   });
 };
 
