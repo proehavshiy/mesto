@@ -45,14 +45,23 @@ apiConnection.getCards()
   console.log('error')
 })
 
+const popupDeletionConfirm = new PopupWithForm({
+  popupSelector: config.popupDeletionConfirmSelector,
+  handleForm: () => {}
+})
+
+var cardToRemove = null;
+
+
 //функция сборки готовой карточки
 function createCard(cardData) {
+  //удаление карточки с сервера
+  const handleDeleteCard = apiConnection.deleteCard.bind(apiConnection);
   //как handleCardClick передаем метод open popupWithImage. чтобы получить картинку и подпись карточки и подставить их в попап
   const handleCardClick = popupWithImage.open.bind(popupWithImage); //потеря контекста. эта функция навешивается как колбэк слушателю картинки карточки. И this будет определяться как картинка, куда мы кликнем
-  const newCard = new Card (cardData, handleCardClick);
+  const newCard = new Card (cardData, handleCardClick, handleDeleteCard);
   return newCard.generateCard();
   };
-
 //функционал отрисовки карточек
 //const cardDisplay = new Section({
 //  //сюда нужно передать из апи name и link // initialCards

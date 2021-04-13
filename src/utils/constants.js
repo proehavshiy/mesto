@@ -40,6 +40,8 @@ export const config = {
   popupOpenImageSelector: '.popup_open-image',
   popupOpenImageImageSelector: '.popup__image',
   popupOpenImageFigcaptionSelector: '.popup__figcaption',
+  //попап подтверждения удаления карточки
+  popupDeletionConfirmSelector: '.popup_confirm-deletion',
   //карточка
   sectionElementSelector: '.elements',
   templateElementSelector: '.template-element',

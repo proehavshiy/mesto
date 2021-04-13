@@ -72,4 +72,26 @@ export class Api {
       return Promise.reject(`ошибка ${response.status}`)
     })
   }
+  //добавление новой карточки на сервер
+  deleteCard({ name, link }, cardId) {
+    //{ name, link },
+    return fetch(`${this._serverUrl}/${this._cohort}/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: {
+        authorization: this._token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name, //название карточки
+        link: link, //ссылка на картинку
+        _id: cardId
+      })
+    })
+    .then(response => {
+      if(response.ok) {
+        return response.json();
+      }
+      return Promise.reject(`ошибка ${response.status}`)
+    })
+  }
 }

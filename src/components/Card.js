@@ -1,12 +1,14 @@
 import { config } from '../utils/constants.js';
 
 export class Card {
-  constructor ({name, link, likes, owner}, handleCardClick) {
+  constructor ({name, link, likes, owner, _id}, handleCardClick, handleDeleteCard) {
     this._name = name;
     this._link = link;
     this._likes = likes.length;
     this.ownerId = owner._id; //"b939b1d8959802541ab0c34b"
+    this.cardId = _id;
     this._handleCardClick = handleCardClick;
+    this._handleDeleteCard = handleDeleteCard;
   }
   generateCard() {
     this._cardElement = this._getTemplate();
@@ -34,8 +36,25 @@ export class Card {
     return _templateElement;
   }
   _setEventListeners(card) {
-    const _cardDeleteButton = card.querySelector(config.templateDeleteButtonSelector); //кнопка удаления карточки
-    _cardDeleteButton.addEventListener('click', (evt) => this._deleteCard(evt));
+    //лисенер на кнопку удаления карточки
+    if(this.ownerId === "b939b1d8959802541ab0c34b") {
+      const _cardDeleteButton = card.querySelector(config.templateDeleteButtonSelector); //кнопка удаления карточки
+      //_cardDeleteButton.addEventListener('click', (evt) => this._deleteCard(evt));
+      //Удаляем карточку с сервера по клику на кнопку
+      _cardDeleteButton.addEventListener('click', (evt) => this._handleDeleteCard({
+        name: this._name,
+        link: this._link
+      }, this.cardId)
+      .then(result => {
+        console.log(result);
+        //удаляем карточку со страницы
+        this._deleteCard(evt);
+      })
+      .catch(err => {
+        console.log(err)
+      }));
+    }
+
     const _cardLikeButton = card.querySelector(config.templateLikeButtonSelector); //кнопки лайка
     _cardLikeButton.addEventListener('click', (evt) => this._likeCard(evt));
     const _cardImage = card.querySelector(config.templateImageSelector);
