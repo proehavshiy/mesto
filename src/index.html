@@ -85,11 +85,15 @@
       </div>
       <div class="popup popup_confirm-deletion">
         <div class="popup__container popup__container_form popup__container_confirm-deletion">
-          <h2 class="popup__heading">
-            Вы уверены?
-          </h2>
-          <button class="popup__button-close page__button" aria-label="Кнопка Закрыть форму" type="button"></button>
-          <button class="popup__button-save page__button" aria-label="Кнопка подтвердить удаление" type="button">Да</button>
+          <button class="popup__button-close popup__button-close_change-profile page__button" aria-label="Кнопка Закрыть форму" type="button"></button>
+          <form class="popup__form" action="#" method="POST" name="confirm-deletion-form" novalidate autocomplete="off">
+            <h2 class="popup__heading">
+              Вы уверены?
+            </h2>
+            <button class="popup__button-save popup__button-save_confirm-deletion page__button" type="submit" value="Кнопка подтвердить удаление" aria-label="Кнопка Сохранить форму">
+              Да
+            </button>
+          </form>
         </div>
       </div>
       <div class="popup popup_open-image">
