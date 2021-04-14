@@ -55,11 +55,14 @@ var cardToRemove = null;
 
 //функция сборки готовой карточки
 function createCard(cardData) {
+  //лайк карточки
+  const handledeleteLike = apiConnection.deleteLikeCard.bind(apiConnection);
+  const handleAddLike = apiConnection.addLikeCard.bind(apiConnection);
   //удаление карточки с сервера
   const handleDeleteCard = apiConnection.deleteCard.bind(apiConnection);
   //как handleCardClick передаем метод open popupWithImage. чтобы получить картинку и подпись карточки и подставить их в попап
   const handleCardClick = popupWithImage.open.bind(popupWithImage); //потеря контекста. эта функция навешивается как колбэк слушателю картинки карточки. И this будет определяться как картинка, куда мы кликнем
-  const newCard = new Card (cardData, handleCardClick, handleDeleteCard);
+  const newCard = new Card (cardData, handleCardClick, handleDeleteCard, handleAddLike, handledeleteLike);
   return newCard.generateCard();
   };
 //функционал отрисовки карточек

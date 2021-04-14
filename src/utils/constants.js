@@ -52,6 +52,7 @@ export const config = {
   templateDeleteButtonSelector:'.element__button-delete',
   templateLikeButtonSelector: '.element__button-like',
   cardLikeCounterSelector: '.element__like-counter',
+  LikedButtonSelector: '.button-like_active',
   LikeIsActiveClass: 'button-like_active',
 };
 //глобальные константы
