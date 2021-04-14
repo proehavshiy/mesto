@@ -133,4 +133,23 @@ export class Api {
       return Promise.reject(`ошибка ${response.status}`)
     })
   }
+  //Обновление аватара пользователя
+  sendUserAvatar({ newAvatarLink }) {
+    return fetch(`${this._serverUrl}/${this._cohort}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: {
+        authorization: this._token,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        avatar: newAvatarLink
+      })
+    })
+    .then(response => {
+      if(response.ok) {
+        return response.json();
+      }
+      return Promise.reject(`ошибка ${response.status}`)
+    })
+  }
 }

@@ -2,6 +2,15 @@
   max-width: 120px;
   max-height: 120px;
   border-radius: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50%;
+}
+
+.profile__avatar:hover {
+  background-color: #000;
+  opacity: .8;
+  cursor: url(../../../images/Avatar-icon.svg),move;
 }
 
 @media screen and (max-width: 942px) {
