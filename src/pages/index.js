@@ -9,6 +9,7 @@ import { Api } from '../components/Api.js';
 import {
   config,
   page,
+  profileAvatarButton,
   changeProfileButton,
   addCardButton,
   popupChangeProfileInputName,
@@ -106,6 +107,14 @@ const popupAddCard = new PopupWithForm({
   }
 });
 
+//попап редактирования аватара
+const popupChangeAvatar = new PopupWithForm({
+  popupSelector: config.popupChangeAvatarSelector,
+  handleForm: (formInputValues) => {
+
+  }
+})
+
 //попап редактирования профиля
 const popupChangeProfile = new PopupWithForm({
   popupSelector: config.popupChangeProfileSelector,
@@ -166,14 +175,21 @@ function handlePopupAddCard() {
   popupAddCard.open()
 };
 
+//колбэк открытия попапа редактирования аватара
+function handlePopupAvatar() {
+  popupChangeAvatar.open()
+};
+
 function managePopup() {
   //Слушатели - кнопки
   changeProfileButton.addEventListener('click', () => handlePopupChangeProfile());
   addCardButton.addEventListener('click', () => handlePopupAddCard());
+  profileAvatarButton.addEventListener('click', () => handlePopupAvatar());
   //Слушатели - попапы
   popupWithImage.setEventListeners();
   popupAddCard.setEventListeners();
   popupChangeProfile.setEventListeners();
+  popupChangeAvatar.setEventListeners();
 
   //отображение карточек в html
   //cardDisplay.renderItems();

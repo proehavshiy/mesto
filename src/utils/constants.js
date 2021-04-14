@@ -42,6 +42,8 @@ export const config = {
   popupOpenImageFigcaptionSelector: '.popup__figcaption',
   //попап подтверждения удаления карточки
   popupDeletionConfirmSelector: '.popup_confirm-deletion',
+  //попап редактирования аватара
+  popupChangeAvatarSelector: '.popup_avatar',
   //карточка
   sectionElementSelector: '.elements',
   templateElementSelector: '.template-element',
@@ -58,6 +60,7 @@ export const config = {
 //глобальные константы
 export const page = document.querySelector(config.pageSelector);
 const popupChangeProfile = page.querySelector(config.popupChangeProfileSelector);
+export const profileAvatarButton = page.querySelector(config.profileAvatar);
 export const changeProfileButton = page.querySelector(config.profileChangeButtonSelector);
 export const addCardButton = page.querySelector(config.cardAddButtonSelector);
 export const popupChangeProfileInputName = popupChangeProfile.querySelector(config.popupChangeProfileInputNameSelector);
