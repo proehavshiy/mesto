@@ -85,6 +85,8 @@ const popupWithImage = new PopupWithImage(config.popupOpenImageSelector);
 const popupAddCard = new PopupWithForm({
   popupSelector: config.popupAddCardSelector,
   handleForm: (formInputValues) => {
+    renderIsLoading(popupAddCard.submitButton, popupAddCard.submitButtonInitialText, true);
+    console.log('текст кнопки сабмита в начале',popupAddCard.submitButton.textContent)
     apiConnection.sendNewCard({
       name: formInputValues['location-name'],
       link: formInputValues['image-link']
@@ -103,6 +105,10 @@ const popupAddCard = new PopupWithForm({
     .catch(error => {
       console.log(error)
     })
+    .finally(() => {
+      renderIsLoading(popupAddCard.submitButton, popupAddCard.submitButtonInitialText, false);
+      console.log('текст кнопки сабмита в конце',popupAddCard.submitButton.textContent)
+    })
     popupAddCard.close();
   }
 });
@@ -111,6 +117,8 @@ const popupAddCard = new PopupWithForm({
 const popupChangeAvatar = new PopupWithForm({
   popupSelector: config.popupChangeAvatarSelector,
   handleForm: (formInputValues) => {
+    renderIsLoading(popupChangeAvatar.submitButton, popupChangeAvatar.submitButtonInitialText, true);
+    console.log('текст кнопки сабмита в начале',popupChangeAvatar.submitButton.textContent)
     apiConnection.sendUserAvatar({
       newAvatarLink: formInputValues['image-link']
     })
@@ -126,6 +134,10 @@ const popupChangeAvatar = new PopupWithForm({
     .catch(error => {
       console.log(error)
     })
+    .finally(() => {
+      renderIsLoading(popupChangeAvatar.submitButton, popupChangeAvatar.submitButtonInitialText, false);
+      console.log('текст кнопки сабмита в конце',popupChangeAvatar.submitButton.textContent)
+    })
   }
 })
 
@@ -134,6 +146,8 @@ const popupChangeProfile = new PopupWithForm({
   popupSelector: config.popupChangeProfileSelector,
   handleForm: (formInputValues) => {
     //обновление данных профиля страницы из инпутов формы при сабмите + отправка их на сервер по api
+    renderIsLoading(popupChangeProfile.submitButton, popupChangeProfile.submitButtonInitialText, true);
+    console.log('текст кнопки сабмита в начале',popupChangeProfile.submitButton.textContent)
     apiConnection.sendUserInfo({
       newName: formInputValues['profile-name'],
       newAbout: formInputValues['profile-signing']
@@ -144,6 +158,10 @@ const popupChangeProfile = new PopupWithForm({
     })
     .catch(error => {
       console.log(error)
+    })
+    .finally(() => {
+      renderIsLoading(popupChangeProfile.submitButton, popupChangeProfile.submitButtonInitialText, false);
+      console.log('текст кнопки сабмита в конце',popupChangeProfile.submitButton.textContent)
     })
     popupChangeProfile.close();
   }
@@ -184,6 +202,16 @@ function fillInputValue() {
   popupChangeProfileInputSigning.value = formValues.inputSigning;
 };
 
+// функция отображения состояния сабмита кнопки во время ожидания данных с сервера
+function renderIsLoading(button, initialButtonText, isLoading) {
+  console.log('initialButtonText', button.textContent)
+  if(isLoading) {
+    button.textContent = `Сохранение...`;
+  } else {
+    button.textContent = initialButtonText;
+    console.log('должно быть без ...', button.textContent)
+  }
+}
 //колбэк открытия попапа добавления карточки
 function handlePopupAddCard() {
   popupAddCard.open()

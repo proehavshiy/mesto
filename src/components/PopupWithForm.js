@@ -6,6 +6,8 @@ export class PopupWithForm extends Popup {
     super(popupSelector);
     this._handleForm = handleForm; //колбэк сабмита формы
     this._popupForm = this._popupElement.querySelector(config.formSelector); //форма
+    this.submitButton = this._popupElement.querySelector(config.submitButtonSelector); //кнопка сабмит формы
+    this.submitButtonInitialText = this._popupElement.querySelector(config.submitButtonSelector).textContent; //кнопка сабмит формы - изначальный текст
     this._AllPopupFormInputs = this._popupForm.querySelectorAll(config.inputSelector); //все инпуты формы
   }
   //собирает данные всех инпутов формы
