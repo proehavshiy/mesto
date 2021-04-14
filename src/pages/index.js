@@ -27,8 +27,6 @@ const apiConnection = new Api({
   token: 'a039ff03-9c34-4fce-91e0-77cd409474e3'
 })
 
-
-
 //функционал отрисовки карточек из API
 apiConnection.getCards()
 .then(serverCardsData => {
@@ -47,57 +45,44 @@ apiConnection.getCards()
   console.log('error')
 })
 
+//временные переменные для удаления карточки с сервера и со страницы
+var cardDataToRemove = null;
 var cardToRemove = null;
 
+//попап удаления карточки
 const popupDeleteCard = new PopupDeleteCard({
   popupSelector: config.popupDeletionConfirmSelector,
   handleForm: () => {
-    console.log('cardToRemove',cardToRemove)
-    apiConnection.deleteCard(cardToRemove._id)
+    //удаление карточки с сервера
+    apiConnection.deleteCard(cardDataToRemove._id)
     .then(result => {
-      console.log("popupDeleteCard удалили карточку?", result)
-      console.log('cardToRemove',cardToRemove)
+      //удаление карточки со страницы поиском по closest. Целая карточка не удаляется почему-то
+      cardToRemove.closest(config.templateCardBodySelector).remove();
       popupDeleteCard.close();
     })
     .catch(err => {
       console.log("popupDeleteCard - ошибка удаления", err)
     })
-    //console.log('cardToRemove', cardToRemove)
-    //  name: this._name,
-      //  link: this._link
-      //}, this.cardId)
-      //.then(result => {
-      //  console.log(result);
-      //  //удаляем карточку со страницы
-      //  this._deleteCard(evt);
-      //})
-      //.catch(err => {
-      //  console.log(err)
-      //}));
   }
 })
-//console.log('popupDeleteCard', popupDeleteCard)
-
-
-
 
 //функция сборки готовой карточки
 function createCard(cardData) {
   //лайк карточки
   const handledeleteLike = apiConnection.deleteLikeCard.bind(apiConnection);
   const handleAddLike = apiConnection.addLikeCard.bind(apiConnection);
-  //удаление карточки с сервера
-  const handleDeleteCard = () => {
+  //удаление карточки с сервера и со страницы
+  const handleDeleteCard = (createdCard) => {
     popupDeleteCard.open();
-    cardToRemove = cardData;
-    //apiConnection.deleteCard.bind(apiConnection);
+    cardDataToRemove = cardData;
+    cardToRemove = createdCard;
   }
   //как handleCardClick передаем метод open popupWithImage. чтобы получить картинку и подпись карточки и подставить их в попап
   const handleCardClick = popupWithImage.open.bind(popupWithImage); //потеря контекста. эта функция навешивается как колбэк слушателю картинки карточки. И this будет определяться как картинка, куда мы кликнем
   const newCard = new Card (cardData, handleCardClick, handleDeleteCard, handleAddLike, handledeleteLike);
   return newCard.generateCard();
   };
-  //console.log('cardToRemove', cardToRemove)
+
 //функционал отрисовки карточек
 //const cardDisplay = new Section({
 //  //сюда нужно передать из апи name и link // initialCards
@@ -111,14 +96,12 @@ function createCard(cardData) {
 //попап с картинкой
 const popupWithImage = new PopupWithImage(config.popupOpenImageSelector);
 
-
-
 //попап добавления карточки
 const popupAddCard = new PopupWithForm({
   popupSelector: config.popupAddCardSelector,
   handleForm: (formInputValues) => {
+    //кнопка в момент ожидания сервера
     renderIsLoading(popupAddCard.submitButton, popupAddCard.submitButtonInitialText, true);
-    console.log('текст кнопки сабмита в начале',popupAddCard.submitButton.textContent)
     apiConnection.sendNewCard({
       name: formInputValues['location-name'],
       link: formInputValues['image-link']
@@ -126,7 +109,6 @@ const popupAddCard = new PopupWithForm({
     .then(cardInfo => {
       console.log('api-попап добавления карточки-результат-новая карточка',cardInfo)
       const newCard = createCard(cardInfo);//через колбэк создаем новую карточку с данными из инпутов формы
-      //{name:cardInfo.name, link:cardInfo.link, likes:cardInfo.likes, owner:cardInfo.owner}
       const newCardDisplay = new Section({
         items: cardInfo,
         renderer: () => {}
@@ -138,8 +120,8 @@ const popupAddCard = new PopupWithForm({
       console.log(error)
     })
     .finally(() => {
+      //возвращаем изначальную кнопку
       renderIsLoading(popupAddCard.submitButton, popupAddCard.submitButtonInitialText, false);
-      console.log('текст кнопки сабмита в конце',popupAddCard.submitButton.textContent)
     })
     popupAddCard.close();
   }
@@ -149,8 +131,8 @@ const popupAddCard = new PopupWithForm({
 const popupChangeAvatar = new PopupWithForm({
   popupSelector: config.popupChangeAvatarSelector,
   handleForm: (formInputValues) => {
+    //кнопка в момент ожидания сервера
     renderIsLoading(popupChangeAvatar.submitButton, popupChangeAvatar.submitButtonInitialText, true);
-    console.log('текст кнопки сабмита в начале',popupChangeAvatar.submitButton.textContent)
     apiConnection.sendUserAvatar({
       newAvatarLink: formInputValues['image-link']
     })
@@ -167,8 +149,8 @@ const popupChangeAvatar = new PopupWithForm({
       console.log(error)
     })
     .finally(() => {
+      //возвращаем изначальную кнопку
       renderIsLoading(popupChangeAvatar.submitButton, popupChangeAvatar.submitButtonInitialText, false);
-      console.log('текст кнопки сабмита в конце',popupChangeAvatar.submitButton.textContent)
     })
   }
 })
@@ -177,9 +159,9 @@ const popupChangeAvatar = new PopupWithForm({
 const popupChangeProfile = new PopupWithForm({
   popupSelector: config.popupChangeProfileSelector,
   handleForm: (formInputValues) => {
-    //обновление данных профиля страницы из инпутов формы при сабмите + отправка их на сервер по api
+    //кнопка в момент ожидания сервера
     renderIsLoading(popupChangeProfile.submitButton, popupChangeProfile.submitButtonInitialText, true);
-    console.log('текст кнопки сабмита в начале',popupChangeProfile.submitButton.textContent)
+    //обновление данных профиля страницы из инпутов формы при сабмите + отправка их на сервер по api
     apiConnection.sendUserInfo({
       newName: formInputValues['profile-name'],
       newAbout: formInputValues['profile-signing']
@@ -192,8 +174,8 @@ const popupChangeProfile = new PopupWithForm({
       console.log(error)
     })
     .finally(() => {
+      //возвращаем изначальную кнопку
       renderIsLoading(popupChangeProfile.submitButton, popupChangeProfile.submitButtonInitialText, false);
-      console.log('текст кнопки сабмита в конце',popupChangeProfile.submitButton.textContent)
     })
     popupChangeProfile.close();
   }
@@ -216,16 +198,17 @@ apiConnection.getUserInfo()
   })
 })
 .catch(error => {
-  console.log("ошибка! получить данные имя и профиль не вышло");
+  console.log(error);
 })
 
-
-//колбэк попапа изменения профиля
-function handlePopupChangeProfile() {
-  //вызываем функцию, чтобы при переоткрытии снова подставились значения
-  fillInputValue();
-  popupChangeProfile.open();
-};
+// функция отображения состояния сабмита кнопки во время ожидания данных с сервера
+function renderIsLoading(button, initialButtonText, isLoading) {
+  if(isLoading) {
+    button.textContent = `Сохранение...`;
+  } else {
+    button.textContent = initialButtonText;
+  }
+}
 
 // заполнение полей формы редактир профиля при открытии
 function fillInputValue() {
@@ -234,16 +217,13 @@ function fillInputValue() {
   popupChangeProfileInputSigning.value = formValues.inputSigning;
 };
 
-// функция отображения состояния сабмита кнопки во время ожидания данных с сервера
-function renderIsLoading(button, initialButtonText, isLoading) {
-  console.log('initialButtonText', button.textContent)
-  if(isLoading) {
-    button.textContent = `Сохранение...`;
-  } else {
-    button.textContent = initialButtonText;
-    console.log('должно быть без ...', button.textContent)
-  }
-}
+//колбэк попапа изменения профиля
+function handlePopupChangeProfile() {
+  //вызываем функцию, чтобы при переоткрытии снова подставились значения
+  fillInputValue();
+  popupChangeProfile.open();
+};
+
 //колбэк открытия попапа добавления карточки
 function handlePopupAddCard() {
   popupAddCard.open()
@@ -266,12 +246,10 @@ function managePopup() {
   popupDeleteCard.setEventListeners();
   popupChangeAvatar.setEventListeners();
 
-  //отображение карточек в html
-  //cardDisplay.renderItems();
-
   //подключение валидации формам
   const formList = Array.from(document.querySelectorAll(config.formSelector));//получаем массив из всех форм на странице
   formList.forEach((formElement) => {
+    //если у попапа есть кнопка открытия, тогда включаем валидацию формы
     if (page.querySelector(`.${formElement.name}-open-button`)) {
       const openButton = page.querySelector(`.${formElement.name}-open-button`);
 
@@ -289,17 +267,3 @@ function managePopup() {
 };
 
 managePopup();
-
-
-
-//Токен: a039ff03-9c34-4fce-91e0-77cd409474e3
-//Идентификатор группы: cohort-22
-//fetch('https://mesto.nomoreparties.co/v1/cohort-22/users/me', {
-//  headers: {
-//    authorization: 'a039ff03-9c34-4fce-91e0-77cd409474e3'
-//  }
-//})
-//  .then(res => res.json())
-//  .then((result) => {
-//    console.log(result);
-//  });

@@ -42,25 +42,15 @@ export class Card {
 
     return _templateElement;
   }
+
   _setEventListeners(card) {
     //лисенер на кнопку удаления карточки
     if(this.ownerId === "b939b1d8959802541ab0c34b") {
       const _cardDeleteButton = card.querySelector(config.templateDeleteButtonSelector); //кнопка удаления карточки
       //_cardDeleteButton.addEventListener('click', (evt) => this._deleteCard(evt));
-      //Удаляем карточку с сервера по клику на кнопку
-      _cardDeleteButton.addEventListener('click', (evt) => this._handleDeleteCard())
-      //_cardDeleteButton.addEventListener('click', (evt) => this._handleDeleteCard({
-      //  name: this._name,
-      //  link: this._link
-      //}, this.cardId)
-      //.then(result => {
-      //  console.log(result);
-      //  //удаляем карточку со страницы
-      //  this._deleteCard(evt);
-      //})
-      //.catch(err => {
-      //  console.log(err)
-      //}));
+      //Открываем попап удаления карточки по клику на кнопку удаления
+      const cardElementForDeletion = card.querySelector('.element__figcaption');
+      _cardDeleteButton.addEventListener('click', (evt) => this._handleDeleteCard(cardElementForDeletion));
     }
 
     //лисенер на лайк
@@ -71,7 +61,10 @@ export class Card {
     //console.log('лайкнутая кнопка',buttonIsLiked)
 
     const _cardLikeButton = card.querySelector(config.templateLikeButtonSelector); //кнопки лайка
-    _cardLikeButton.addEventListener('click', (evt) => this._likeCard(evt, card));
+    //_cardLikeButton.addEventListener('click', (evt) => this._isCardLiked());
+    //_cardLikeButton.addEventListener('click', (evt) => this._likeCard(evt, card));
+    _cardLikeButton.addEventListener('click', (evt) => this._likeCard(card));
+    //_likeCard2()
     //чтобы лайки ставились и отправлялись на сервер
     //_cardLikeButton.addEventListener('click', (evt) => this._handleAddLike({
     //  cardId: this.cardId,
@@ -134,63 +127,53 @@ export class Card {
       this._handleCardClick(this._name, this._link);
     })
   }
-  _deleteCard(evt) {
-    evt.target.closest(config.templateCardBodySelector).remove();
+  //проверяет, лайкал ли я карточку или нет
+  _isCardLiked(likes){
+    const array = [];
+    likes.forEach(likeObj => {
+      array.push(likeObj._id)
+      return array
+    })
+    return array.includes("b939b1d8959802541ab0c34b")
   }
-  _likeCard(evt, card) {
-    evt.target.classList.toggle(config.LikeIsActiveClass);
-
-    if(evt.target.classList.contains(config.LikeIsActiveClass)) {
-      console.log('кнопка лайка нажата и поменяла цвет на черный')
+  _likeCounter(card, isClicked){
+    if(isClicked) {
+      return card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength + 1;
+    } else {
+      return card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength - 1;
+    }
+  }
+  //колбек лайка
+  _likeCard(card) {
+    if(!this._isCardLiked(this._likes)) {
       this._handleAddLike({
         cardId: this.cardId,
         likes: {name: this._owner.name, about: this._owner.about, avatar: this._owner.avatar, _id: this._owner._id, cohort: this._owner.cohort}
       })
       .then(result => {
-        //console.log('result.likes[0]._id', result.likes[0]._id)
-        const f = (el) => {
-          return el._id === "b939b1d8959802541ab0c34b"
-          //if(LikeObject._id === "b939b1d8959802541ab0c34b") {
-            //    return true;
-            //  }
-            //  return false;
-        }
-        console.log('я ее лайкал когда-то уже?', result.likes.some(f))
-        console.log("сколько лайков до?",card.querySelector(config.cardLikeCounterSelector).textContent)
-        //увеличиваем кол-во лайков в счетчике
-        card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength + 1;
-        console.log("сколько лайков после?",card.querySelector(config.cardLikeCounterSelector).textContent)
-        console.log('результат после нажатия на лайк:',result)
-
-        //console.log('result.likes[0]._id', typeOf(result.likes[0]))
+        //card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength + 1;
+        this._likeCounter(card, true);
+        console.log('карточку не лайкал. Лайк поставлен', result)
       })
       .catch(err => {
-        console.log("ошибка после нажатия на лайк:",err)
+        console.log('карточку не лайкал. ошибка:',err)
       })
-
     } else {
-      console.log('кнопка отжата  и поменяла цвет на белый')
       this._handledeleteLike({
         cardId: this.cardId,
         likes: {name: this._owner.name, about: this._owner.about, avatar: this._owner.avatar, _id: this._owner._id, cohort: this._owner.cohort}
       })
       .then(result => {
-        const f = (el) => {
-          return el._id === "b939b1d8959802541ab0c34b"
-        }
-        console.log('я ее лайкал когда-то уже?', result.likes.some(f))
-        if(result.likes.some(f)) {console.log('да, я уже лайкал эту карточку')};
-        if(!result.likes.some(f)) {console.log(' нет , я еще не лайкал эту карточку')};
-        console.log("отлайкнули. сколько лайков до?",card.querySelector(config.cardLikeCounterSelector).textContent)
-        //уменьшаем кол-во лайков в счетчике
-        card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength - 1;
-        console.log("отлайкнули. сколько лайков после?",card.querySelector(config.cardLikeCounterSelector).textContent)
-        console.log('результат после нажатия на лайк:',result)
+          //card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength - 1;
+          this._likeCounter(card, false);
+          console.log('карточку лайкал уже. Лайк убран', result)
       })
       .catch(err => {
-        console.log("ошибка после снятия лайка:",err)
-      });
+        console.log('карточку лайкал уже. ошибка:',err)
+      })
     }
   }
-
+  //_deleteCard(evt) {
+  //  evt.target.closest(config.templateCardBodySelector).remove();
+  //}
 }
