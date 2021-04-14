@@ -48,18 +48,19 @@ export class Card {
       const _cardDeleteButton = card.querySelector(config.templateDeleteButtonSelector); //кнопка удаления карточки
       //_cardDeleteButton.addEventListener('click', (evt) => this._deleteCard(evt));
       //Удаляем карточку с сервера по клику на кнопку
-      _cardDeleteButton.addEventListener('click', (evt) => this._handleDeleteCard({
-        name: this._name,
-        link: this._link
-      }, this.cardId)
-      .then(result => {
-        console.log(result);
-        //удаляем карточку со страницы
-        this._deleteCard(evt);
-      })
-      .catch(err => {
-        console.log(err)
-      }));
+      _cardDeleteButton.addEventListener('click', (evt) => this._handleDeleteCard())
+      //_cardDeleteButton.addEventListener('click', (evt) => this._handleDeleteCard({
+      //  name: this._name,
+      //  link: this._link
+      //}, this.cardId)
+      //.then(result => {
+      //  console.log(result);
+      //  //удаляем карточку со страницы
+      //  this._deleteCard(evt);
+      //})
+      //.catch(err => {
+      //  console.log(err)
+      //}));
     }
 
     //лисенер на лайк

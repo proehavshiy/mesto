@@ -73,7 +73,7 @@ export class Api {
     })
   }
   //добавление новой карточки на сервер
-  deleteCard({ name, link }, cardId) {
+  deleteCard(cardId) {
     //{ name, link },
     return fetch(`${this._serverUrl}/${this._cohort}/cards/${cardId}`, {
       method: 'DELETE',
@@ -82,8 +82,8 @@ export class Api {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: name, //название карточки
-        link: link, //ссылка на картинку
+        //name: name, //название карточки
+        //link: link, //ссылка на картинку
         _id: cardId
       })
     })

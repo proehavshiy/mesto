@@ -4,6 +4,7 @@ import { FormValidator } from '../components/FormValidator.js';
 import { Section } from '../components/Section.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
+import { PopupDeleteCard } from '../components/PopupDeleteCard.js';
 import { UserInfo } from '../components/UserInfo.js';
 import { Api } from '../components/Api.js';
 import {
@@ -46,12 +47,38 @@ apiConnection.getCards()
   console.log('error')
 })
 
-const popupDeletionConfirm = new PopupWithForm({
-  popupSelector: config.popupDeletionConfirmSelector,
-  handleForm: () => {}
-})
-
 var cardToRemove = null;
+
+const popupDeleteCard = new PopupDeleteCard({
+  popupSelector: config.popupDeletionConfirmSelector,
+  handleForm: () => {
+    console.log('cardToRemove',cardToRemove)
+    apiConnection.deleteCard(cardToRemove._id)
+    .then(result => {
+      console.log("popupDeleteCard удалили карточку?", result)
+      console.log('cardToRemove',cardToRemove)
+      popupDeleteCard.close();
+    })
+    .catch(err => {
+      console.log("popupDeleteCard - ошибка удаления", err)
+    })
+    //console.log('cardToRemove', cardToRemove)
+    //  name: this._name,
+      //  link: this._link
+      //}, this.cardId)
+      //.then(result => {
+      //  console.log(result);
+      //  //удаляем карточку со страницы
+      //  this._deleteCard(evt);
+      //})
+      //.catch(err => {
+      //  console.log(err)
+      //}));
+  }
+})
+//console.log('popupDeleteCard', popupDeleteCard)
+
+
 
 
 //функция сборки готовой карточки
@@ -60,12 +87,17 @@ function createCard(cardData) {
   const handledeleteLike = apiConnection.deleteLikeCard.bind(apiConnection);
   const handleAddLike = apiConnection.addLikeCard.bind(apiConnection);
   //удаление карточки с сервера
-  const handleDeleteCard = apiConnection.deleteCard.bind(apiConnection);
+  const handleDeleteCard = () => {
+    popupDeleteCard.open();
+    cardToRemove = cardData;
+    //apiConnection.deleteCard.bind(apiConnection);
+  }
   //как handleCardClick передаем метод open popupWithImage. чтобы получить картинку и подпись карточки и подставить их в попап
   const handleCardClick = popupWithImage.open.bind(popupWithImage); //потеря контекста. эта функция навешивается как колбэк слушателю картинки карточки. И this будет определяться как картинка, куда мы кликнем
   const newCard = new Card (cardData, handleCardClick, handleDeleteCard, handleAddLike, handledeleteLike);
   return newCard.generateCard();
   };
+  //console.log('cardToRemove', cardToRemove)
 //функционал отрисовки карточек
 //const cardDisplay = new Section({
 //  //сюда нужно передать из апи name и link // initialCards
@@ -231,6 +263,7 @@ function managePopup() {
   popupWithImage.setEventListeners();
   popupAddCard.setEventListeners();
   popupChangeProfile.setEventListeners();
+  popupDeleteCard.setEventListeners();
   popupChangeAvatar.setEventListeners();
 
   //отображение карточек в html
