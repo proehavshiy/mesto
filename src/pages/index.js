@@ -111,7 +111,21 @@ const popupAddCard = new PopupWithForm({
 const popupChangeAvatar = new PopupWithForm({
   popupSelector: config.popupChangeAvatarSelector,
   handleForm: (formInputValues) => {
-
+    apiConnection.sendUserAvatar({
+      newAvatarLink: formInputValues['image-link']
+    })
+    .then(newAvatar => {
+      console.log('api-редактирование аватара-результат:', newAvatar)
+      changingProfileInfo.setUserInfo({
+        name: newAvatar.name,
+        signing: newAvatar.about,
+        avatar: newAvatar.avatar
+      })
+      popupChangeAvatar.close();
+    })
+    .catch(error => {
+      console.log(error)
+    })
   }
 })
 
