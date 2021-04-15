@@ -31,7 +31,7 @@ export class Card {
     }
     //покрас кнопки лайка в зависимости от того, лайкнул ли я ее на сервере или нет
     //чтобы при перезагрузке страницы состояние лайка сохранялось
-    if(this._isCardLiked(this._likes)) {
+    if(this._isCardLikedinServer(this._likes)) {
       this._likeButton(this._cardElement);
     } else {
       this._dislikeButton(this._cardElement)
@@ -62,6 +62,7 @@ export class Card {
     }
     //слушатель на лайк
     const _cardLikeButton = card.querySelector(config.templateLikeButtonSelector);
+    //_cardLikeButton.addEventListener('click', (evt) => this._likeCard(card));
     _cardLikeButton.addEventListener('click', (evt) => this._likeCard(card));
     //слушатель на картинку
     const _cardImage = card.querySelector(config.templateImageSelector);
@@ -77,8 +78,9 @@ export class Card {
   _dislikeButton(card){
     card.querySelector(config.templateLikeButtonSelector).classList.remove(config.LikedButtonClass);
   }
-  //проверяет, лайкал ли я карточку или нет
-  _isCardLiked(likes){
+  //проверяет, есть ли лайк у карточки на сервере
+  //метод нужен для сохранения лайка при перезагрузке страницы
+  _isCardLikedinServer(likes){
     const array = [];
     likes.forEach(likeObj => {
       array.push(likeObj._id)
@@ -87,47 +89,105 @@ export class Card {
     //возвращает true, если я лайкал. false, если я не лайкал
     return array.includes("b939b1d8959802541ab0c34b")
   }
+  //проверяет, cтоит ли лайк на карточке в разметке
+  _isCardLikedInDom(card){
+    if(card.querySelector(config.templateLikeButtonSelector).classList.contains(config.LikedButtonClass)) {
+      return true
+    } else {
+      return false
+    }
+  }
+  //счетчик лайков
   _likeCounter(card, isClicked){
     if(isClicked) {
       return card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength + 1;
     } else {
-      return card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength - 1;
+      return card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength - 0;
     }
+  }
+  //лайк карточке на сервере добавляю
+  _addLikeToCardByApi(){
+    this._handleAddLike({
+      cardId: this.cardId,
+      likes: {name: this._owner.name, about: this._owner.about, avatar: this._owner.avatar, _id: this._owner._id, cohort: this._owner.cohort}
+    })
+    .then(result => {
+      //this._likeCounter(card, true);
+      console.log('карточку не лайкал. Лайк поставлен', result)
+      //this._likeButton(card);
+    })
+    .catch(err => {
+      console.log('карточку не лайкал. ошибка:',err)
+    })
+  }
+  //лайк карточке на сервере удаляю
+  _removeLikeToCardByApi(){
+    this._handledeleteLike({
+      cardId: this.cardId,
+      likes: {name: this._owner.name, about: this._owner.about, avatar: this._owner.avatar, _id: this._owner._id, cohort: this._owner.cohort}
+    })
+    .then(result => {
+      //this._likeCounter(card, false);
+      console.log('карточку лайкал уже. Лайк убран', result)
+      //this._dislikeButton(card);
+    })
+    .catch(err => {
+      console.log('карточку лайкал уже. ошибка:',err)
+    })
   }
   //колбек лайка
   _likeCard(card) {
-    if(!this._isCardLiked(this._likes)) {
-      this._handleAddLike({
-        cardId: this.cardId,
-        likes: {name: this._owner.name, about: this._owner.about, avatar: this._owner.avatar, _id: this._owner._id, cohort: this._owner.cohort}
-      })
-      .then(result => {
-        //обновляю кол-во лайков
-        this._likeCounter(card, true);
-        //console.log('карточку не лайкал. Лайк поставлен', result)
-        //лайк становится черным
-        this._likeButton(card);
-      })
-      .catch(err => {
-        console.log('карточку не лайкал. ошибка:',err)
-      })
+    if(!this._isCardLikedInDom(card)) {
+      //увеличиваю счетчик +1
+      this._likeCounter(card, true);
+      //крашу в черный кнопку лайка
+      this._likeButton(card);
+      //отправляю лайк на сервер
+      this._addLikeToCardByApi()
     } else {
-      this._handledeleteLike({
-        cardId: this.cardId,
-        likes: {name: this._owner.name, about: this._owner.about, avatar: this._owner.avatar, _id: this._owner._id, cohort: this._owner.cohort}
-      })
-      .then(result => {
-        //обновляю кол-во лайков
-        this._likeCounter(card, false);
-        //console.log('карточку лайкал уже. Лайк убран', result)
-        //лайк становится белым
-        this._dislikeButton(card);
-      })
-      .catch(err => {
-        console.log('карточку лайкал уже. ошибка:',err)
-      })
+      //уменьшаю счетчик -1
+      this._likeCounter(card, false);
+      //крашу в белый кнопку лайка
+      this._dislikeButton(card);
+      //удаляю лайк с сервера
+      this._removeLikeToCardByApi()
     }
   }
+
+  //старый колбек лайка
+  //_likeCard(card) {
+  //  if(!this._isCardLiked(this._likes)) {
+  //    this._handleAddLike({
+  //      cardId: this.cardId,
+  //      likes: {name: this._owner.name, about: this._owner.about, avatar: this._owner.avatar, _id: this._owner._id, cohort: this._owner.cohort}
+  //    })
+  //    .then(result => {
+  //      //обновляю кол-во лайков
+  //      this._likeCounter(card, true);
+  //      //console.log('карточку не лайкал. Лайк поставлен', result)
+  //      //лайк становится черным
+  //      this._likeButton(card);
+  //    })
+  //    .catch(err => {
+  //      console.log('карточку не лайкал. ошибка:',err)
+  //    })
+  //  } else {
+  //    this._handledeleteLike({
+  //      cardId: this.cardId,
+  //      likes: {name: this._owner.name, about: this._owner.about, avatar: this._owner.avatar, _id: this._owner._id, cohort: this._owner.cohort}
+  //    })
+  //    .then(result => {
+  //      //обновляю кол-во лайков
+  //      this._likeCounter(card, false);
+  //      //console.log('карточку лайкал уже. Лайк убран', result)
+  //      //лайк становится белым
+  //      this._dislikeButton(card);
+  //    })
+  //    .catch(err => {
+  //      console.log('карточку лайкал уже. ошибка:',err)
+  //    })
+  //  }
+  //}
   //_deleteCard(evt) {
   //  evt.target.closest(config.templateCardBodySelector).remove();
   //}
