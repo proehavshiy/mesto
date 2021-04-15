@@ -4,7 +4,7 @@ import { FormValidator } from '../components/FormValidator.js';
 import { Section } from '../components/Section.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
-import { PopupDeleteCard } from '../components/PopupDeleteCard.js';
+import { PopupWithoutInputs } from '../components/PopupWithoutInputs.js';
 import { UserInfo } from '../components/UserInfo.js';
 import { Api } from '../components/Api.js';
 import {
@@ -50,7 +50,7 @@ var cardDataToRemove = null;
 var cardToRemove = null;
 
 //попап удаления карточки
-const popupDeleteCard = new PopupDeleteCard({
+const PopupDeleteCard = new PopupWithoutInputs ({
   popupSelector: config.popupDeletionConfirmSelector,
   handleForm: () => {
     //удаление карточки с сервера
@@ -58,10 +58,10 @@ const popupDeleteCard = new PopupDeleteCard({
     .then(result => {
       //удаление карточки со страницы поиском по closest. Целая карточка не удаляется почему-то
       cardToRemove.closest(config.templateCardBodySelector).remove();
-      popupDeleteCard.close();
+      PopupDeleteCard.close();
     })
     .catch(err => {
-      console.log("popupDeleteCard - ошибка удаления", err)
+      console.log("PopupWithoutInputs - ошибка удаления", err)
     })
   }
 })
@@ -73,7 +73,7 @@ function createCard(cardData) {
   const handleAddLike = apiConnection.addLikeCard.bind(apiConnection);
   //удаление карточки с сервера и со страницы
   const handleDeleteCard = (createdCard) => {
-    popupDeleteCard.open();
+    PopupDeleteCard.open();
     cardDataToRemove = cardData;
     cardToRemove = createdCard;
   }
@@ -243,7 +243,7 @@ function managePopup() {
   popupWithImage.setEventListeners();
   popupAddCard.setEventListeners();
   popupChangeProfile.setEventListeners();
-  popupDeleteCard.setEventListeners();
+  PopupDeleteCard.setEventListeners();
   popupChangeAvatar.setEventListeners();
 
   //подключение валидации формам

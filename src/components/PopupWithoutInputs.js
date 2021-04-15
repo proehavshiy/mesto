@@ -1,7 +1,7 @@
 import { config } from '../utils/constants.js';
 import { Popup } from './Popup.js';
 
-export class PopupDeleteCard extends Popup {
+export class PopupWithoutInputs extends Popup {
   constructor({popupSelector, handleForm}) {
     super(popupSelector);
     this._handleForm = handleForm; //колбэк сабмита формы
