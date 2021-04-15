@@ -55,7 +55,9 @@ export const config = {
   templateLikeButtonSelector: '.element__button-like',
   cardLikeCounterSelector: '.element__like-counter',
   LikedButtonSelector: '.button-like_active',
-  LikeIsActiveClass: 'button-like_active',
+  DislikedButtonSelector: '.button-like_disabled',
+  LikedButtonClass: 'button-like_active',
+  DislikedButtonClass: '.button-like_disabled'
 };
 //глобальные константы
 export const page = document.querySelector(config.pageSelector);
