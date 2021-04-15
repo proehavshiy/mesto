@@ -104,7 +104,7 @@ export class Card {
       .then(result => {
         //обновляю кол-во лайков
         this._likeCounter(card, true);
-        console.log('карточку не лайкал. Лайк поставлен', result)
+        //console.log('карточку не лайкал. Лайк поставлен', result)
         //лайк становится черным
         this._likeButton(card);
       })
@@ -119,7 +119,7 @@ export class Card {
       .then(result => {
         //обновляю кол-во лайков
         this._likeCounter(card, false);
-        console.log('карточку лайкал уже. Лайк убран', result)
+        //console.log('карточку лайкал уже. Лайк убран', result)
         //лайк становится белым
         this._dislikeButton(card);
       })

@@ -4,7 +4,6 @@ import { FormValidator } from '../components/FormValidator.js';
 import { Section } from '../components/Section.js';
 import { PopupWithForm } from '../components/PopupWithForm.js';
 import { PopupWithImage } from '../components/PopupWithImage.js';
-import { PopupWithoutInputs } from '../components/PopupWithoutInputs.js';
 import { UserInfo } from '../components/UserInfo.js';
 import { Api } from '../components/Api.js';
 import {
@@ -30,7 +29,7 @@ const apiConnection = new Api({
 //функционал отрисовки карточек из API
 apiConnection.getCards()
 .then(serverCardsData => {
-  console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера',serverCardsData)
+  //console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера:ok',serverCardsData)
   const cardDisplay = new Section({
     //сюда нужно передать из апи name и link, likes // initialCards
     items: serverCardsData,
@@ -42,15 +41,14 @@ apiConnection.getCards()
   cardDisplay.renderItems();
 })
 .catch(err => {
-  console.log('error')
+  console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера:error', err)
 })
 
 //временные переменные для удаления карточки с сервера и со страницы
 var cardDataToRemove = null;
 var cardToRemove = null;
 
-//попап удаления карточки
-const PopupDeleteCard = new PopupWithoutInputs ({
+const PopupDeleteCard = new PopupWithForm ({
   popupSelector: config.popupDeletionConfirmSelector,
   handleForm: () => {
     //удаление карточки с сервера
@@ -61,7 +59,7 @@ const PopupDeleteCard = new PopupWithoutInputs ({
       PopupDeleteCard.close();
     })
     .catch(err => {
-      console.log("PopupWithoutInputs - ошибка удаления", err)
+      console.log("PopupDeleteCard - удаление: error", err)
     })
   }
 })
@@ -107,7 +105,7 @@ const popupAddCard = new PopupWithForm({
       link: formInputValues['image-link']
     })
     .then(cardInfo => {
-      console.log('api-попап добавления карточки-результат-новая карточка',cardInfo)
+      console.log('api-попап добавления карточки-результат-новая карточка: ok',cardInfo)
       const newCard = createCard(cardInfo);//через колбэк создаем новую карточку с данными из инпутов формы
       const newCardDisplay = new Section({
         items: cardInfo,
@@ -117,7 +115,7 @@ const popupAddCard = new PopupWithForm({
       newCardDisplay.prependItem(newCard); //вставка новой карточки
     })
     .catch(error => {
-      console.log(error)
+      console.log('api-попап добавления карточки-результат-новая карточка: error', error)
     })
     .finally(() => {
       //возвращаем изначальную кнопку
@@ -137,7 +135,7 @@ const popupChangeAvatar = new PopupWithForm({
       newAvatarLink: formInputValues['image-link']
     })
     .then(newAvatar => {
-      console.log('api-редактирование аватара-результат:', newAvatar)
+      console.log('api-редактирование аватара: ok', newAvatar)
       changingProfileInfo.setUserInfo({
         name: newAvatar.name,
         signing: newAvatar.about,
@@ -146,7 +144,7 @@ const popupChangeAvatar = new PopupWithForm({
       popupChangeAvatar.close();
     })
     .catch(error => {
-      console.log(error)
+      console.log('api-редактирование аватара: ok', error)
     })
     .finally(() => {
       //возвращаем изначальную кнопку
@@ -167,11 +165,11 @@ const popupChangeProfile = new PopupWithForm({
       newAbout: formInputValues['profile-signing']
     })
     .then(userInfo => {
-      console.log('api-редактирование профиля-результат', userInfo)
+      console.log('api-редактирование профиля: ok', userInfo)
       changingProfileInfo.setUserInfo({name:userInfo.name, signing:userInfo.about, avatar: userInfo.avatar});
     })
     .catch(error => {
-      console.log(error)
+      console.log('api-редактирование профиля: error', error)
     })
     .finally(() => {
       //возвращаем изначальную кнопку
@@ -267,3 +265,4 @@ function managePopup() {
 };
 
 managePopup();
+
