@@ -1,4 +1,3 @@
-import { initialCards } from '../utils/initial-сards.js';
 import { Card } from '../components/Card.js';
 import { FormValidator } from '../components/FormValidator.js';
 import { Section } from '../components/Section.js';
@@ -17,7 +16,7 @@ import {
   sectionElement
 } from '../utils/constants.js';
 ////////////////////ВКЛЮЧИТЬ ПОТОМ ПЕРЕД СБОРКОЙ ВЕБПАКОМ!!!!
-//import './index.css';
+import './index.css';
 
 //запрос к api
 const apiConnection = new Api({
@@ -105,7 +104,7 @@ const popupAddCard = new PopupWithForm({
       link: formInputValues['image-link']
     })
     .then(cardInfo => {
-      console.log('api-попап добавления карточки-результат-новая карточка: ok',cardInfo)
+      //console.log('api-попап добавления карточки-результат-новая карточка: ok',cardInfo)
       const newCard = createCard(cardInfo);//через колбэк создаем новую карточку с данными из инпутов формы
       const newCardDisplay = new Section({
         items: cardInfo,
@@ -135,7 +134,7 @@ const popupChangeAvatar = new PopupWithForm({
       newAvatarLink: formInputValues['image-link']
     })
     .then(newAvatar => {
-      console.log('api-редактирование аватара: ok', newAvatar)
+      //console.log('api-редактирование аватара: ok', newAvatar)
       changingProfileInfo.setUserInfo({
         name: newAvatar.name,
         signing: newAvatar.about,
@@ -165,7 +164,7 @@ const popupChangeProfile = new PopupWithForm({
       newAbout: formInputValues['profile-signing']
     })
     .then(userInfo => {
-      console.log('api-редактирование профиля: ok', userInfo)
+      //console.log('api-редактирование профиля: ok', userInfo)
       changingProfileInfo.setUserInfo({name:userInfo.name, signing:userInfo.about, avatar: userInfo.avatar});
     })
     .catch(error => {
