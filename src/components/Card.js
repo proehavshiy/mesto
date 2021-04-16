@@ -98,15 +98,19 @@ export class Card {
     }
   }
   //счетчик лайков
-  _likeCounter(card, isClicked){
-    if(isClicked) {
-      return card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength + 1;
-    } else {
-      return card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength - 0;
-    }
+  _likeCounter(card, likesLength){
+    card.querySelector(config.cardLikeCounterSelector).textContent = likesLength;
   }
+  //старый и ненадежный счетчик лайков
+  //_likeCounter(card, isClicked){
+  //  if(isClicked) {
+  //    return card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength + 1;
+  //  } else {
+  //    return card.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength - 0;
+  //  }
+  //}
   //лайк карточке на сервере добавляю
-  _addLikeToCardByApi(){
+  _addLikeToCardByApi(card){
     this._handleAddLike({
       cardId: this.cardId,
       likes: {name: this._owner.name, about: this._owner.about, avatar: this._owner.avatar, _id: this._owner._id, cohort: this._owner.cohort}
@@ -115,13 +119,17 @@ export class Card {
       //this._likeCounter(card, true);
       console.log('карточку не лайкал. Лайк поставлен', result)
       //this._likeButton(card);
+      //лайкаю карточку перебором массива лайков из ответа сервера
+      console.log('лайк поставлен - result.likes.length',result.likes.length)
+      this._likeCounter(card, result.likes.length)
+      console.log('лайк поставлен - кол-во в счетчике',  card.querySelector(config.cardLikeCounterSelector).textContent)
     })
     .catch(err => {
       console.log('карточку не лайкал. ошибка:',err)
     })
   }
   //лайк карточке на сервере удаляю
-  _removeLikeToCardByApi(){
+  _removeLikeToCardByApi(card){
     this._handledeleteLike({
       cardId: this.cardId,
       likes: {name: this._owner.name, about: this._owner.about, avatar: this._owner.avatar, _id: this._owner._id, cohort: this._owner.cohort}
@@ -130,6 +138,10 @@ export class Card {
       //this._likeCounter(card, false);
       console.log('карточку лайкал уже. Лайк убран', result)
       //this._dislikeButton(card);
+      //лайкаю карточку перебором массива лайков из ответа сервера
+      console.log('лайк убран - result.likes.length',result.likes.length)
+      this._likeCounter(card, result.likes.length)
+      console.log('лайк убран - кол-во в счетчике', card.querySelector(config.cardLikeCounterSelector).textContent)
     })
     .catch(err => {
       console.log('карточку лайкал уже. ошибка:',err)
@@ -139,18 +151,18 @@ export class Card {
   _likeCard(card) {
     if(!this._isCardLikedInDom(card)) {
       //увеличиваю счетчик +1
-      this._likeCounter(card, true);
+      //this._likeCounter(card, true);
       //крашу в черный кнопку лайка
       this._likeButton(card);
       //отправляю лайк на сервер
-      this._addLikeToCardByApi()
+      this._addLikeToCardByApi(card)
     } else {
       //уменьшаю счетчик -1
-      this._likeCounter(card, false);
+      //this._likeCounter(card, false);
       //крашу в белый кнопку лайка
       this._dislikeButton(card);
       //удаляю лайк с сервера
-      this._removeLikeToCardByApi()
+      this._removeLikeToCardByApi(card)
     }
   }
 
