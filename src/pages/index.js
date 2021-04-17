@@ -16,7 +16,7 @@ import {
   sectionElement
 } from '../utils/constants.js';
 ////////////////////ВКЛЮЧИТЬ ПОТОМ ПЕРЕД СБОРКОЙ ВЕБПАКОМ!!!!
-//import './index.css';
+import './index.css';
 
 //запрос к api
 const apiConnection = new Api({
