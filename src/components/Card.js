@@ -1,7 +1,7 @@
 import { config } from '../utils/constants.js';
 
 export class Card {
-  constructor ({name, link, likes, owner, _id}, handleCardClick, handleDeleteCard, handleAddLike, handledeleteLike) {
+  constructor ({name, link, likes, owner, _id}, userId, handleCardClick, handleDeleteCard, handleAddLike, handledeleteLike) {
     this._name = name;
     this._link = link;
     this._likes = likes;
@@ -9,7 +9,8 @@ export class Card {
     this._likesLength = likes.length;
     this._owner = owner;
     //console.log('owner', this._owner)
-    this.ownerId = owner._id; //"b939b1d8959802541ab0c34b"
+    this.ownerId = owner._id; //айди владельца карточки
+    this.userId = userId; // наш пользователь - "b939b1d8959802541ab0c34b"
     this.cardId = _id;
     this._handleCardClick = handleCardClick;
     this._handleDeleteCard = handleDeleteCard;
@@ -26,7 +27,7 @@ export class Card {
     this._cardElement.querySelector(config.templateCardTitleSelector).textContent = this._name; //добавляем заголовок
     this._cardElement.querySelector(config.cardLikeCounterSelector).textContent = this._likesLength; //добавляем кол-во лайков карточке
     //если владелец карточки не я, то удаляем кнопку "удалить"
-    if(this.ownerId !== "b939b1d8959802541ab0c34b") {
+    if(this.ownerId !== this.userId) {
       this._cardElement.querySelector(config.templateDeleteButtonSelector).style.display = "none";
     }
     //покрас кнопки лайка в зависимости от того, лайкнул ли я ее на сервере или нет
@@ -54,7 +55,7 @@ export class Card {
 
   _setEventListeners(card) {
     //лисенер на кнопку удаления карточки
-    if(this.ownerId === "b939b1d8959802541ab0c34b") {
+    if(this.ownerId === this.userId) {
       const _cardDeleteButton = card.querySelector(config.templateDeleteButtonSelector); //кнопка удаления карточки
       //Открываем попап удаления карточки по клику на кнопку удаления
       const cardElementForDeletion = card.querySelector('.element__figcaption');
@@ -87,7 +88,7 @@ export class Card {
       return array
     })
     //возвращает true, если я лайкал. false, если я не лайкал
-    return array.includes("b939b1d8959802541ab0c34b")
+    return array.includes(this.userId)
   }
   //проверяет, cтоит ли лайк на карточке в разметке
   _isCardLikedInDom(card){

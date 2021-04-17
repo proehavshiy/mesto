@@ -39,11 +39,12 @@ apiConnection.getPromiseAll(apiConnection.getUserInfo(), apiConnection.getCards(
 
   //функционал отрисовки карточек из API
   console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера:ok',serverData[1])
+  console.log('api-получаем айди нашего пользователя для сбора карточки-результат-b939b1d8959802541ab0c34b:ok',serverData[0]._id)
   const cardDisplay = new Section({
     //сюда нужно передать из апи name и link, likes // initialCards
     items: serverData[1],
     renderer: (item) => {
-      const newCard = createCard(item); //создание изначальных карточек
+      const newCard = createCard(item, serverData[0]._id); //создание изначальных карточек
       cardDisplay.appendItem(newCard); //вставка изначальных карточек
       }
     }, sectionElement);
@@ -108,7 +109,7 @@ const PopupDeleteCard = new PopupWithForm ({
 })
 
 //функция сборки готовой карточки
-function createCard(cardData) {
+function createCard(cardData, userId) {
   //лайк карточки
   const handledeleteLike = apiConnection.deleteLikeCard.bind(apiConnection);
   const handleAddLike = apiConnection.addLikeCard.bind(apiConnection);
@@ -120,7 +121,7 @@ function createCard(cardData) {
   }
   //как handleCardClick передаем метод open popupWithImage. чтобы получить картинку и подпись карточки и подставить их в попап
   const handleCardClick = popupWithImage.open.bind(popupWithImage); //потеря контекста. эта функция навешивается как колбэк слушателю картинки карточки. И this будет определяться как картинка, куда мы кликнем
-  const newCard = new Card (cardData, handleCardClick, handleDeleteCard, handleAddLike, handledeleteLike);
+  const newCard = new Card (cardData, userId, handleCardClick, handleDeleteCard, handleAddLike, handledeleteLike);
   return newCard.generateCard();
   };
 
@@ -148,8 +149,9 @@ const popupAddCard = new PopupWithForm({
       link: formInputValues['image-link']
     })
     .then(cardInfo => {
-      //console.log('api-попап добавления карточки-результат-новая карточка: ok',cardInfo)
-      const newCard = createCard(cardInfo);//через колбэк создаем новую карточку с данными из инпутов формы
+      console.log('api-попап добавления карточки-результат-новая карточка: ok',cardInfo)
+      console.log('api-попап добавления карточки-результат-cardInfo.owner._id = b939b1d8959802541ab0c34b',cardInfo.owner._id)
+      const newCard = createCard(cardInfo, cardInfo.owner._id);//через колбэк создаем новую карточку с данными из инпутов формы
       const newCardDisplay = new Section({
         items: cardInfo,
         renderer: () => {}
@@ -178,7 +180,7 @@ const popupChangeAvatar = new PopupWithForm({
       newAvatarLink: formInputValues['image-link']
     })
     .then(newAvatar => {
-      //console.log('api-редактирование аватара: ok', newAvatar)
+      console.log('api-редактирование аватара: ok', newAvatar)
       changingProfileInfo.setUserInfo({
         name: newAvatar.name,
         signing: newAvatar.about,
