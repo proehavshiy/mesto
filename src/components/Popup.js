@@ -3,7 +3,9 @@ import { config } from '../utils/constants.js';
 export class Popup {
   constructor(popupSelector) {
     this._popupElement = document.querySelector(popupSelector);
+    //bind
     this._handleEscCloseBind = this._handleEscClose.bind(this); //.bind() возвращает новую функцию. Поэтому чтобы поставить и снять слушатель, нужно обращаться через переменную
+    this._handleClickCloseBind = this._handleClickClose.bind(this)
   }
   open() {
     this._popupElement.classList.add(config.openedPopupClass);
@@ -29,6 +31,6 @@ export class Popup {
   setEventListeners() {
     //Содержит публичный метод setEventListeners, который добавляет слушатель клика иконке закрытия попапа.
     //добавляем слушатель на закрытие попапа кликом по кнопке и кликом вне формы
-    this._popupElement.addEventListener('click',  this._handleClickClose.bind(this));//если колбэк не забиндить, будет потеря контекста/ привязываем this к экземпляру класса
+    this._popupElement.addEventListener('click',  this._handleClickCloseBind);//если колбэк не забиндить, будет потеря контекста/ привязываем this к экземпляру класса
   }
 }

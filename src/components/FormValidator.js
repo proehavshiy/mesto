@@ -4,6 +4,9 @@ export class FormValidator {
     this._form = form;
     this._inputList = Array.from(this._form.querySelectorAll(this._config.inputSelector)); //массив всех инпутов из формы
     this._buttonElement = this._form.querySelector(this._config.submitButtonSelector); //submit кнопка формы
+    //bind
+    this._checkInputValidityBind = this._checkInputValidity.bind(this);
+    this.toggleButtonStateBind = this.toggleButtonState.bind(this);
   }
   enableValidation() {
     this._setEventListeners();
@@ -18,8 +21,8 @@ export class FormValidator {
     //лисенер на каждый инпут формы
     this._inputList.forEach(_inputElement => {
       _inputElement.addEventListener('input', () => {
-        this._checkInputValidity(_inputElement); //проверка валидности инпута
-        this.toggleButtonState(); //переключение состояния кнопки в завис от валидности
+        this._checkInputValidityBind(_inputElement); //проверка валидности инпута
+        this.toggleButtonStateBind(); //переключение состояния кнопки в завис от валидности
       })
     })
   }

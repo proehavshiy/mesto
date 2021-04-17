@@ -16,6 +16,10 @@ export class Card {
     this._handleDeleteCard = handleDeleteCard;
     this._handleAddLike = handleAddLike;
     this._handledeleteLike = handledeleteLike;
+    //bind
+    this._handleDeleteCardBind = this._handleDeleteCard.bind(this);
+    this._likeCardBind = this._likeCard.bind(this);
+    this._handleCardClickBind = this._handleCardClick.bind(this);
   }
 
   generateCard() {
@@ -59,16 +63,16 @@ export class Card {
       const _cardDeleteButton = card.querySelector(config.templateDeleteButtonSelector); //кнопка удаления карточки
       //Открываем попап удаления карточки по клику на кнопку удаления
       const cardElementForDeletion = card.querySelector('.element__figcaption');
-      _cardDeleteButton.addEventListener('click', (evt) => this._handleDeleteCard(cardElementForDeletion));
+      _cardDeleteButton.addEventListener('click', (evt) => this._handleDeleteCardBind(cardElementForDeletion));
     }
     //слушатель на лайк
     const _cardLikeButton = card.querySelector(config.templateLikeButtonSelector);
     //_cardLikeButton.addEventListener('click', (evt) => this._likeCard(card));
-    _cardLikeButton.addEventListener('click', (evt) => this._likeCard(card));
+    _cardLikeButton.addEventListener('click', (evt) => this._likeCardBind(card));
     //слушатель на картинку
     const _cardImage = card.querySelector(config.templateImageSelector);
     _cardImage.addEventListener('click', ()=> {
-      this._handleCardClick(this._name, this._link);
+      this._handleCardClickBind(this._name, this._link);
     })
   }
   //метод изменения цвета лайка - черный

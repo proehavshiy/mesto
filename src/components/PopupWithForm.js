@@ -9,6 +9,8 @@ export class PopupWithForm extends Popup {
     this.submitButton = this._popupElement.querySelector(config.submitButtonSelector); //кнопка сабмит формы
     this.submitButtonInitialText = this._popupElement.querySelector(config.submitButtonSelector).textContent; //кнопка сабмит формы - изначальный текст
     this._AllPopupFormInputs = this._popupForm.querySelectorAll(config.inputSelector); //все инпуты формы
+    //bind
+    this._handleFormSubmitBind = this._handleFormSubmit.bind(this);
   }
   //собирает данные всех инпутов формы
   _getInputValues() {
@@ -27,7 +29,7 @@ export class PopupWithForm extends Popup {
   setEventListeners() {
     super.setEventListeners();
     //должен не только добавлять обработчик клика иконке закрытия, но и добавлять обработчик сабмита формы.
-    this._popupForm.addEventListener('submit', this._handleFormSubmit.bind(this));//если колбэк сабмита не забиндить, будет потеря контекста/ привязываем this к экземпляру класса
+    this._popupForm.addEventListener('submit', this._handleFormSubmitBind);//если колбэк сабмита не забиндить, будет потеря контекста/ привязываем this к экземпляру класса
   }
   close() {
     super.close();
