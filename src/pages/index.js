@@ -106,6 +106,8 @@ var cardToRemove = null;
 const PopupDeleteCard = new PopupWithForm ({
   popupSelector: config.popupDeletionConfirmSelector,
   handleForm: () => {
+    //кнопка в момент ожидания сервера
+    renderIsLoading(PopupDeleteCard.submitButton, PopupDeleteCard.submitButtonInitialText, true);
     //удаление карточки с сервера
     apiConnection.deleteCard(cardDataToRemove._id)
     .then(result => {
@@ -115,6 +117,10 @@ const PopupDeleteCard = new PopupWithForm ({
     })
     .catch(err => {
       console.log("PopupDeleteCard - удаление: error", err)
+    })
+    .finally(() => {
+      //возвращаем изначальную кнопку
+      renderIsLoading(PopupDeleteCard.submitButton, PopupDeleteCard.submitButtonInitialText, false);
     })
   }
 })
@@ -178,6 +184,7 @@ const popupAddCard = new PopupWithForm({
         renderer: () => {}
       }, sectionElement)
       cardRenderer.prependItem(newCard); //вставка новой карточки
+      popupAddCard.close();
       //const newCardDisplay = new Section({
       //  items: cardInfo,
       //  renderer: () => {}
@@ -192,7 +199,6 @@ const popupAddCard = new PopupWithForm({
       //возвращаем изначальную кнопку
       renderIsLoading(popupAddCard.submitButton, popupAddCard.submitButtonInitialText, false);
     })
-    popupAddCard.close();
   }
 });
 

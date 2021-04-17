@@ -8,12 +8,8 @@ export class Api {
   //метод для единого вызова методов серверных запросов
   getPromiseAll(...requests) {
     const promises = [...requests]
-    console.log("Promise.all - массив изначальный",promises);
+    //console.log("Promise.all - массив изначальный",promises);
     return Promise.all(promises)
-    //.then(response => {
-    //  console.log("Promise.all - массив результат",response);
-    //  }
-    //)
   }
   //запрос информации профиля с сервера
   getUserInfo() {
