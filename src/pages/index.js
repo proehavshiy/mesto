@@ -40,16 +40,25 @@ apiConnection.getPromiseAll(apiConnection.getUserInfo(), apiConnection.getCards(
   //функционал отрисовки карточек из API
   console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера:ok',serverData[1])
   console.log('api-получаем айди нашего пользователя для сбора карточки-результат-b939b1d8959802541ab0c34b:ok',serverData[0]._id)
-  const cardDisplay = new Section({
-    //сюда нужно передать из апи name и link, likes // initialCards
+  //создаем и рендерим изначальные карточки на страницу
+  const cardRenderer = cardDisplay({
     items: serverData[1],
     renderer: (item) => {
       const newCard = createCard(item, serverData[0]._id); //создание изначальных карточек
-      cardDisplay.appendItem(newCard); //вставка изначальных карточек
-      }
-    }, sectionElement);
+      cardRenderer.appendItem(newCard); //вставка изначальных карточек
+    }
+  }, sectionElement)
+  cardRenderer.renderItems();
+  //const cardDisplay = new Section({
+  //  //сюда нужно передать из апи name и link, likes // initialCards
+  //  items: serverData[1],
+  //  renderer: (item) => {
+  //    const newCard = createCard(item, serverData[0]._id); //создание изначальных карточек
+  //    cardDisplay.appendItem(newCard); //вставка изначальных карточек
+  //    }
+  //  }, sectionElement);
   //отображаем карточки на странице
-  cardDisplay.renderItems();
+  //cardDisplay.renderItems();
 })
 .catch(err => {
   console.log("Promise.all - ошибка", err)
@@ -125,6 +134,15 @@ function createCard(cardData, userId) {
   return newCard.generateCard();
   };
 
+//функция для отображения карточки на странице
+function cardDisplay(data, sectionElement) {
+  const cardDisplay = new Section({
+    items: data.items,
+    renderer: data.renderer,
+  }, sectionElement);
+  return cardDisplay
+}
+
 //функционал отрисовки карточек
 //const cardDisplay = new Section({
 //  //сюда нужно передать из апи name и link // initialCards
@@ -152,12 +170,18 @@ const popupAddCard = new PopupWithForm({
       console.log('api-попап добавления карточки-результат-новая карточка: ok',cardInfo)
       console.log('api-попап добавления карточки-результат-cardInfo.owner._id = b939b1d8959802541ab0c34b',cardInfo.owner._id)
       const newCard = createCard(cardInfo, cardInfo.owner._id);//через колбэк создаем новую карточку с данными из инпутов формы
-      const newCardDisplay = new Section({
+      //собираем новую карточку и рендерим ее на страницу
+      const cardRenderer = cardDisplay({
         items: cardInfo,
         renderer: () => {}
-      },
-        sectionElement);
-      newCardDisplay.prependItem(newCard); //вставка новой карточки
+      }, sectionElement)
+      cardRenderer.prependItem(newCard); //вставка новой карточки
+      //const newCardDisplay = new Section({
+      //  items: cardInfo,
+      //  renderer: () => {}
+      //},
+      //  sectionElement);
+      //newCardDisplay.prependItem(newCard); //вставка новой карточки
     })
     .catch(error => {
       console.log('api-попап добавления карточки-результат-новая карточка: error', error)
