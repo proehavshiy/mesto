@@ -16,7 +16,7 @@ import {
   sectionElement
 } from '../utils/constants.js';
 ////////////////////ВКЛЮЧИТЬ ПОТОМ ПЕРЕД СБОРКОЙ ВЕБПАКОМ!!!!
-import './index.css';
+//import './index.css';
 
 //запрос к api
 const apiConnection = new Api({
@@ -25,23 +25,67 @@ const apiConnection = new Api({
   token: 'a039ff03-9c34-4fce-91e0-77cd409474e3'
 })
 
-//функционал отрисовки карточек из API
-apiConnection.getCards()
-.then(serverCardsData => {
-  //console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера:ok',serverCardsData)
+//через Promise.all одновременно получаем данные профиля и карточки
+apiConnection.getPromiseAll(apiConnection.getUserInfo(), apiConnection.getCards())
+.then(serverData => {
+  console.log("Promise.all - массив результат", serverData)
+  //получаем данные профиля по api и отображаем их на странице
+  console.log('получаем данные профиля по api и отображаем их на странице:ok',serverData[0])
+  changingProfileInfo.setUserInfo({
+    name: serverData[0].name,
+    signing: serverData[0].about,
+    avatar: serverData[0].avatar
+  })
+
+  //функционал отрисовки карточек из API
+  console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера:ok',serverData[1])
   const cardDisplay = new Section({
     //сюда нужно передать из апи name и link, likes // initialCards
-    items: serverCardsData,
+    items: serverData[1],
     renderer: (item) => {
       const newCard = createCard(item); //создание изначальных карточек
       cardDisplay.appendItem(newCard); //вставка изначальных карточек
       }
     }, sectionElement);
+  //отображаем карточки на странице
   cardDisplay.renderItems();
 })
 .catch(err => {
-  console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера:error', err)
+  console.log("Promise.all - ошибка", err)
+  console.log('получаем данные профиля по api и отображаем их на странице и api-получаем изначальные карточки для отображения-результат-все карточки сервера:error', err)
 })
+
+
+//функционал отрисовки карточек из API
+//apiConnection.getCards()
+//.then(serverCardsData => {
+//  //console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера:ok',serverCardsData)
+//  const cardDisplay = new Section({
+//    //сюда нужно передать из апи name и link, likes // initialCards
+//    items: serverCardsData,
+//    renderer: (item) => {
+//      const newCard = createCard(item); //создание изначальных карточек
+//      cardDisplay.appendItem(newCard); //вставка изначальных карточек
+//      }
+//    }, sectionElement);
+//  cardDisplay.renderItems();
+//})
+//.catch(err => {
+//  console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера:error', err)
+//})
+
+//получаем данные профиля по api и отображаем их на странице
+//apiConnection.getUserInfo()
+//.then(userInfo => {
+//  changingProfileInfo.setUserInfo({
+//    name: userInfo.name,
+//    signing: userInfo.about,
+//    avatar: userInfo.avatar
+//  })
+//})
+//.catch(error => {
+//  console.log(error);
+//})
 
 //временные переменные для удаления карточки с сервера и со страницы
 var cardDataToRemove = null;
@@ -185,18 +229,18 @@ const changingProfileInfo = new UserInfo({
   avatar: config.profileAvatar
 });
 
-//получаем данные профиля по api и отображаем их на странице
-apiConnection.getUserInfo()
-.then(userInfo => {
-  changingProfileInfo.setUserInfo({
-    name: userInfo.name,
-    signing: userInfo.about,
-    avatar: userInfo.avatar
-  })
-})
-.catch(error => {
-  console.log(error);
-})
+////получаем данные профиля по api и отображаем их на странице
+//apiConnection.getUserInfo()
+//.then(userInfo => {
+//  changingProfileInfo.setUserInfo({
+//    name: userInfo.name,
+//    signing: userInfo.about,
+//    avatar: userInfo.avatar
+//  })
+//})
+//.catch(error => {
+//  console.log(error);
+//})
 
 // функция отображения состояния сабмита кнопки во время ожидания данных с сервера
 function renderIsLoading(button, initialButtonText, isLoading) {

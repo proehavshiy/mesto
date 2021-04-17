@@ -5,6 +5,16 @@ export class Api {
     this._cohort = cohort; // cohort-22
     this._token = token; // a039ff03-9c34-4fce-91e0-77cd409474e3
   }
+  //метод для единого вызова методов серверных запросов
+  getPromiseAll(...requests) {
+    const promises = [...requests]
+    console.log("Promise.all - массив изначальный",promises);
+    return Promise.all(promises)
+    //.then(response => {
+    //  console.log("Promise.all - массив результат",response);
+    //  }
+    //)
+  }
   //запрос информации профиля с сервера
   getUserInfo() {
     return fetch(`${this._serverUrl}/${this._cohort}/users/me`, {

@@ -20,6 +20,10 @@ export class UserInfo {
     this._profileSubtitle.textContent = signing;
     this._profileAvatar.src = avatar;
 
+    //this._profileAvatar.closest('profile').style.animationDelay = ".2s";
+    //cardToRemove.closest(config.templateCardBodySelector)
+    //this._cardElement.style.animationDelay = ".2s";
+
   }
 }
 
