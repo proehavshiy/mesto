@@ -31,11 +31,13 @@ apiConnection.getPromiseAll(apiConnection.getUserInfo(), apiConnection.getCards(
   console.log("Promise.all - массив результат", serverData)
   //получаем данные профиля по api и отображаем их на странице
   console.log('получаем данные профиля по api и отображаем их на странице:ok',serverData[0])
+  //отображаем в разметке юзернейм и подпись с сервера
   changingProfileInfo.setUserInfo({
     name: serverData[0].name,
-    signing: serverData[0].about,
-    avatar: serverData[0].avatar
-  })
+    signing: serverData[0].about
+  });
+  //отображаем в разметке аватар с сервера
+  changingProfileInfo.setUserAvatar(serverData[0].avatar);
 
   //функционал отрисовки карточек из API
   console.log('api-получаем изначальные карточки для отображения-результат-все карточки сервера:ok',serverData[1])
@@ -205,11 +207,8 @@ const popupChangeAvatar = new PopupWithForm({
     })
     .then(newAvatar => {
       console.log('api-редактирование аватара: ok', newAvatar)
-      changingProfileInfo.setUserInfo({
-        name: newAvatar.name,
-        signing: newAvatar.about,
-        avatar: newAvatar.avatar
-      })
+      //меняем аватар в разметке на новый
+      changingProfileInfo.setUserAvatar(newAvatar.avatar);
       popupChangeAvatar.close();
     })
     .catch(error => {
@@ -234,8 +233,13 @@ const popupChangeProfile = new PopupWithForm({
       newAbout: formInputValues['profile-signing']
     })
     .then(userInfo => {
-      //console.log('api-редактирование профиля: ok', userInfo)
-      changingProfileInfo.setUserInfo({name:userInfo.name, signing:userInfo.about, avatar: userInfo.avatar});
+      console.log('api-редактирование профиля: ok', userInfo)
+      //меняем юзернейм и подпись в разметке на новые
+      changingProfileInfo.setUserInfo({
+        name: userInfo.name,
+        signing: userInfo.about
+      });
+      popupChangeProfile.close();
     })
     .catch(error => {
       console.log('api-редактирование профиля: error', error)
@@ -244,7 +248,6 @@ const popupChangeProfile = new PopupWithForm({
       //возвращаем изначальную кнопку
       renderIsLoading(popupChangeProfile.submitButton, popupChangeProfile.submitButtonInitialText, false);
     })
-    popupChangeProfile.close();
   }
 });
 

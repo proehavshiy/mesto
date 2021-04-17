@@ -14,10 +14,13 @@ export class UserInfo {
     _profileData.inputSigning = this._profileSubtitle.textContent;
     return _profileData
   }
-  setUserInfo({ name, signing, avatar }) {
-    // добавляет новые данные из формы редактирования профиля на страницу после сабмита формы
+  // добавляет новые данные из формы редактирования профиля на страницу после сабмита формы
+  setUserInfo({ name, signing }) {
     this._profileTitle.textContent = name;
     this._profileSubtitle.textContent = signing;
+  }
+  // добавляет новый аватар на страницу после сабмита формы
+  setUserAvatar(avatar) {
     this._profileAvatar.src = avatar;
   }
 }
