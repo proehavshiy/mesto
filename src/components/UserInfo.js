@@ -21,7 +21,8 @@ export class UserInfo {
   }
   // добавляет новый аватар на страницу после сабмита формы
   setUserAvatar(avatar) {
-    this._profileAvatar.src = avatar;
+    this._profileAvatar.style.backgroundImage = `url(${avatar})`;
+    //"url('img_tree.png')"
   }
 }
 
