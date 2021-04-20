@@ -8,7 +8,12 @@ export class Popup {
     this._handleClickCloseBind = this._handleClickClose.bind(this)
   }
   open() {
-    this._popupElement.classList.add(config.openedPopupClass);
+    //чтобы попапы при перезагрузке страницы не мерцали, изначально у них display: none
+    //при открытии им добавляется display: flex через класс popup__flexed
+    //через нулевой таймаут сразу же добавляется класс открытия. если без таймаута, то плавного открытия-закрытия не будет
+    this._popupElement.classList.add('popup__flexed');
+    setTimeout( ()=> {this._popupElement.classList.add(config.openedPopupClass)},0);
+
     document.addEventListener('keyup', this._handleEscCloseBind);//если bind не привязать к слушателю, потеряется контекст
   }
   close() {
