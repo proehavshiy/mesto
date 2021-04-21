@@ -1,3 +1,4 @@
+/*
 @keyframes appear{
   from {
     opacity: 0;
@@ -6,12 +7,15 @@
     opacity: 1;
   }
 }
+*/
 
 .content {
   -webkit-box-flex: 1;
       -ms-flex: 1 0 auto;
           flex: 1 0 auto;
+  /*
   animation: appear .3s ease-in-out;
   animation-fill-mode: both;
   animation-delay: .2s;
+  */
 }
